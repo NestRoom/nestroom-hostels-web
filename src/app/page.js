@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import styles from "./page.module.css";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 
 const PhoneIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -21,7 +22,6 @@ export default function Home() {
   const [phone, setPhone] = useState("");
 
   const handlePhoneChange = (e) => {
-    // Strip anything that isn't a digit, max 10 digits
     const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
     setPhone(digits);
   };
@@ -29,23 +29,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       
-      {/* Navbar Container */}
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          nest<span className={styles.blueText}>room</span>
-        </div>
-        
-        <div className={styles.navLinks}>
-          <a href="#">about</a>
-          <a href="#">features</a>
-          <a href="#">pricing</a>
-        </div>
-        
-        <div className={styles.navCtas}>
-          <Link href="/login" className={styles.continueBtn}>continue</Link>
-          <Link href="/signup" className={styles.signupBtn}>sign up</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Main Content */}
       <main className={styles.main}>
@@ -88,19 +72,13 @@ export default function Home() {
               playsInline
               className={styles.heroVideo}
             />
-            {/* Inner shadow overlay to blend edges with background */}
             <div className={styles.innerShadowOverlay}></div>
           </div>
         </div>
 
       </main>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.divider}></div>
-        <p className={styles.copyright}>© nestroom, 2026</p>
-        <p className={styles.tc}>T&C apply</p>
-      </footer>
+      <Footer />
 
     </div>
   );
