@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -20,10 +21,23 @@ const ArrowRightIcon = () => (
 
 export default function Home() {
   const [phone, setPhone] = useState("");
+  const router = useRouter();
 
   const handlePhoneChange = (e) => {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
     setPhone(digits);
+  };
+
+  const handlePhoneSubmit = () => {
+    if (phone.length === 10) {
+      router.push(`/login?phone=${phone}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handlePhoneSubmit();
+    }
   };
 
   return (
@@ -53,9 +67,10 @@ export default function Home() {
                 className={styles.phoneInput}
                 value={phone}
                 onChange={handlePhoneChange}
+                onKeyDown={handleKeyDown}
               />
             </div>
-            <button className={styles.arrowBtn}>
+            <button className={styles.arrowBtn} onClick={handlePhoneSubmit}>
               <ArrowRightIcon />
             </button>
           </div>
