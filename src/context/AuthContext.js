@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
 } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 
@@ -36,6 +38,26 @@ export function AuthProvider({ children }) {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
+  const setupRecaptcha = (elementId) => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
+        size: "invisible",
+        callback: () => {
+          // reCAPTCHA solved
+        },
+      });
+    }
+    return window.recaptchaVerifier;
+  };
+
+  const sendOtp = async (phoneNumber, recaptchaVerifier) => {
+    return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+  };
+
+  const verifyOtp = async (confirmationResult, code) => {
+    return confirmationResult.confirm(code);
+  };
+
   const logout = async () => {
     return signOut(auth);
   };
@@ -48,6 +70,9 @@ export function AuthProvider({ children }) {
         signInWithGoogle,
         loginWithEmail,
         signUpWithEmail,
+        setupRecaptcha,
+        sendOtp,
+        verifyOtp,
         logout,
       }}
     >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -38,6 +38,12 @@ const LockIcon = () => (
   </svg>
 );
 
+const PhoneIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+  </svg>
+);
+
 const ArrowRightIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -55,16 +61,135 @@ const GoogleIcon = () => (
 );
 
 export default function SignUpPage() {
+  const [activeTab, setActiveTab] = useState("email");
   const [hostelName, setHostelName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpSent, setOtpSent] = useState(false);
+  const [confirmationResult, setConfirmationResult] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
-  const { signUpWithEmail, signInWithGoogle } = useAuth();
+  const otpRefs = useRef([]);
+  const { signUpWithEmail, signInWithGoogle, setupRecaptcha, sendOtp, verifyOtp } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  // Resend timer countdown
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
+
+  const handlePhoneChange = (e) => {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setPhone(digits);
+  };
+
+  const handleSendOtp = async (e) => {
+    if (e) e.preventDefault();
+    if (phone.length !== 10) {
+      setError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    try {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+        window.recaptchaVerifier = null;
+      }
+      const recaptchaVerifier = setupRecaptcha("recaptcha-container");
+      const result = await sendOtp(`+91${phone}`, recaptchaVerifier);
+      setConfirmationResult(result);
+      setOtpSent(true);
+      setResendTimer(30);
+    } catch (err) {
+      console.error("Firebase sendOtp Error:", err);
+      console.dir(err);
+      
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+        window.recaptchaVerifier = null;
+      }
+      switch (err.code) {
+        case "auth/invalid-phone-number":
+          setError("Invalid phone number. Please check and try again.");
+          break;
+        case "auth/too-many-requests":
+          setError("Too many attempts. Please try again later.");
+          break;
+        default:
+          setError("Failed to send OTP. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (!/^\d*$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const newOtp = [...otp];
+    for (let i = 0; i < pasted.length; i++) {
+      newOtp[i] = pasted[i];
+    }
+    setOtp(newOtp);
+    const focusIndex = Math.min(pasted.length, 5);
+    otpRefs.current[focusIndex]?.focus();
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    const code = otp.join("");
+    if (code.length !== 6) {
+      setError("Please enter the complete 6-digit code.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    try {
+      await verifyOtp(confirmationResult, code);
+      router.push("/");
+    } catch (err) {
+      setError("Invalid verification code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendTimer > 0) return;
+    setOtp(["", "", "", "", "", ""]);
+    setOtpSent(false);
+    setConfirmationResult(null);
+    setTimeout(() => handleSendOtp(), 100);
+  };
+
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -106,6 +231,14 @@ export default function SignUpPage() {
     }
   };
 
+  const switchTab = (tab) => {
+    setActiveTab(tab);
+    setError("");
+    setOtpSent(false);
+    setOtp(["", "", "", "", "", ""]);
+    setConfirmationResult(null);
+  };
+
   return (
     <div className={styles.page}>
 
@@ -142,63 +275,166 @@ export default function SignUpPage() {
             <h2 className={styles.formTitle}>Get Started</h2>
             <p className={styles.formSubtitle}>Create your admin account in seconds.</p>
 
+            {/* Tab Switcher */}
+            <div className={styles.tabSwitcher}>
+              <button
+                className={`${styles.tab} ${activeTab === "email" ? styles.tabActive : ""}`}
+                onClick={() => switchTab("email")}
+                type="button"
+              >
+                Email
+              </button>
+              <button
+                className={`${styles.tab} ${activeTab === "phone" ? styles.tabActive : ""}`}
+                onClick={() => switchTab("phone")}
+                type="button"
+              >
+                Phone
+              </button>
+            </div>
+
             {error && <div className={styles.errorMsg}>{error}</div>}
 
-            <form onSubmit={handleSubmit} className={styles.form}>
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Hostel Name</label>
-                <div className={styles.inputRow}>
-                  <BuildingIcon />
-                  <input
-                    type="text"
-                    placeholder="e.g. Sunny Backpackers"
-                    className={styles.input}
-                    value={hostelName}
-                    onChange={(e) => setHostelName(e.target.value)}
-                    required
-                  />
+            {/* Email Tab */}
+            {activeTab === "email" && (
+              <form onSubmit={handleEmailSubmit} className={styles.form}>
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Hostel Name</label>
+                  <div className={styles.inputRow}>
+                    <BuildingIcon />
+                    <input
+                      type="text"
+                      placeholder="e.g. Sunny Backpackers"
+                      className={styles.input}
+                      value={hostelName}
+                      onChange={(e) => setHostelName(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Work Email</label>
-                <div className={styles.inputRow}>
-                  <MailIcon />
-                  <input
-                    type="email"
-                    placeholder="name@hostel.com"
-                    className={styles.input}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Work Email</label>
+                  <div className={styles.inputRow}>
+                    <MailIcon />
+                    <input
+                      type="email"
+                      placeholder="name@hostel.com"
+                      className={styles.input}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Create Password</label>
-                <div className={styles.inputRow}>
-                  <LockIcon />
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    className={styles.input}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                  />
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Create Password</label>
+                  <div className={styles.inputRow}>
+                    <LockIcon />
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      className={styles.input}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <button type="submit" className={styles.submitBtn} disabled={loading}>
-                {loading ? (
-                  <span className={styles.spinner}></span>
-                ) : (
-                  <>Sign Up <ArrowRightIcon /></>
-                )}
-              </button>
-            </form>
+                <button type="submit" className={styles.submitBtn} disabled={loading}>
+                  {loading ? (
+                    <span className={styles.spinner}></span>
+                  ) : (
+                    <>Sign Up <ArrowRightIcon /></>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Phone Tab */}
+            {activeTab === "phone" && !otpSent && (
+              <form onSubmit={handleSendOtp} className={styles.form}>
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Mobile Number</label>
+                  <div className={styles.inputRow}>
+                    <PhoneIcon />
+                    <span className={styles.countryCode}>+91</span>
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      placeholder="10-digit mobile number"
+                      className={styles.input}
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  id="send-otp-btn"
+                  className={styles.submitBtn}
+                  disabled={loading || phone.length !== 10}
+                >
+                  {loading ? (
+                    <span className={styles.spinner}></span>
+                  ) : (
+                    <>Send OTP <ArrowRightIcon /></>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* OTP Verification Step */}
+            {activeTab === "phone" && otpSent && (
+              <form onSubmit={handleVerifyOtp} className={styles.form}>
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Enter verification code</label>
+                  <p className={styles.otpHint}>
+                    Sent to +91 {phone.slice(0, 5)} {phone.slice(5)}
+                  </p>
+                  <div className={styles.otpContainer}>
+                    {otp.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={(el) => (otpRefs.current[i] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                        onPaste={i === 0 ? handleOtpPaste : undefined}
+                        className={styles.otpInput}
+                        autoFocus={i === 0}
+                        autoComplete="one-time-code"
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <button type="submit" className={styles.submitBtn} disabled={loading}>
+                  {loading ? (
+                    <span className={styles.spinner}></span>
+                  ) : (
+                    <>Verify <ArrowRightIcon /></>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className={styles.resendBtn}
+                  onClick={handleResendOtp}
+                  disabled={resendTimer > 0}
+                >
+                  {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend OTP"}
+                </button>
+              </form>
+            )}
 
             <div className={styles.orDivider}>
               <span className={styles.orLine}></span>
@@ -224,6 +460,9 @@ export default function SignUpPage() {
         </div>
 
       </main>
+
+      {/* Invisible reCAPTCHA container */}
+      <div id="recaptcha-container"></div>
 
       <Footer />
 
