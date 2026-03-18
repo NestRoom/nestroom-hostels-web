@@ -1,0 +1,6 @@
+.dashboardPage {
+  /* Will contain CSS Grid/Flexbox code for dashboard layout in future phases */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
