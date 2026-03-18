@@ -1,0 +1,50 @@
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: #666;
+  background-color: #F8F6F4;
+}
+
+.dashboardContainer {
+  display: flex;
+  height: 100vh;
+  background-color: #F8F6F4;
+  overflow: hidden; /* Prevent body scroll, handle scroll in mainArea */
+}
+
+/* Temporary placeholder styles */
+.sidebarPlaceholder {
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #eaeaea;
+  padding: 24px;
+  font-weight: 500;
+  color: #333;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbarPlaceholder {
+  height: 80px;
+  background-color: #FAFAFA; /* Or transparent depending on exact design */
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  font-weight: 500;
+  color: #333;
+}
+
+.mainArea {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
