@@ -1,0 +1,13 @@
+.navItem {
+  display: flex;
+  align-items: center;
+  /* Further styling will be added in isolated steps 21-23 */
+}
+
+.icon {
+  /* Icon spacing placeholder */
+}
+
+.label {
+  /* Label typography placeholder */
+}
