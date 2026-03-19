@@ -3,6 +3,18 @@
   --foreground: #18181b; /* Text Black */
   --primary: #343df4; /* Vibrant Blue */
   --text-muted: #a1a1aa;
+
+  /* Dashboard Specific Tokens */
+  --panel-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --text-main: #18181b;
+  --text-secondary: #71717a;
+  --border-light: #e4e4e7;
+  --border-medium: #d4d4d8;
+  --status-success: #10b981; /* Green for payments */
+  --status-warning: #f59e0b; /* Orange for medium priority */
+  --status-danger: #ef4444; /* Red for high priority / overdue */
+  --icon-bg-blue: #eff0ff; /* Light blue background for specific icons */
 }
 
 html,
