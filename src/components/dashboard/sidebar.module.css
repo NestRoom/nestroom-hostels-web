@@ -4,4 +4,24 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border-light);
+}
+
+.logoContainer {
+  padding: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.blueText {
+  color: var(--primary);
 }
