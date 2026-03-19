@@ -3,6 +3,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Sidebar from '@/components/dashboard/Sidebar';
 import styles from './layout.module.css';
 
 export default function DashboardLayout({ children }) {
@@ -25,8 +26,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className={styles.dashboardContainer}>
-      {/* Real Sidebar component will replace this soon */}
-      <aside className={styles.sidebarPlaceholder}>Sidebar Placeholder</aside>
+      <Sidebar />
       
       <div className={styles.mainContent}>
         {/* Real Topbar component will replace this soon */}
