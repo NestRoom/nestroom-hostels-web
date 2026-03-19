@@ -1,0 +1,10 @@
+.card {
+  background-color: var(--panel-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; /* Ensures any background graphics don't spill out */
+}
