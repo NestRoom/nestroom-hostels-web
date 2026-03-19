@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from './sidebar.module.css';
 import NavItem from './NavItem';
+import SidebarFooter from './SidebarFooter';
 import { 
   MdOutlineSpaceDashboard,
   MdOutlineSingleBed,
@@ -38,6 +39,10 @@ export default function Sidebar() {
           />
         ))}
       </nav>
+
+      <div className={styles.footerWrapper}>
+        <SidebarFooter />
+      </div>
     </aside>
   );
 }
