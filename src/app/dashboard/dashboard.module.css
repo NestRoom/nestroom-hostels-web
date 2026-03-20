@@ -1,6 +1,56 @@
 .dashboardPage {
-  /* Will contain CSS Grid/Flexbox code for dashboard layout in future phases */
   display: flex;
   flex-direction: column;
+  gap: 32px;
+  max-width: 1400px;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+
+.chartRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.managementSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  margin: 0;
+}
+
+.managementRow {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* Payments card is visually slightly wider than complaints */
+  gap: 24px;
+}
+
+/* Temporary Placeholders */
+.placeholderBox {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-p);
+  border: 1px dashed var(--border-medium);
+  box-shadow: none;
+}
+
+.chartRow .placeholderBox {
+  min-height: 350px;
+}
+
+.managementRow .placeholderBox {
+  min-height: 300px;
 }
