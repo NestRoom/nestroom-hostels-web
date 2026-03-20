@@ -1,0 +1,31 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 32px 16px 32px; /* Providing breathing room from top of the viewport */
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: var(--font-size-p);
+  color: var(--text-secondary);
+}
+
+.actionsPlaceholder {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
