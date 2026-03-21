@@ -1,0 +1,59 @@
+.statCard {
+  position: relative;
+  overflow: hidden; /* Clips the oversized background watermark appropriately */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+  padding: 32px;
+}
+
+.watermark {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 80px;
+  color: var(--text-secondary);
+  opacity: 0.1;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1;
+}
+
+.title {
+  font-size: var(--font-size-p);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.value {
+  font-size: var(--font-size-stat);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.metricArea {
+  margin-top: auto; /* Ensures the bottom element anchors down securely regardless of title height difference */
+  padding-top: 16px;
+  z-index: 1;
+}
