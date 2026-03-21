@@ -1,0 +1,35 @@
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 100px;
+  padding: 10px 16px;
+  min-width: 250px;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.searchWrapper:focus-within {
+  border-color: #d1d5db;
+  box-shadow: 0 0 0 2px rgba(229, 231, 235, 0.5);
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #374151;
+  width: 100%;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}

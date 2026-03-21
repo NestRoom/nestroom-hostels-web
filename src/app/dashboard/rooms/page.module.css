@@ -1,0 +1,6 @@
+.roomsContainer {
+  padding: 32px;
+  background-color: #f4eee6;
+  min-height: 100vh;
+  border-radius: 32px;
+}
