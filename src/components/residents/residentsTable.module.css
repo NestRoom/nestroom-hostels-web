@@ -1,0 +1,116 @@
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  min-height: 250px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th {
+  padding: 16px 24px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.table td {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.residentCell {
+  display: flex !important;
+  align-items: center;
+}
+
+.avatarSpacing {
+  margin-right: 12px;
+}
+
+.residentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.residentName {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.residentPhone {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.roomCell, .dateCell {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.actionBtn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background-color: #f3f4f6;
+  color: var(--text-main);
+}
+
+.loadingSkeleton, .emptyState {
+  padding: 40px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Skeleton Loading Animation */
+.skeletonAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonText {
+  height: 12px;
+  border-radius: 4px;
+  background-color: #e5e7eb;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
