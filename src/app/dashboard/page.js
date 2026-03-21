@@ -2,6 +2,7 @@ import styles from './dashboard.module.css';
 import Card from '@/components/dashboard/Card';
 import StatCard from '@/components/dashboard/StatCard';
 import RevenueChart from '@/components/dashboard/RevenueChart';
+import ActiveComplaints from '@/components/dashboard/ActiveComplaints';
 import { FiUser, FiBriefcase, FiAlertTriangle } from 'react-icons/fi';
 import { MdOutlineDoorFront, MdLocationCity, MdOutlineSingleBed, MdCurrencyRupee } from 'react-icons/md';
 
@@ -71,7 +72,7 @@ export default function DashboardPage() {
       <div className={styles.managementSection}>
         <h2 className={styles.sectionTitle}>Management Overview</h2>
         <div className={styles.managementRow}>
-          <Card className={styles.placeholderBox}>Active Complaints Placeholder</Card>
+          <ActiveComplaints />
           <Card className={styles.placeholderBox}>Recent Payments Placeholder</Card>
         </div>
       </div>
