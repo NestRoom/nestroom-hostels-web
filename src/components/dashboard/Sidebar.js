@@ -20,13 +20,14 @@ const navItems = [
   { label: 'Inventory', href: '/dashboard/inventory', icon: MdOutlineInventory2 },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, setSidebarOpen }) {
   return (
-    <aside className={styles.sidebar}>
+    <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
       <div className={styles.logoContainer}>
         <Link href="/" className={styles.logo}>
           nest<span className={styles.blueText}>room</span>
         </Link>
+        <div className={styles.logoIconCollapsed}>N<span className={styles.blueText}>R</span></div>
       </div>
 
       <nav className={styles.navContainer}>

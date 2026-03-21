@@ -1,12 +1,21 @@
-import { FiSearch, FiBell } from 'react-icons/fi';
+import { FiSearch, FiBell, FiMenu } from 'react-icons/fi';
 import styles from './topbar.module.css';
 
-export default function Topbar() {
+export default function Topbar({ setSidebarOpen }) {
   return (
     <header className={styles.topbar}>
       <div className={styles.titleBlock}>
-        <h1 className={styles.title}>Overview</h1>
-        <span className={styles.subtitle}>Namaste, here&apos;s what&apos;s happening at Nestroom Hostel today.</span>
+        <button 
+          className={styles.hamburgerBtn} 
+          onClick={() => setSidebarOpen && setSidebarOpen(true)}
+          aria-label="Open Sidebar Menu"
+        >
+          <FiMenu />
+        </button>
+        <div className={styles.titleTextGroup}>
+          <h1 className={styles.title}>Overview</h1>
+          <span className={styles.subtitle}>Namaste, here&apos;s what&apos;s happening at Nestroom Hostel today.</span>
+        </div>
       </div>
       
       <div className={styles.actionsContainer}>
