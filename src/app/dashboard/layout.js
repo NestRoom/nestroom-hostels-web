@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Topbar from '@/components/dashboard/Topbar';
+import ThemeToggle from '@/components/ThemeToggle';
 import styles from './layout.module.css';
 
 export default function DashboardLayout({ children }) {
@@ -36,6 +37,9 @@ export default function DashboardLayout({ children }) {
           {children}
         </main>
       </div>
+      
+      {/* Floating UI Elements */}
+      <ThemeToggle />
     </div>
   );
 }

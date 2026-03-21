@@ -37,7 +37,35 @@
   --radius-full: 9999px;
 
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03);
+  /* Extended Dashboard specific token overrides to prevent hardcoded hex values blocking toggles */
+  --icon-bg-purple: #f3e8ff;
+  --icon-purple: #9333ea;
+  --icon-bg-orange: #fff7ed;
+  --icon-orange: #ea580c;
+}
+
+/* Phase 12 Step 93 Dark Mode Attribute Targeting */
+[data-theme='dark'] {
+  --background: #121212;
+  --foreground: #ffffff;
+  --primary: #5260ff; /* Slightly brightened blue to retain legibility */
+  --text-muted: #71717a;
+  
+  --panel-bg: #1e1e24; /* Deep charcoal for cards instead of harsh #000 */
+  --sidebar-bg: #18181b; 
+  --text-main: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  
+  --border-light: #27272a;
+  --border-medium: #3f3f46;
+  
+  --icon-bg-blue: #2d338a;
+  --icon-bg-purple: #3b205e;
+  --icon-purple: #d8b4fe;
+  --icon-bg-orange: #432109;
+  --icon-orange: #fdba74;
+  
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 html,

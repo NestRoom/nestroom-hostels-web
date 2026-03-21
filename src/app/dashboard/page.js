@@ -35,8 +35,8 @@ export default function DashboardPage() {
           title="Occupied Rooms" 
           value="38 / 45" 
           icon={FiUser} 
-          iconBgColor="#F3E8FF" /* Light specific purple */
-          iconColor="#9333EA" /* Deep purple */
+          iconBgColor="var(--icon-bg-purple)" 
+          iconColor="var(--icon-purple)" 
           watermarkIcon={MdOutlineSingleBed}
         >
           <div className={styles.avatarGroup}>
@@ -52,8 +52,8 @@ export default function DashboardPage() {
           title="Pending Payments" 
           value="₹2,45,000" 
           icon={FiBriefcase} 
-          iconBgColor="#FFF7ED" /* Light specific orange */
-          iconColor="#EA580C" /* Deep orange */
+          iconBgColor="var(--icon-bg-orange)" 
+          iconColor="var(--icon-orange)" 
           watermarkIcon={MdCurrencyRupee}
         >
           <div className={styles.alertText}>
