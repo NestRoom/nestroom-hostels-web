@@ -1,0 +1,56 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.addCard {
+  border: 2px dashed #d1d5db;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 280px;
+  text-align: center;
+}
+
+.addCard:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.addIconHolder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  color: #9ca3af;
+  margin-bottom: 20px;
+}
+
+.plusIcon {
+  font-size: 24px;
+}
+
+.addTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 8px 0;
+}
+
+.addSubtitle {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0;
+}
