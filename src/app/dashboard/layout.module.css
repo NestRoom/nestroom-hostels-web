@@ -43,8 +43,60 @@
   color: #333;
 }
 
+.scrollContainer {
+  position: relative;
+  flex: 1;
+  margin: 32px;
+  border-radius: 32px;
+  background-color: #f4eee6;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  --gradient-color: #f4eee6;
+}
+
+[data-theme='dark'] .scrollContainer {
+  /* Dynamic match if Dark Mode is active, assuming matching background behavior */
+  background-color: var(--panel-bg);
+  --gradient-color: var(--panel-bg);
+}
+
 .mainArea {
   flex: 1;
   padding: 32px;
   overflow-y: auto;
+}
+
+.topGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(to bottom, var(--gradient-color) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+}
+
+.bottomGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(to top, var(--gradient-color) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+
+.showGradient {
+  opacity: 1;
 }
