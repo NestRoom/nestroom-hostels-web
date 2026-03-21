@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import { FiUser } from 'react-icons/fi';
 import styles from './avatar.module.css';
 
 export default function Avatar({ name, imageUrl, size = 'md' }) {
   const getInitials = (n) => {
-    if (!n) return '?';
+    if (!n) return <FiUser />;
     const split = n.split(' ');
     if (split.length > 1) {
       return (split[0][0] + split[1][0]).toUpperCase();

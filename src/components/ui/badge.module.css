@@ -43,3 +43,28 @@
   background-color: #f3f4f6;
   color: #374151;
 }
+
+.success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.warning {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.info {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.blue_light {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
