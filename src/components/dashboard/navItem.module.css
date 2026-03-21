@@ -26,3 +26,29 @@
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(52, 61, 244, 0.4);
 }
+
+.label {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .label {
+    display: none;
+  }
+  .navItem {
+    justify-content: center;
+    padding: 14px;
+    margin: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .label {
+    display: block;
+  }
+  .navItem {
+    justify-content: flex-start;
+    padding: 14px 24px;
+    margin: 4px 16px;
+  }
+}

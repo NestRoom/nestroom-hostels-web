@@ -54,6 +54,48 @@
   flex-shrink: 0;
 }
 
+.hamburgerBtn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 24px 24px 16px 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .titleBlock {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .titleTextGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hamburgerBtn {
+    display: block;
+  }
+
+  .searchContainer {
+    min-width: 100%;
+    order: 3; /* Pushes the massive search block entirely to its own row bounding 100% width on phones */
+  }
+
+  .actionsContainer {
+    margin-left: auto;
+  }
+}
+
 .searchInput {
   border: none;
   background: transparent;
