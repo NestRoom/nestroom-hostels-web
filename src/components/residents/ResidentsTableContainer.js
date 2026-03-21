@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Card from '@/components/ui/Card';
 import TableControls from './TableControls';
 import ResidentsTable from './ResidentsTable';
+import TableFooterPagination from './TableFooterPagination';
 import { fetchResidentsList } from '@/lib/mockData/residents';
 import styles from './residentsTableContainer.module.css';
 
@@ -52,7 +53,7 @@ export default function ResidentsTableContainer() {
       
       <ResidentsTable data={filteredData} loading={loading} />
       
-      {/* Table Footer Pagination Placeholder (Phase 9 pending) */}
+      <TableFooterPagination totalItems={124} itemsPerPage={5} />
     </Card>
   );
 }
