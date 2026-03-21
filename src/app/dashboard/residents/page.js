@@ -1,4 +1,5 @@
 import ResidentsHeader from '@/components/residents/ResidentsHeader';
+import SummarySection from '@/components/residents/SummarySection';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -10,9 +11,8 @@ export default function ResidentsPage() {
   return (
     <div className={styles.container}>
       <ResidentsHeader />
+      <SummarySection />
 
-      {/* Summary Cards */}
-      
       {/* Table Filters & Data List will go here... */}
     </div>
   );
