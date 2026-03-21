@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Topbar from '@/components/dashboard/Topbar';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -12,6 +12,30 @@ export default function DashboardLayout({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const scrollRef = useRef(null);
+  const [scrollState, setScrollState] = useState({
+    isAtTop: true,
+    isAtBottom: false,
+    showGradients: false
+  });
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const isAtTop = el.scrollTop === 0;
+    // Using roughly a 1px threshold for fractional browser rendering variances
+    const isAtBottom = el.scrollHeight - Math.ceil(el.scrollTop) <= el.clientHeight + 1;
+    const showGradients = el.scrollHeight > el.clientHeight;
+    
+    setScrollState({ isAtTop, isAtBottom, showGradients });
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [children]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -39,9 +63,29 @@ export default function DashboardLayout({ children }) {
       <div className={styles.mainContent}>
         <Topbar setSidebarOpen={setSidebarOpen} />
         
-        <main className={styles.mainArea}>
-          {children}
-        </main>
+        <div className={styles.scrollContainer}>
+          {/* Top Gradient */}
+          <div 
+            className={`${styles.topGradient} ${
+              scrollState.showGradients && !scrollState.isAtTop ? styles.showGradient : ''
+            }`} 
+          />
+          
+          <main 
+            className={styles.mainArea} 
+            ref={scrollRef} 
+            onScroll={checkScroll}
+          >
+            {children}
+          </main>
+
+          {/* Bottom Gradient */}
+          <div 
+            className={`${styles.bottomGradient} ${
+              scrollState.showGradients && !scrollState.isAtBottom ? styles.showGradient : ''
+            }`} 
+          />
+        </div>
       </div>
       
       {/* Floating UI Elements */}
