@@ -23,6 +23,21 @@ const mockData = [
   { name: 'Jun', revenue: 245000 },
 ];
 
+// Steps 74: Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className={styles.customTooltip}>
+        <p className={styles.tooltipLabel}>{label}</p>
+        <p className={styles.tooltipValue}>
+          {`₹${payload[0].value.toLocaleString()}`}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function RevenueChart() {
   return (
     <Card className={styles.chartCard}>
@@ -37,7 +52,7 @@ export default function RevenueChart() {
         </div>
       </div>
       
-      {/* Steps 68-70: Render Line Chart, customize line, format axes */}
+      {/* Steps 68-74: Render Line Chart, customize line, format axes, custom tooltip */}
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -58,8 +73,8 @@ export default function RevenueChart() {
               tickFormatter={(value) => `₹${value / 1000}k`}
             />
             <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-card)' }}
-              formatter={(value) => [`₹${value.toLocaleString()}`, 'Revenue']}
+              content={<CustomTooltip />} 
+              cursor={{ stroke: 'var(--border-light)', strokeWidth: 2, strokeDasharray: '3 3' }}
             />
             <Line 
               type="monotone" 
