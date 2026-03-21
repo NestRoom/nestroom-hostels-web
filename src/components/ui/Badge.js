@@ -9,6 +9,11 @@ export default function Badge({ type, text, className = '' }) {
       case ROOM_STATUS.MAINTENANCE: return styles.maintenance;
       case ROOM_STATUS.PARTIALLY_VACANT: return styles.partiallyVacant;
       case 'type': return styles.roomType;
+      case 'success': return styles.success;
+      case 'warning': return styles.warning;
+      case 'danger': return styles.danger;
+      case 'info': return styles.info;
+      case 'blue_light': return styles.blue_light;
       default: return styles.default;
     }
   };

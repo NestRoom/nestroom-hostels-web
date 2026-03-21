@@ -1,0 +1,7 @@
+.card {
+  background-color: var(--panel-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  position: relative;
+}
