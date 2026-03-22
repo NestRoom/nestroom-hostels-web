@@ -17,6 +17,7 @@ const navItems = [
   { label: 'Residents', href: '/dashboard/residents', icon: FiUsers },
   { label: 'Payments', href: '/dashboard/payments', icon: MdOutlinePayments },
   { label: 'Services', href: '/dashboard/services', icon: MdOutlineCleaningServices },
+  { label: 'Inventory', href: '/dashboard/inventory', icon: MdOutlineInventory2 },
 ];
 
 export default function Sidebar({ isOpen, setSidebarOpen }) {
