@@ -5,10 +5,27 @@
   gap: 16px;
 }
 
+.profileLink {
+  text-decoration: none;
+  width: 100%;
+}
+
 .profileContainer {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+
+.profileContainer:hover {
+  background-color: var(--border-light);
+}
+
+.image {
+  object-fit: cover;
 }
 
 .avatar {

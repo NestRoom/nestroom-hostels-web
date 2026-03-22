@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Card from './Card';
 import styles from './recentPayments.module.css';
 
@@ -15,7 +16,7 @@ const PaymentRow = ({ payment }) => (
   <div className={styles.paymentRow}>
     {/* Step 86 & 87: Implement Avatar layout and Details Section */}
     <div className={styles.userInfo}>
-      <img src={payment.avatar} alt={payment.name} className={styles.avatar} />
+      <Image src={payment.avatar} alt={payment.name} className={styles.avatar} width={40} height={40} />
       <div className={styles.detailsBlock}>
         <span className={styles.name}>{payment.name}</span>
         <span className={styles.room}>{payment.room}</span>
