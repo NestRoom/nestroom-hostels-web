@@ -1,13 +1,35 @@
+"use client";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import styles from './dashboard.module.css';
-import Card from '@/components/dashboard/Card';
 import StatCard from '@/components/dashboard/StatCard';
 import RevenueChart from '@/components/dashboard/RevenueChart';
 import ActiveComplaints from '@/components/dashboard/ActiveComplaints';
 import RecentPayments from '@/components/dashboard/RecentPayments';
 import { FiUser, FiBriefcase, FiAlertTriangle } from 'react-icons/fi';
 import { MdOutlineDoorFront, MdLocationCity, MdOutlineSingleBed, MdCurrencyRupee } from 'react-icons/md';
+import apiClient from '@/lib/apiClient';
 
 export default function DashboardPage() {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const data = await apiClient.get('/dashboard/stats');
+        setStats(data.stats);
+      } catch (err) {
+        console.error('Failed to load dashboard stats:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStats();
+  }, []);
+
+  if (loading) return <div className={styles.loading}>Loading Stats...</div>;
+
   return (
     <div className={styles.dashboardPage}>
       {/* Top Row: Quick Stats */}
@@ -16,7 +38,7 @@ export default function DashboardPage() {
         {/* Card 1: Total Rooms */}
         <StatCard 
           title="Total Rooms" 
-          value="45" 
+          value={stats?.rooms?.total || "0"} 
           icon={MdOutlineDoorFront} 
           iconBgColor="var(--icon-bg-blue)" 
           iconColor="var(--primary)"
@@ -24,33 +46,44 @@ export default function DashboardPage() {
         >
           <div className={styles.progressBarContainer}>
             <div className={styles.progressBar}>
-              <div className={styles.progressFill} style={{ width: '45%' }}></div>
+              <div 
+                className={styles.progressFill} 
+                style={{ width: stats?.rooms?.total ? `${(stats.rooms.occupied / stats.rooms.total) * 100}%` : '0%' }}
+              ></div>
             </div>
-            <span className={styles.progressText}>Capacity: 135 Beds</span>
+            <span className={styles.progressText}>Occupancy: {stats?.rooms?.occupied || 0} / {stats?.rooms?.total || 0}</span>
           </div>
         </StatCard>
 
-        {/* Card 2: Occupied Rooms */}
+        {/* Card 2: Active Residents */}
         <StatCard 
-          title="Occupied Rooms" 
-          value="38 / 45" 
+          title="Active Residents" 
+          value={stats?.residents?.active || "0"} 
           icon={FiUser} 
           iconBgColor="var(--icon-bg-purple)" 
           iconColor="var(--icon-purple)" 
           watermarkIcon={MdOutlineSingleBed}
         >
           <div className={styles.avatarGroup}>
-            <img src="https://i.pravatar.cc/150?img=12" alt="Avatar" className={styles.overlapAvatar} />
-            <img src="https://i.pravatar.cc/150?img=32" alt="Avatar" className={styles.overlapAvatar} />
-            <img src="https://i.pravatar.cc/150?img=53" alt="Avatar" className={styles.overlapAvatar} />
-            <div className={styles.moreAvatarBadge}>+84</div>
+            {[12, 32, 53].map(id => (
+              <div key={id} className={styles.overlapAvatarWrapper}>
+                <Image 
+                  src={`https://i.pravatar.cc/150?img=${id}`} 
+                  alt="Resident Profile" 
+                  width={32} 
+                  height={32} 
+                  className={styles.overlapAvatar} 
+                />
+              </div>
+            ))}
+            <div className={styles.moreAvatarBadge}>+{stats?.residents?.total || 0}</div>
           </div>
         </StatCard>
 
         {/* Card 3: Pending Payments */}
         <StatCard 
-          title="Pending Payments" 
-          value="₹2,45,000" 
+          title="Pending Dues" 
+          value={`₹${stats?.payments?.pendingDues?.toLocaleString() || "0"}`} 
           icon={FiBriefcase} 
           iconBgColor="var(--icon-bg-orange)" 
           iconColor="var(--icon-orange)" 
@@ -58,7 +91,7 @@ export default function DashboardPage() {
         >
           <div className={styles.alertText}>
             <FiAlertTriangle />
-            <span>12 Residents Overdue</span>
+            <span>{stats?.payments?.overdueCount || 0} Overdue Bills</span>
           </div>
         </StatCard>
 

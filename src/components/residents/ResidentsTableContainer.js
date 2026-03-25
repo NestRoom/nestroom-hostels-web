@@ -5,38 +5,30 @@ import Card from '@/components/ui/Card';
 import TableControls from './TableControls';
 import ResidentsTable from './ResidentsTable';
 import TableFooterPagination from './TableFooterPagination';
-import { fetchResidentsList } from '@/lib/mockData/residents';
+import { useResidents } from '@/context/ResidentsContext';
 import styles from './residentsTableContainer.module.css';
 
 export default function ResidentsTableContainer() {
-  const [activeTab, setActiveTab] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  const [residents, setResidents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { 
+    residents, 
+    loading, 
+    activeTab, 
+    setActiveTab, 
+    searchQuery, 
+    setSearchQuery 
+  } = useResidents();
 
-  useEffect(() => {
-    // API Call simulation
-    fetchResidentsList()
-      .then(data => {
-        setResidents(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  // Basic Filter Engine mapping State to Data
   const filteredData = residents.filter(resident => {
-    // 1. Tab filtering (just a mock behavior mapping pending to 'New')
+    // 1. Tab filtering
     if (activeTab === 'pending' && resident.status !== 'New') return false;
+    if (activeTab === 'notice' && resident.status !== 'Notice') return false;
     
-    // 2. Search filtering (String Match against name or room)
+    // 2. Search filtering
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       const matchName = resident.name.toLowerCase().includes(query);
-      const matchRoom = resident.roomNo.toLowerCase().includes(query);
-      if (!matchName && !matchRoom) return false;
+      const matchPhone = resident.phone?.toLowerCase().includes(query);
+      if (!matchName && !matchPhone) return false;
     }
     
     return true;

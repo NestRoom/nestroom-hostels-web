@@ -1,5 +1,9 @@
 import { Outfit } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import { RoomsProvider } from "@/context/RoomsContext";
+import { ResidentsProvider } from "@/context/ResidentsContext";
+import { PaymentsProvider } from "@/context/PaymentsContext";
+import { ServicesProvider } from "@/context/ServicesContext";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -16,7 +20,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable}`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <RoomsProvider>
+            <ResidentsProvider>
+              <PaymentsProvider>
+                <ServicesProvider>
+                  {children}
+                </ServicesProvider>
+              </PaymentsProvider>
+            </ResidentsProvider>
+          </RoomsProvider>
+        </AuthProvider>
       </body>
     </html>
   );

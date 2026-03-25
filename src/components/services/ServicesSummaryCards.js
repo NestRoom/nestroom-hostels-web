@@ -1,19 +1,38 @@
-import { FiInbox, FiClock, FiMonitor, FiTrendingUp, FiTrendingDown, FiMinus } from 'react-icons/fi';
+"use client";
+import { FiInbox, FiClock, FiTrendingUp } from 'react-icons/fi';
+import { useServices } from '@/context/ServicesContext';
 import Card from '../ui/Card';
-import { SUMMARY_STATS } from '../../app/dashboard/services/constants';
 import styles from './ServicesSummaryCards.module.css';
 
-const iconMap = {
-  requests: FiInbox,
-  resolution: FiClock,
-  subscriptions: FiMonitor
-};
-
 export default function ServicesSummaryCards() {
+  const { stats, loading } = useServices();
+
+  if (loading || !stats) return <div className={styles.loading}>Loading Stats...</div>;
+
+  const summaryItems = [
+    {
+      id: 'requests',
+      title: 'Open Tickets',
+      value: stats.openTickets,
+      icon: FiInbox,
+      trend: 'Awaiting resolution',
+      trendType: 'neutral'
+    },
+    {
+      id: 'resolution',
+      title: 'Avg. Resolution',
+      value: stats.averageResolutionTimeHours,
+      unit: 'hrs',
+      icon: FiClock,
+      trend: 'Efficiency metric',
+      trendType: 'increase'
+    }
+  ];
+
   return (
     <div className={styles.cardsContainer}>
-      {SUMMARY_STATS.map((stat) => {
-        const Icon = iconMap[stat.id];
+      {summaryItems.map((stat) => {
+        const Icon = stat.icon;
         
         return (
           <Card key={stat.id} className={styles.card}>
@@ -33,9 +52,7 @@ export default function ServicesSummaryCards() {
               </div>
               
               <div className={`${styles.trend} ${styles[stat.trendType]}`}>
-                {stat.trendType === 'increase' && <FiTrendingUp className={styles.trendIcon} />}
-                {stat.trendType === 'decrease' && <FiTrendingDown className={styles.trendIcon} />}
-                {stat.trendType === 'neutral' && <FiMinus className={styles.trendIcon} />}
+                <FiTrendingUp className={styles.trendIcon} />
                 <span className={styles.trendText}>{stat.trend}</span>
               </div>
             </div>
