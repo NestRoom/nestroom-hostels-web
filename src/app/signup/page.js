@@ -74,7 +74,7 @@ export default function SignUpPage() {
   const [resendTimer, setResendTimer] = useState(0);
 
   const otpRefs = useRef([]);
-  const { signUpWithEmail, signInWithGoogle, setupRecaptcha, sendOtp, verifyOtp } = useAuth();
+  const { signUpWithEmail, signInWithGoogle, sendWhatsAppOtp, verifyWhatsAppOtp } = useAuth();
   const router = useRouter();
 
   // Resend timer countdown
@@ -100,33 +100,12 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      }
-      const recaptchaVerifier = setupRecaptcha("recaptcha-container");
-      const result = await sendOtp(`+91${phone}`, recaptchaVerifier);
-      setConfirmationResult(result);
+      await sendWhatsAppOtp(`+91${phone}`);
       setOtpSent(true);
-      setResendTimer(30);
+      setResendTimer(60);
     } catch (err) {
-      console.error("Firebase sendOtp Error:", err);
-      console.dir(err);
-      
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      }
-      switch (err.code) {
-        case "auth/invalid-phone-number":
-          setError("Invalid phone number. Please check and try again.");
-          break;
-        case "auth/too-many-requests":
-          setError("Too many attempts. Please try again later.");
-          break;
-        default:
-          setError("Failed to send OTP. Please try again.");
-      }
+      console.error("WhatsApp OTP Error:", err);
+      setError(err.message || "Failed to send OTP. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -172,10 +151,12 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      await verifyOtp(confirmationResult, code);
-      router.push("/");
+      await verifyWhatsAppOtp(`+91${phone}`, code);
+      // NOTE: For phone auth, user might still need to set up hostel name 
+      // if it's a new user. For now redirecting to dash.
+      router.push("/dashboard");
     } catch (err) {
-      setError("Invalid verification code. Please try again.");
+      setError(err.message || "Invalid verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -185,7 +166,6 @@ export default function SignUpPage() {
     if (resendTimer > 0) return;
     setOtp(["", "", "", "", "", ""]);
     setOtpSent(false);
-    setConfirmationResult(null);
     setTimeout(() => handleSendOtp(), 100);
   };
 
@@ -195,22 +175,11 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      await signUpWithEmail(email, password);
-      router.push("/");
+      // Backend expects: name, email, password, hostelName
+      await signUpWithEmail("Admin", email, password, hostelName);
+      router.push("/dashboard");
     } catch (err) {
-      switch (err.code) {
-        case "auth/email-already-in-use":
-          setError("This email is already registered. Try logging in.");
-          break;
-        case "auth/weak-password":
-          setError("Password must be at least 6 characters.");
-          break;
-        case "auth/invalid-email":
-          setError("Please enter a valid email address.");
-          break;
-        default:
-          setError("Something went wrong. Please try again.");
-      }
+      setError(err.message || "Failed to create account. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -221,11 +190,9 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       await signInWithGoogle();
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
-      if (err.code !== "auth/popup-closed-by-user") {
-        setError("Google sign-in failed. Please try again.");
-      }
+      setError(err.message || "Google sign-in failed. Please try again.");
     } finally {
       setLoading(false);
     }

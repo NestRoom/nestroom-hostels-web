@@ -1,14 +1,34 @@
 "use client";
 
-import { createContext, useContext, useState, useMemo } from 'react';
-import { initialRoomsState } from '@/lib/mockData/rooms';
+import { createContext, useContext, useState, useMemo, useEffect } from 'react';
+import { initialRoomsState, fetchRooms } from '@/lib/mockData/rooms';
+import { useAuth } from './AuthContext';
 
 const RoomsContext = createContext();
 
 export function RoomsProvider({ children }) {
+  const { user } = useAuth();
   const [rooms, setRooms] = useState(initialRoomsState);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Fetch rooms on mount if user is logged in
+  useEffect(() => {
+    async function loadRooms() {
+      if (!user) return;
+      try {
+        setLoading(true);
+        const data = await fetchRooms();
+        setRooms(data);
+      } catch (err) {
+        console.error('Failed to fetch rooms:', err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadRooms();
+  }, [user]);
 
   const filteredRooms = useMemo(() => {
     let result = rooms;
@@ -32,6 +52,7 @@ export function RoomsProvider({ children }) {
   const value = {
     rooms,
     setRooms,
+    loading,
     activeFilter,
     setActiveFilter,
     searchQuery,

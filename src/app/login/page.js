@@ -61,7 +61,7 @@ function LoginContent() {
   const [resendTimer, setResendTimer] = useState(0);
 
   const otpRefs = useRef([]);
-  const { loginWithEmail, signInWithGoogle, setupRecaptcha, sendOtp, verifyOtp } = useAuth();
+  const { loginWithEmail, signInWithGoogle, sendWhatsAppOtp, verifyWhatsAppOtp } = useAuth();
   const router = useRouter();
 
   // Resend timer countdown
@@ -71,14 +71,6 @@ function LoginContent() {
       return () => clearTimeout(timer);
     }
   }, [resendTimer]);
-
-  // Auto-send OTP if phone is pre-filled from landing page
-  useEffect(() => {
-    if (initialPhone && activeTab === "phone" && !otpSent) {
-      handleSendOtp();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handlePhoneChange = (e) => {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
@@ -95,34 +87,12 @@ function LoginContent() {
     setLoading(true);
 
     try {
-      // Clear previous reCAPTCHA if exists
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      }
-      const recaptchaVerifier = setupRecaptcha("recaptcha-container");
-      const result = await sendOtp(`+91${phone}`, recaptchaVerifier);
-      setConfirmationResult(result);
+      await sendWhatsAppOtp(`+91${phone}`);
       setOtpSent(true);
-      setResendTimer(30);
+      setResendTimer(60);
     } catch (err) {
-      console.error("Firebase sendOtp Error:", err);
-      console.dir(err);
-      // Reset reCAPTCHA on error
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      }
-      switch (err.code) {
-        case "auth/invalid-phone-number":
-          setError("Invalid phone number. Please check and try again.");
-          break;
-        case "auth/too-many-requests":
-          setError("Too many attempts. Please try again later.");
-          break;
-        default:
-          setError("Failed to send OTP. Please try again.");
-      }
+      console.error("WhatsApp OTP error:", err);
+      setError(err.message || "Failed to send OTP. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -169,10 +139,10 @@ function LoginContent() {
     setLoading(true);
 
     try {
-      await verifyOtp(confirmationResult, code);
-      router.push("/");
+      await verifyWhatsAppOtp(`+91${phone}`, code);
+      router.push("/dashboard");
     } catch (err) {
-      setError("Invalid verification code. Please try again.");
+      setError(err.message || "Invalid verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -182,8 +152,6 @@ function LoginContent() {
     if (resendTimer > 0) return;
     setOtp(["", "", "", "", "", ""]);
     setOtpSent(false);
-    setConfirmationResult(null);
-    // Will re-trigger send
     setTimeout(() => handleSendOtp(), 100);
   };
 
@@ -194,23 +162,9 @@ function LoginContent() {
 
     try {
       await loginWithEmail(email, password);
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
-      switch (err.code) {
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-        case "auth/invalid-credential":
-          setError("Invalid email or password.");
-          break;
-        case "auth/invalid-email":
-          setError("Please enter a valid email address.");
-          break;
-        case "auth/too-many-requests":
-          setError("Too many attempts. Please try again later.");
-          break;
-        default:
-          setError("Something went wrong. Please try again.");
-      }
+      setError(err.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -221,11 +175,9 @@ function LoginContent() {
     setLoading(true);
     try {
       await signInWithGoogle();
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
-      if (err.code !== "auth/popup-closed-by-user") {
-        setError("Google sign-in failed. Please try again.");
-      }
+      setError(err.message || "Google sign-in failed. Please try again.");
     } finally {
       setLoading(false);
     }
