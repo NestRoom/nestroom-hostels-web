@@ -1,16 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+import { signInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import apiClient from "@/lib/apiClient";
 
 const AuthContext = createContext({});
 
@@ -18,48 +11,96 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * INITIAL LOAD: Check if we have a valid JWT and fetch user profile
+   */
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    async function loadUser() {
+      const token = localStorage.getItem('nestroom_jwt');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await apiClient.get('/auth/me');
+        setUser(data.user);
+      } catch (err) {
+        console.error('Failed to load user session:', err.message);
+        localStorage.removeItem('nestroom_jwt');
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadUser();
   }, []);
 
-  const signInWithGoogle = async () => {
-    return signInWithPopup(auth, googleProvider);
-  };
-
-  const loginWithEmail = async (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-
-  const signUpWithEmail = async (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
-
-  const setupRecaptcha = (elementId) => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
-        size: "invisible",
-        callback: () => {
-          // reCAPTCHA solved
-        },
-      });
+  /**
+   * HELPER: Successful Authentication Handler
+   * Stores the JWT and the user object in state
+   */
+  const handleAuthSuccess = (data) => {
+    if (data.token) {
+      localStorage.setItem('nestroom_jwt', data.token);
     }
-    return window.recaptchaVerifier;
+    setUser(data.user);
+    return data;
   };
 
-  const sendOtp = async (phoneNumber, recaptchaVerifier) => {
-    return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+  /**
+   * GOOGLE SSO FLOW
+   */
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+      
+      // Send Firebase ID token to our backend to exchange for our JWT
+      const data = await apiClient.post('/auth/google', { idToken });
+      return handleAuthSuccess(data);
+    } catch (err) {
+      console.error('Google Sign-In Error:', err.message);
+      throw err;
+    }
   };
 
-  const verifyOtp = async (confirmationResult, code) => {
-    return confirmationResult.confirm(code);
+  /**
+   * EMAIL / PASSWORD FLOWS
+   */
+  const loginWithEmail = async (email, password) => {
+    const data = await apiClient.post('/auth/login', { email, password });
+    return handleAuthSuccess(data);
   };
 
+  const signUpWithEmail = async (name, email, password, hostelName) => {
+    const data = await apiClient.post('/auth/register', { name, email, password, hostelName });
+    return handleAuthSuccess(data);
+  };
+
+  /**
+   * WHATSAPP OTP FLOW
+   */
+  const sendWhatsAppOtp = async (phone) => {
+    return apiClient.post('/auth/whatsapp/send-otp', { phone });
+  };
+
+  const verifyWhatsAppOtp = async (phone, otp) => {
+    const data = await apiClient.post('/auth/whatsapp/verify-otp', { phone, otp });
+    return handleAuthSuccess(data);
+  };
+
+  /**
+   * LOGOUT
+   */
   const logout = async () => {
-    return signOut(auth);
+    localStorage.removeItem('nestroom_jwt');
+    setUser(null);
+    try {
+      await firebaseSignOut(auth); // Clean up Firebase session
+    } catch (e) {
+      // Ignored
+    }
   };
 
   return (
@@ -70,9 +111,8 @@ export function AuthProvider({ children }) {
         signInWithGoogle,
         loginWithEmail,
         signUpWithEmail,
-        setupRecaptcha,
-        sendOtp,
-        verifyOtp,
+        sendWhatsAppOtp,
+        verifyWhatsAppOtp,
         logout,
       }}
     >
