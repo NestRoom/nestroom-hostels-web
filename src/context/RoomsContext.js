@@ -1,34 +1,34 @@
 "use client";
-
-import { createContext, useContext, useState, useMemo, useEffect } from 'react';
-import { initialRoomsState, fetchRooms } from '@/lib/mockData/rooms';
+import { createContext, useContext, useState, useMemo, useEffect, useCallback } from 'react';
+import apiClient from '@/lib/apiClient';
 import { useAuth } from './AuthContext';
 
 const RoomsContext = createContext();
 
 export function RoomsProvider({ children }) {
   const { user } = useAuth();
-  const [rooms, setRooms] = useState(initialRoomsState);
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const loadRooms = useCallback(async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      const data = await apiClient.get('/rooms');
+      setRooms(data.rooms || []);
+    } catch (err) {
+      console.error('Failed to fetch rooms:', err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
   // Fetch rooms on mount if user is logged in
   useEffect(() => {
-    async function loadRooms() {
-      if (!user) return;
-      try {
-        setLoading(true);
-        const data = await fetchRooms();
-        setRooms(data);
-      } catch (err) {
-        console.error('Failed to fetch rooms:', err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
     loadRooms();
-  }, [user]);
+  }, [loadRooms]);
 
   const filteredRooms = useMemo(() => {
     let result = rooms;
@@ -53,6 +53,7 @@ export function RoomsProvider({ children }) {
     rooms,
     setRooms,
     loading,
+    refreshRooms: loadRooms, // Re-use loadRooms
     activeFilter,
     setActiveFilter,
     searchQuery,

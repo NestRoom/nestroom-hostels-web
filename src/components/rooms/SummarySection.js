@@ -1,3 +1,4 @@
+"use client";
 import { useRooms } from '@/context/RoomsContext';
 import SummaryCard from './SummaryCard';
 import styles from './summarySection.module.css';

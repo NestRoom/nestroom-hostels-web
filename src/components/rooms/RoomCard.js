@@ -57,7 +57,7 @@ export default function RoomCard({ room }) {
                 <div className={styles.residentInfo}>
                   <span className={styles.name}>{res.name}</span>
                   <span className={styles.details}>
-                    {res.bed} <span className={styles.dot}>•</span> <span className={res.feeStatus === 'Overdue' ? styles.overdue : ''}>{res.feeStatus}</span>
+                    {res.bed} <span className={styles.dot}>•</span> <span className={res.paymentStatus === 'Overdue' ? styles.overdue : ''}>{res.paymentStatus}</span>
                   </span>
                 </div>
               </div>

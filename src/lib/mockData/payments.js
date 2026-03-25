@@ -33,3 +33,7 @@ export const summaryCardsData = {
 };
 export const revenueChartData = [];
 export const transactionHistory = [];
+export const managementOverviewData = {
+  disputes: { count: "0", failedUpi: 0, amountMismatch: 0 },
+  forecast: { amount: "₹0", pendingBills: 0, progress: 0 }
+};

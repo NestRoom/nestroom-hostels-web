@@ -1,3 +1,4 @@
+"use client";
 import { FiPlus } from 'react-icons/fi';
 import { useRooms } from '@/context/RoomsContext';
 import RoomCard from './RoomCard';
