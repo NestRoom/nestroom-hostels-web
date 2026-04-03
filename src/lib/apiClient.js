@@ -3,12 +3,12 @@
  *
  * WHY THIS FILE EXISTS:
  * This is a lightweight wrapper around the native `fetch` API. It handles:
- * 1. Prepending the `BASE_URL` so we don't repeat http://localhost:5000 everywhere.
+ * 1. Prepending the `BASE_URL` so we don't repeat the backend URL everywhere.
  * 2. Automatically attaching the `Authorization: Bearer <token>` header from localStorage.
  * 3. Standard JSON parsing and error handling.
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nestroom-hostels-backend.vercel.app/api';
 
 /**
  * CORE FETCH WRAPPER
