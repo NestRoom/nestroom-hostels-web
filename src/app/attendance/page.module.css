@@ -1,0 +1,439 @@
+.container {
+  display: flex;
+  background-color: #FDF9F6; /* Aesthetic beige to match dashboard theme */
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 260px; /* Offset for fixed sidebar */
+  padding: 2.5rem;
+  padding-top: 2rem;
+  overflow-y: auto;
+  min-width: 0; /* Prevent flex overflow */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.subtitle {
+  color: #6B7280;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.surpriseBtn {
+  background: #111827;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.surpriseBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  background: #000;
+}
+
+/* Tabs */
+.tabContainer {
+  display: flex;
+  gap: 2rem;
+  border-bottom: 2px solid #E5E7EB;
+  margin-bottom: 2.5rem;
+}
+
+.tab {
+  padding-bottom: 1rem;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: #111827;
+}
+
+.activeTab {
+  color: #3b3bff !important;
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #3b3bff;
+}
+
+/* Stats */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.statCard {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid #f1f5f9;
+  border-left: 5px solid #E5E7EB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 0.5rem;
+}
+
+/* Table */
+.feedTable {
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  border: 1px solid #F3F4F6;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 1rem 1.5rem;
+  background: #F9FAFB;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #F9FAFB;
+  vertical-align: middle;
+}
+
+.residentInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b3bff 0%, #6366f1 100%);
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(59, 59, 255, 0.15);
+}
+
+.residentName {
+  font-weight: 700;
+  color: #111827;
+}
+
+.residentPhone {
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+.statusBadge {
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.statusPresent { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
+.statusAbsent { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+.statusPending { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+.statusOnLeave { background: rgba(107, 114, 128, 0.1); color: #6B7280; border: 1px solid rgba(107, 114, 128, 0.2); }
+.statusNotResponded { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+.geoSuccess {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #10B981;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.geoFail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #EF4444;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.pendingGeo {
+  color: #9CA3AF;
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+.remarks {
+  font-size: 0.85rem;
+  color: #6B7280;
+}
+
+/* Settings */
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.configCard {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.configTitle {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  border-bottom: 2px solid #F3F4F6;
+  padding-bottom: 0.75rem;
+}
+
+.toggleGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: #F9FAFB;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.inputControl {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #E5E7EB;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.inputHint {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  margin-top: 0.25rem;
+}
+
+.coordinatesRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.rangeInput {
+  width: 100%;
+  accent-color: #3b3bff;
+}
+
+.saveBtn {
+  width: 100%;
+  margin-top: 2rem;
+  background: #3b3bff;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 8px 16px rgba(59, 59, 255, 0.2);
+}
+
+.saveBtn:hover {
+  background: #2525ff;
+}
+
+/* Visualization */
+.visualCard {
+  background: #0F172A;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.blueprintContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.blueprint {
+  flex: 1;
+  width: 100%;
+}
+
+.outerRadius {
+  fill: rgba(59, 59, 255, 0.05);
+  stroke: #3b3bff;
+  stroke-width: 2;
+  stroke-dasharray: 8 4;
+  animation: pulse 4s infinite;
+}
+
+.hostelPoint {
+  fill: #3b3bff;
+}
+
+.radiusLine {
+  stroke: #3b3bff;
+  stroke-width: 1;
+}
+
+.blueprintText {
+  fill: #3b3bff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.buildingRect {
+  fill: none;
+  stroke: #475569;
+  stroke-width: 1;
+}
+
+.visualHint {
+  color: #94A3B8;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+@keyframes pulse {
+  0% { stroke-opacity: 0.4; fill-opacity: 0.05; }
+  50% { stroke-opacity: 1; fill-opacity: 0.1; }
+  100% { stroke-opacity: 0.4; fill-opacity: 0.05; }
+}
+
+/* Switch UI */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switchInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #D1D5DB;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #3b3bff;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}

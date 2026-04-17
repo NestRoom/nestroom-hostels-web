@@ -1,0 +1,74 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    height: 76px;
+    border-radius: 100px;
+    box-shadow: inset 0px -4px 16px 5px #fff;
+    align-items: center;
+    justify-content: space-between;
+    text-shadow: 2px 2px 4px 0px #00000083;
+}
+.logo {
+    display: flex;
+    flex-direction: row;
+    margin-left: 60;
+    cursor: pointer;
+}
+.nest {
+    color: black;
+    font-size: 30px;
+    font-weight: 700;
+}
+.room {
+    color: #2C1DFF;
+    font-size: 30px;
+    font-weight: 700;
+}
+.navLinks {
+    display: flex;
+    flex-direction: row;
+    gap: 54px;
+}
+.link {
+    color: black;
+    font-weight: 600;
+    font-size: 21px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+.link:hover {
+    color: #2C1DFF;
+}
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+    margin-right: 10px;
+    align-items: center;
+}
+.loginButton {
+    color: #2C1DFF;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+.loginButton:hover {
+    color: black;
+}
+.signUpButton {
+    background-color: #2C1DFF;
+    padding: 12px 30px;
+    border-radius: 100px;
+    border: none;
+    box-shadow: inset 0px -4px 16px 3px #ffffffc1;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: "Poppins", sans-serif;
+}
+.signUpButton:hover {
+    box-shadow: inset 0px -4px 20px 1px #ffffffc1;
+}
