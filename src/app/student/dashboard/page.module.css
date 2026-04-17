@@ -1,0 +1,242 @@
+.container {
+  min-height: 100vh;
+  background: #FDF9F6;
+  font-family: 'Poppins', sans-serif;
+  color: #111827;
+  padding: 1.5rem;
+}
+
+.content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.nest { color: #111827; }
+.room { color: #3b3bff; }
+
+.userBadge {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  color: #64748B;
+}
+
+.welcomeTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.welcomeSub {
+  color: #94A3B8;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+/* Attendance Card - Premium Glassmorphism */
+.attendanceCard {
+  position: relative;
+  background: white;
+  border: 1px solid rgba(59, 59, 255, 0.1);
+  padding: 2.5rem;
+  border-radius: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(59, 59, 255, 0.08);
+}
+
+.attendanceGlow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(59, 59, 255, 0.2) 0%, transparent 70%);
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.attendanceContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.alertIcon {
+  width: 64px;
+  height: 64px;
+  background: #3b3bff;
+  color: white;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 30px rgba(59, 59, 255, 0.5);
+}
+
+.alertIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.attendanceTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0;
+  color: #111827;
+}
+
+.attendanceDesc {
+  margin: 1rem 0 2rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.markBtn {
+  width: 100%;
+  background: #3b3bff;
+  color: white;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  box-shadow: 0 10px 20px rgba(59, 59, 255, 0.2);
+}
+
+.markBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+}
+
+.markBtn:disabled {
+  background: #475569;
+  color: #94A3B8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.geoHint {
+  margin-top: 1.5rem !important;
+  font-size: 0.75rem;
+  color: #64748B !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Results */
+.resultCard {
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.resSuccess {
+  background: #10b9811a;
+  border: 1px solid #10b98133;
+  color: #34d399;
+}
+
+.resError {
+  background: #ef44441a;
+  border: 1px solid #ef444433;
+  color: #f87171;
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.resultHeader button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.miniCard {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.miniCard:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.miniIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.miniIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.miniCardTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.miniCardDesc {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}

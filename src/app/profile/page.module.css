@@ -1,0 +1,371 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #FDF9F6;
+  font-family: inherit;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 250px;
+  padding: 3rem 4rem;
+  padding-bottom: 6rem;
+  max-width: 1000px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.pageTitle {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.5rem 0;
+}
+
+.pageSubtitle {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.completionWidget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.progressCircle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressText {
+  position: absolute;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b3bff;
+}
+
+.completionLabel {
+  font-size: 0.7rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.editProfileBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #3b3bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  box-shadow: 0 4px 12px rgba(59, 59, 255, 0.2);
+}
+
+.editProfileBtn:hover {
+  opacity: 0.9;
+}
+
+/* Sections instead of Cards */
+.section {
+  display: flex;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.sectionHeader {
+  flex: 0 0 250px;
+}
+
+.sectionHeader h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.sectionHeader p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.sectionBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Profile Photo Upload */
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.avatarLarge {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #E5E7EB;
+}
+
+.uploadLabel {
+  display: inline-block;
+  background-color: white;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.uploadLabel:hover {
+  background-color: #F3F4F6;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.photoHelp {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Form Inputs */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #D1D5DB;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  color: #111;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  border-color: #3b3bff;
+  box-shadow: 0 0 0 3px rgba(59, 59, 255, 0.1);
+}
+
+.inputGroup input[disabled] {
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.helperText {
+  display: block;
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 0.25rem;
+}
+
+.twoColumn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Hostels Array */
+.hostelItem {
+  background-color: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.hostelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.hostelHeader h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #111;
+}
+
+.hostelBadge {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.mapContainer {
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  height: 200px;
+  background-color: #F9FAFB;
+}
+
+/* Security Settings */
+.settingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  background-color: white;
+}
+
+.settingInfo h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  color: #111;
+}
+
+.settingInfo p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.enabledText {
+  color: #059669 !important;
+  font-weight: 500;
+}
+
+.actionBtn {
+  background: white;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.actionBtn:hover {
+  background-color: #F3F4F6;
+}
+
+/* Footer Actions */
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 250px;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem 4rem;
+  border-top: 1px solid #E5E7EB;
+  z-index: 10;
+}
+
+.cancelBtn {
+  padding: 0.75rem 1.5rem;
+  background-color: white;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.saveBtn {
+  padding: 0.75rem 2rem;
+  background-color: #3b3bff;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 59, 255, 0.2);
+}
+
+.floatingModeToggle {
+  position: fixed;
+  right: 2rem;
+  bottom: 6rem;
+  width: 48px;
+  height: 48px;
+  background-color: #111;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 100;
+}

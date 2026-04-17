@@ -1,0 +1,35 @@
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  margin-top: 20px;
+  z-index: 2;
+}
+
+.line {
+  height: 2px;
+  width: 100%;
+  background-color: #cacaca;
+  margin-bottom: 10px;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.text {
+  color: #8c8c8c;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.textSmall {
+  color: #a3a3a3;
+  font-size: 12px;
+  font-weight: 500;
+}

@@ -1,0 +1,192 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 40px;
+  padding: 40px 40px;
+  width: 450px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardGlow {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background-color: #2C1DFF;
+  filter: blur(100px);
+  opacity: 0.15;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #171717;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #737373;
+  margin: 0;
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #171717;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  padding: 15px 20px;
+  gap: 12px;
+}
+
+.icon {
+  color: #a3a3a3;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+  color: #171717;
+  width: 100%;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: #a3a3a3;
+}
+
+.button {
+  background-color: #2C1DFF;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #1e11e6;
+}
+
+.buttonIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.footerText {
+  text-align: center;
+  font-size: 14px;
+  color: #737373;
+  margin-top: 24px;
+}
+
+.link {
+  color: #2C1DFF;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.errorText {
+  color: #ff3333;
+  font-size: 13px;
+  font-weight: 500;
+  margin: -10px 0 0 0;
+  padding-left: 5px;
+}
+
+.otpContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.otpBoxInput {
+  width: 50px;
+  height: 60px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background-color: #f9f9f9;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  color: #171717;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.otpBoxInput:focus {
+  border-color: #2C1DFF;
+  box-shadow: 0 0 0 3px rgba(44, 29, 255, 0.1);
+}
+
+.countrySelect {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+  color: #171717;
+  font-family: inherit;
+  cursor: pointer;
+  padding-right: 8px;
+  border-right: 1px solid #e5e5e5;
+  margin-right: 8px;
+}
+
+.passwordToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a3a3a3;
+  transition: color 0.2s;
+}
+
+.passwordToggle:hover {
+  color: #171717;
+}
