@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Loading from "../../components/Loading/Loading";
 import styles from "./page.module.css";
+import { secureFetch } from "../../utils/auth";
 
 export default function StudentDashboard() {
   const [loading, setLoading] = useState(true);
@@ -12,12 +13,7 @@ export default function StudentDashboard() {
 
   const checkAttendance = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) return;
-
-      const res = await fetch("http://localhost:5001/v1/residents/attendance/active", {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const res = await secureFetch("http://localhost:5001/v1/residents/attendance/active");
       const data = await res.json();
       if (data.status === 'success' && data.data.activeRequest) {
         setActiveRequest(data.data.activeRequest);
@@ -51,12 +47,9 @@ export default function StudentDashboard() {
       async (position) => {
         try {
           const { latitude, longitude, accuracy } = position.coords;
-          const token = localStorage.getItem("accessToken");
-          
-          const res = await fetch("http://localhost:5001/v1/residents/attendance/submit", {
+          const res = await secureFetch("http://localhost:5001/v1/residents/attendance/submit", {
             method: "POST",
             headers: { 
-              "Authorization": `Bearer ${token}`,
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -66,6 +59,7 @@ export default function StudentDashboard() {
               accuracy
             })
           });
+
           
           const data = await res.json();
           if (data.status === 'success') {

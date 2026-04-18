@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
 
+import { setTokens } from '../../utils/auth';
+
 export default function LoginCard() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -26,10 +28,10 @@ export default function LoginCard() {
       const data = await res.json();
 
       if (data.success) {
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
-        router.push('/dashboard'); // redirect to dashboard on returning login
+        setTokens(data.data.accessToken, data.data.refreshToken);
+        router.push('/dashboard'); 
       } else {
+
         setError(data.error?.message || data.message || 'Login failed.');
       }
     } catch (err) {

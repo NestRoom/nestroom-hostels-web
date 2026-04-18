@@ -1,11 +1,41 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import LoginCard from "../components/AuthCard/LoginCard";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
+
+      try {
+        const res = await fetch("http://localhost:5001/v1/auth/me", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (data.data.user.userType === 'resident') {
+            router.push("/student/dashboard");
+          } else {
+            router.push("/dashboard");
+          }
+        }
+      } catch (err) {
+        console.error("Auth check failed", err);
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
+
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
