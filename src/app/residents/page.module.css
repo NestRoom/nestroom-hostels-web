@@ -276,7 +276,8 @@
 }
 
 .statusActive { background-color: #ECFDF5; color: #059669; }
-.statusNotice { background-color: #FFF7ED; color: #EA580C; }
+.statusNotice { background-color: #FEF2F2; color: #DC2626; }
+.statusPending { background-color: #FFFBEB; color: #D97706; }
 
 /* Modals */
 .modalOverlay {

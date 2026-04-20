@@ -129,9 +129,18 @@ export default function StudentProfile() {
           <div className={styles.cardTitle}>
             <span>Onboarding Documents</span>
             <span className={`${styles.statusIndicator} ${styles[resident?.kyc?.kycStatus?.toLowerCase() || 'pending']}`}>
-              {resident?.kyc?.kycStatus || 'Pending'}
+              {resident?.kyc?.kycStatus || 'Not Submitted'}
             </span>
           </div>
+
+          {resident?.kyc?.kycStatus === 'Rejected' && (
+            <div className={styles.rejectionAlert}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div>
+                <strong>Verification Rejected:</strong> {resident.kyc.rejectionReason || "Please re-upload clear documents."}
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className={styles.uploadGrid}>
@@ -178,9 +187,25 @@ export default function StudentProfile() {
               </div>
             </div>
 
-            <button type="submit" className={styles.submitBtn} disabled={submitting}>
-              {submitting ? "Processing Upload..." : "Submit for Verification"}
-            </button>
+            {resident?.kyc?.kycStatus !== 'Verified' && (
+              <button 
+                type="submit" 
+                className={styles.submitBtn} 
+                disabled={submitting || resident?.kyc?.kycStatus === 'Pending'}
+              >
+                {submitting ? "Processing Upload..." : 
+                 resident?.kyc?.kycStatus === 'Pending' ? "Under Review" : 
+                 resident?.kyc?.kycStatus === 'Rejected' ? "Re-submit for Verification" : 
+                 "Submit for Verification"}
+              </button>
+            )}
+
+            {resident?.kyc?.kycStatus === 'Verified' && (
+              <div className={styles.verifiedSuccess}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Your profile is verified. Enjoy your stay!
+              </div>
+            )}
           </form>
 
           {message && (

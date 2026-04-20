@@ -60,8 +60,9 @@
   text-transform: uppercase;
 }
 
-.pending { background: #FFF4E5; color: #D97706; }
-.verified { background: #E6FFFA; color: #008B8B; }
+.pending { background: #FFFBEB; color: #D97706; }
+.verified { background: #ECFDF5; color: #059669; }
+.rejected { background: #FEF2F2; color: #DC2626; }
 
 .infoGrid {
   display: grid;
@@ -148,6 +149,39 @@
   inset: 0;
   opacity: 0;
   cursor: pointer;
+  z-index: 2;
+}
+
+.rejectionAlert {
+  background: #FEF2F2;
+  border: 1px solid #FEE2E2;
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #991B1B;
+  font-size: 0.95rem;
+}
+
+.rejectionAlert strong {
+  font-weight: 800;
+}
+
+.verifiedSuccess {
+  background: #F0FDF4;
+  border: 1px solid #DCFCE7;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #166534;
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-align: center;
 }
 
 .submitBtn {
