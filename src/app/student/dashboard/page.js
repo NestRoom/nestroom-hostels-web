@@ -8,15 +8,17 @@ import Loading from "../../components/Loading/Loading";
 export default function StudentOverview() {
   const [loading, setLoading] = useState(true);
   const [resident, setResident] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const [activeRequest, setActiveRequest] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
 
   const fetchData = async () => {
     try {
-      const [profileRes, activeRes] = await Promise.all([
+      const [profileRes, activeRes, notifRes] = await Promise.all([
         secureFetch("http://localhost:5001/v1/residents/profile"),
-        secureFetch("http://localhost:5001/v1/residents/attendance/active")
+        secureFetch("http://localhost:5001/v1/residents/attendance/active"),
+        secureFetch("http://localhost:5001/v1/residents/notifications?limit=5")
       ]);
 
       const profileData = await profileRes.json();
@@ -27,6 +29,11 @@ export default function StudentOverview() {
       const activeData = await activeRes.json();
       if (activeData.status === 'success' && activeData.data.activeRequest) {
         setActiveRequest(activeData.data.activeRequest);
+      }
+
+      const notifData = await notifRes.json();
+      if (notifData.success) {
+        setNotifications(notifData.data.notifications);
       }
     } catch (e) {
       console.error(e);
@@ -189,29 +196,40 @@ export default function StudentOverview() {
 
       <aside className={styles.infoPanel}>
         <div className={styles.panelSection}>
-          <h4 className={styles.panelTitle}>Hostel Alerts</h4>
+          <h4 className={styles.panelTitle}>Notice Board</h4>
           <div className={styles.announcementList}>
-            <div className={styles.announcement}>
-               <div className={styles.annIcon} style={{ background: '#ECFDF5', color: '#059669' }}>
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-               </div>
-               <div className={styles.annText}>
-                 <h6>Maintenance Complete</h6>
-                 <p>Building B elevator is now operational.</p>
-                 <span>2 hours ago</span>
-               </div>
-            </div>
-            <div className={styles.announcement}>
-               <div className={styles.annIcon} style={{ background: '#FFF7ED', color: '#EA580C' }}>
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-               </div>
-               <div className={styles.annText}>
-                 <h6>Partial Power Outage</h6>
-                 <p>Scheduled testing from 2 PM to 4 PM tomorrow.</p>
-                 <span>Yesterday</span>
-               </div>
-            </div>
+            {notifications.length === 0 ? (
+              <p className={styles.emptyText}>No recent notices.</p>
+            ) : (
+              notifications.map((notif) => (
+                <div key={notif._id} className={styles.announcement} onClick={() => window.location.href = "/student/notifications"}>
+                   <div 
+                     className={styles.annIcon} 
+                     style={{ 
+                       background: notif.type === 'Emergency' ? '#FFF5F5' : notif.type === 'Announcement' ? '#ECFDF5' : '#F0F9FF', 
+                       color: notif.type === 'Emergency' ? '#E53E3E' : notif.type === 'Announcement' ? '#059669' : '#0369A1' 
+                     }}
+                   >
+                     {notif.type === 'Emergency' ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                     ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                     )}
+                   </div>
+                   <div className={styles.annText}>
+                     <h6>{notif.title}</h6>
+                     <p>{notif.message.substring(0, 50)}...</p>
+                     <span className={notif.isRead ? styles.isRead : styles.isUnread}>
+                        {notif.isRead ? "Viewed" : "New Message"} • {new Date(notif.sentAt).toLocaleDateString()}
+                     </span>
+                   </div>
+                </div>
+              ))
+            )}
           </div>
+          <button className={styles.actionBtnFull} onClick={() => window.location.href = "/student/notifications"}>
+            View All Notices
+          </button>
         </div>
 
         <div className={styles.panelSection}>

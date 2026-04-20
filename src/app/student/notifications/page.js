@@ -35,6 +35,8 @@ export default function NotificationsPage() {
       await secureFetch(`http://localhost:5001/v1/residents/notifications/${id}/read`, {
         method: "PUT"
       });
+      // Optionally update local state to mark as read immediately
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
     } catch (e) {
       console.error(e);
     }
@@ -48,6 +50,8 @@ export default function NotificationsPage() {
     setSelectedNotif(notif);
     markAsRead(notif._id);
   };
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   if (loading) return <Loading text="Fetching notifications..." />;
 
@@ -64,7 +68,7 @@ export default function NotificationsPage() {
         <aside className={styles.listCard}>
           <div className={styles.listHeader}>
              <span>Recent Messages</span>
-             <span className={styles.count}>{notifications.length}</span>
+             {unreadCount > 0 && <span className={styles.count}>{unreadCount}</span>}
           </div>
           <div className={styles.notifList}>
             {notifications.length === 0 ? (

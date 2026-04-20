@@ -9,32 +9,45 @@ import Loading from "../components/Loading/Loading";
 
 export default function StudentLayout({ children }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [resident, setResident] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const fetchProfile = async () => {
+    try {
+      const [profileRes, notifRes] = await Promise.all([
+        secureFetch("http://localhost:5001/v1/residents/profile"),
+        secureFetch("http://localhost:5001/v1/residents/notifications")
+      ]);
+
+      const profileData = await profileRes.json();
+      if (profileData.success) {
+        setResident(profileData.data.resident);
+        
+        // Nudge to profile if KYC is pending and they are on dashboard
+        if (profileData.data.resident.kyc?.kycStatus === 'Pending' && pathname === '/student/dashboard' && !profileData.data.resident.kyc?.profilePhoto) {
+           router.push("/student/profile");
+        }
+      }
+
+      const notifData = await notifRes.json();
+      if (notifData.success) {
+        // Count notifications where resident is not in viewedBy (viewedBy is not returned by student API for safety, but we can check a flag if backend provides it)
+        // Actually, let's update the backend getMyNotifications to include an 'isRead' flag.
+        const unread = notifData.data.notifications.filter(n => !n.isRead).length; 
+        setUnreadCount(unread);
+      }
+    } catch (e) {
+      console.error("Failed to fetch resident data", e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await secureFetch("http://localhost:5001/v1/residents/profile");
-        const data = await res.json();
-        if (data.success) {
-          setResident(data.data.resident);
-          
-          // Nudge to profile if KYC is pending and they are on dashboard
-          if (data.data.resident.kyc?.kycStatus === 'Pending' && pathname === '/student/dashboard' && !data.data.resident.kyc?.profilePhoto) {
-             router.push("/student/profile");
-          }
-        }
-      } catch (e) {
-        console.error("Failed to fetch resident profile", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProfile();
-  }, []);
+  }, [pathname]); // Refresh on navigation to clear unread if they visited notifications
 
   const handleLogout = () => {
     clearTokens();
@@ -93,8 +106,17 @@ export default function StudentLayout({ children }) {
 
         <nav className={styles.nav}>
           {navItems.map((item) => (
-            <Link key={item.path} href={item.path} className={`${styles.navItem} ${pathname === item.path ? styles.active : ""}`}>
-              <span className={styles.navIcon}>{item.icon}</span>
+            <Link 
+              key={item.path} 
+              href={item.path} 
+              className={`${styles.navItem} ${pathname === item.path ? styles.active : ""}`}
+            >
+              <div className={styles.iconWrapper}>
+                <span className={styles.navIcon}>{item.icon}</span>
+                {item.name === "Notice Board" && unreadCount > 0 && (
+                  <span className={styles.unreadBadge}>{unreadCount}</span>
+                )}
+              </div>
               <span className={styles.navName}>{item.name}</span>
             </Link>
           ))}

@@ -310,6 +310,42 @@
   font-weight: 600;
 }
 
+.isUnread {
+  color: #ef4444 !important;
+}
+
+.isRead {
+  color: #94a3b8 !important;
+}
+
+.emptyText {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 2rem 0;
+}
+
+.actionBtnFull {
+  width: 100%;
+  margin-top: 2rem;
+  background: #FFF9F9;
+  border: 1px solid rgba(232, 175, 170, 0.2);
+  padding: 1rem;
+  border-radius: 1.25rem;
+  color: #4A3E3E;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtnFull:hover {
+  background: #FDF8F6;
+  border-color: #3b3bff;
+  color: #3b3bff;
+}
+
 .contactCard {
   display: flex;
   flex-direction: column;
