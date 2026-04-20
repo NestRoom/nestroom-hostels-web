@@ -3,27 +3,36 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./NavBar.module.css";
+import { secureFetch } from "../../utils/auth";
 
 export default function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState('owner');
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setIsAuthenticated(!!token);
+    const checkAuth = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
 
-    if (token) {
-      fetch('http://localhost:5001/v1/auth/me', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => res.json())
-      .then(data => {
+      try {
+        const res = await secureFetch('http://localhost:5001/v1/auth/me');
+        const data = await res.json();
         if (data.success) {
+          setIsAuthenticated(true);
           setUserType(data.data.user.userType);
+        } else {
+          setIsAuthenticated(false);
         }
-      })
-      .catch(err => console.error(err));
-    }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
 

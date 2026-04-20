@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-  --background: #F9F1F0; /* Soft Beige Pink */
-  --foreground: #4A3E3E; /* Warm Dark Brown */
-  --primary: #3b3bff;
-  --accent: #E8AFAA;
+  --background: #FDF8F6; /* Premium soft beige-pink background from screenshot */
+  --foreground: #1e293b; /* Clean dark text */
+  --primary: #3b3bff;   /* vibrant brand blue */
+  --accent: #E8AFAA;    /* Secondary warm accent */
+  --card-bg: #FFFFFF;
+  --sidebar-bg: #FFFFFF;
+  --sidebar-inactive: #64748b;
+  --sidebar-active-bg: #3b3bff;
+  --sidebar-active-text: #FFFFFF;
 }
 
-/* Force architectural theme colors even in dark mode to avoid breakage */
+/* Enforce architectural theme even in dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #F9F1F0;
-    --foreground: #4A3E3E;
+    --background: #FDF8F6;
+    --foreground: #1e293b;
   }
 }
 
@@ -37,7 +42,6 @@ a {
   text-decoration: none;
 }
 
-/* Standard scrollbar for consistent look */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -47,14 +51,22 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E8AFAA80; /* Subtle pink scrollbar */
+  background: #cbd5e1;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E8AFAA;
+  background: #94a3b8;
 }
 
 input, button, select, textarea {
   font-family: inherit !important;
+}
+
+/* Utility for card aesthetic from screenshot */
+.premium-card {
+  background: white;
+  border-radius: 2rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.02);
 }

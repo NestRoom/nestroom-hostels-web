@@ -16,14 +16,14 @@
     cursor: pointer;
 }
 .nest {
-    color: black;
+    color: var(--foreground);
     font-size: 30px;
-    font-weight: 700;
+    font-weight: 800;
 }
 .room {
-    color: #2C1DFF;
+    color: var(--primary);
     font-size: 30px;
-    font-weight: 700;
+    font-weight: 800;
 }
 .navLinks {
     display: flex;

@@ -10,7 +10,7 @@
   font-size: 2rem;
   font-weight: 800;
   margin: 0;
-  color: #111827;
+  color: var(--foreground);
 }
 
 .subtitle {
@@ -37,7 +37,7 @@
   display: block;
   font-size: 0.75rem;
   font-weight: 800;
-  color: #3b3bff;
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
@@ -100,7 +100,7 @@
 
 .payBtn {
   width: 100%;
-  background: #3b3bff;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 1.25rem;
@@ -109,12 +109,12 @@
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 10px 25px rgba(59, 59, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(59, 59, 255, 0.2);
 }
 
 .payBtn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(59, 59, 255, 0.4);
+  box-shadow: 0 15px 35px rgba(59, 59, 255, 0.3);
 }
 
 .historyCard {

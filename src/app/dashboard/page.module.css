@@ -1,21 +1,17 @@
 .wrapper {
   display: flex;
   min-height: 100vh;
-  background-color: #FDF9F6;
-  color: #111827;
+  background-color: var(--background);
+  color: var(--foreground);
   overflow: hidden;
 }
 
 .mainContent {
   flex-grow: 1;
-  margin-left: 250px;
+  margin-left: 260px;
   height: 100vh;
   overflow-y: auto;
   position: relative;
-  background-image: 
-    radial-gradient(#e5e7eb 1px, transparent 1px);
-  background-size: 30px 30px; 
-  background-position: -1px -1px;
 }
 
 .header {
@@ -25,7 +21,7 @@
   align-items: center;
   position: sticky;
   top: 0;
-  background: rgba(253, 249, 246, 0.8);
+  background: rgba(253, 248, 246, 0.8);
   backdrop-filter: blur(12px);
   z-index: 100;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -166,7 +162,7 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #3b42f2, #6366f1);
+  background: var(--primary);
   border-radius: 4px;
 }
 
@@ -266,17 +262,17 @@
 }
 
 .saveBtn {
-  background: #3b42f2;
+  background: var(--primary);
   color: white;
   border: none;
-  padding: 0.65rem 1.25rem;
+  padding: 0.65rem 1.5rem;
   border-radius: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(59, 66, 242, 0.2);
+  box-shadow: 0 4px 12px rgba(59, 59, 255, 0.2);
 }
 
 .resetBtn {
