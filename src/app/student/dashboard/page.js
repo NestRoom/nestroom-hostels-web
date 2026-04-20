@@ -1,29 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Loading from "../../components/Loading/Loading";
 import styles from "./page.module.css";
 import { secureFetch } from "../../utils/auth";
+import Loading from "../../components/Loading/Loading";
 
-export default function StudentDashboard() {
+export default function StudentOverview() {
   const [loading, setLoading] = useState(true);
+  const [resident, setResident] = useState(null);
   const [activeRequest, setActiveRequest] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState(null); // { success, message, status }
+  const [result, setResult] = useState(null);
 
-  // Password states
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-  const [passwordLoading, setPasswordLoading] = useState(false);
-
-  const checkAttendance = async () => {
+  const fetchData = async () => {
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/attendance/active");
-      const data = await res.json();
-      if (data.status === 'success' && data.data.activeRequest) {
-        setActiveRequest(data.data.activeRequest);
-      } else {
-        setActiveRequest(null);
+      const [profileRes, activeRes] = await Promise.all([
+        secureFetch("http://localhost:5001/v1/residents/profile"),
+        secureFetch("http://localhost:5001/v1/residents/attendance/active")
+      ]);
+
+      const profileData = await profileRes.json();
+      if (profileData.success) {
+        setResident(profileData.data.resident);
+      }
+
+      const activeData = await activeRes.json();
+      if (activeData.status === 'success' && activeData.data.activeRequest) {
+        setActiveRequest(activeData.data.activeRequest);
       }
     } catch (e) {
       console.error(e);
@@ -33,10 +36,7 @@ export default function StudentDashboard() {
   };
 
   useEffect(() => {
-    checkAttendance();
-    // Poll every 30 seconds for surprise checks
-    const interval = setInterval(checkAttendance, 30000);
-    return () => clearInterval(interval);
+    fetchData();
   }, []);
 
   const handleMarkAttendance = () => {
@@ -54,26 +54,19 @@ export default function StudentDashboard() {
           const { latitude, longitude, accuracy } = position.coords;
           const res = await secureFetch("http://localhost:5001/v1/residents/attendance/submit", {
             method: "POST",
-            headers: { 
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              status: "Present",
-              latitude,
-              longitude,
-              accuracy
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "Present", latitude, longitude, accuracy })
           });
 
           const data = await res.json();
           if (data.status === 'success') {
-            setResult({ success: true, message: data.data.message, status: data.data.status });
+            setResult({ success: true, message: data.data.message });
             setActiveRequest(null);
           } else {
             setResult({ success: false, message: data.message });
           }
         } catch (e) {
-             setResult({ success: false, message: "Server error occurred" });
+          setResult({ success: false, message: "Server error occurred" });
         } finally {
           setSubmitting(false);
         }
@@ -86,151 +79,170 @@ export default function StudentDashboard() {
     );
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("New passwords do not match!");
-      return;
-    }
-    setPasswordLoading(true);
-    try {
-      const res = await secureFetch("http://localhost:5001/v1/auth/change-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(passwordData)
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        alert("Password changed successfully!");
-        setIsPasswordModalOpen(false);
-        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-      } else {
-        alert(data.message || "Failed to change password");
-      }
-    } catch (e) {
-      alert("Error connecting to server");
-    } finally {
-      setPasswordLoading(false);
-    }
-  };
+  if (loading) return null;
 
   return (
-    <div className={styles.container}>
-      {loading && <Loading />}
-      
-      <div className={styles.content}>
-        <div className={styles.header}>
-            <div className={styles.logo}>
-                <span className={styles.nest}>nest</span><span className={styles.room}>room</span>
-            </div>
-            <div className={styles.userBadge}>Student Portal</div>
-        </div>
+    <div className={styles.dashboardContainer}>
+      <div className={styles.mainFeed}>
+        <header className={styles.pageHeader}>
+          <h1 className={styles.title}>Dashboard Overview</h1>
+          <p className={styles.subtitle}>Welcome back, {resident?.fullName?.split(" ")[0] || "Student"}! Here is what's happening today.</p>
+        </header>
 
-        <div className={styles.welcome}>
-             <h1 className={styles.welcomeTitle}>Hi there! 👋</h1>
-             <p className={styles.welcomeSub}>Stay updated with your hostel activities.</p>
-        </div>
-
+        {/* Attendance Banner */}
         {activeRequest && (
-          <div className={styles.attendanceCard}>
-            <div className={styles.attendanceGlow}></div>
-            <div className={styles.attendanceContent}>
+          <div className={styles.attendanceAlert}>
+            <div className={styles.alertContent}>
               <div className={styles.alertIcon}>
-                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M8 17A5 5 0 0 1 12 7a5 5 0 0 1 4 10"/><path d="M12 2v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 6.3 1.4-1.4"/><path d="M22 12h-2"/><path d="M4 12H2"/><path d="m17.7 17.7 1.4 1.4"/><path d="m4.9 19.1 1.4-1.4"/></svg>
               </div>
-              <h2 className={styles.attendanceTitle}>Attendance Required</h2>
-              <p className={styles.attendanceDesc}>{activeRequest.remarks || "Regular daily check-in is active."}</p>
-              
+              <div className={styles.alertText}>
+                <h4>Attendance Verification</h4>
+                <p>{activeRequest.remarks || "Regular daily check-in is currently active."}</p>
+              </div>
               <button 
                 className={styles.markBtn} 
                 onClick={handleMarkAttendance}
                 disabled={submitting}
               >
-                {submitting ? "Verifying Location..." : "Verify & Mark Present"}
+                {submitting ? "Verifying..." : "Confirm Presence"}
               </button>
-              
-              <p className={styles.geoHint}>Verification uses your secure GPS location.</p>
             </div>
           </div>
         )}
 
         {result && (
-          <div className={`${styles.resultCard} ${result.success ? styles.resSuccess : styles.resError}`}>
-            <div className={styles.resultHeader}>
-                {result.success ? "Success!" : "Verification Failed"}
-                <button onClick={() => setResult(null)}>&times;</button>
-            </div>
+          <div className={`${styles.resultAlert} ${result.success ? styles.resSuccess : styles.resError}`}>
             <p>{result.message}</p>
+            <button onClick={() => setResult(null)}>&times;</button>
           </div>
         )}
 
-        <div className={styles.grid}>
-             <div className={styles.miniCard}>
-                <div className={styles.miniIcon} style={{ background: '#3b3bff1a', color: '#3b3bff' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                </div>
-                <h3 className={styles.miniCardTitle}>Attendance History</h3>
-                <p className={styles.miniCardDesc}>View your past presence records.</p>
-             </div>
-             <div className={styles.miniCard}>
-                <div className={styles.miniIcon} style={{ background: '#10b9811a', color: '#10b981' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                </div>
-                <h3 className={styles.miniCardTitle}>Leave Request</h3>
-                <p className={styles.miniCardDesc}>Apply for home leave or medical leave.</p>
-             </div>
-             <div className={styles.miniCard} onClick={() => setIsPasswordModalOpen(true)} style={{ cursor: 'pointer' }}>
-                <div className={styles.miniIcon} style={{ background: '#2C1DFF1a', color: '#2C1DFF' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <h3 className={styles.miniCardTitle}>Security Settings</h3>
-                <p className={styles.miniCardDesc}>Update your portal login password.</p>
-             </div>
+        <div className={styles.statGrid}>
+          <div className={styles.roomCard}>
+            <div className={styles.cardHeader}>
+              <h3>Room Details</h3>
+              <span className={styles.tag}>Assigned</span>
+            </div>
+            <div className={styles.roomNumber}>
+              <span className={styles.label}>Room</span>
+              <h2>{resident?.roomId?.roomNumber || "N/A"}</h2>
+            </div>
+            <div className={styles.roomMeta}>
+              <div className={styles.metaItem}>
+                 <span className={styles.metaLabel}>Bed</span>
+                 <span className={styles.metaValue}>{resident?.bedId?.bedNumber || "A"}</span>
+              </div>
+              <div className={styles.metaItem}>
+                 <span className={styles.metaLabel}>Floor</span>
+                 <span className={styles.metaValue}>{resident?.roomId?.floorNumber || "1"}</span>
+              </div>
+              <div className={styles.metaItem}>
+                 <span className={styles.metaLabel}>Hostel</span>
+                 <span className={styles.metaValue}>{resident?.hostelId?.hostelName || "N/A"}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.kycCard}>
+            <div className={styles.cardHeader}>
+              <h3>KYC Verification</h3>
+            </div>
+            <div className={styles.kycStatusWrapper}>
+              <div 
+                className={`${styles.kycIndicator} ${styles[resident?.kyc?.kycStatus?.toLowerCase() || 'pending']}`}
+              >
+                {resident?.kyc?.kycStatus || "Pending"}
+              </div>
+              <p className={styles.kycHint}>
+                {resident?.kyc?.kycStatus === 'Verified' 
+                  ? "Your profile is fully verified and all features are unlocked." 
+                  : "Please upload your Aadhaar and College ID to verify your identity."}
+              </p>
+            </div>
+            {resident?.kyc?.kycStatus !== 'Verified' && (
+              <button className={styles.actionLink} onClick={() => window.location.href = "/student/profile"}>
+                Complete Profile
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            )}
+          </div>
         </div>
 
-        {isPasswordModalOpen && (
-          <div className={styles.modalOverlay} onClick={() => setIsPasswordModalOpen(false)}>
-            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-              <h2 className={styles.modalTitle}>Change Password</h2>
-              <form onSubmit={handlePasswordChange} className={styles.passwordForm}>
-                <div className={styles.inputGroup}>
-                  <label>Current Password</label>
-                  <input 
-                    type="password" 
-                    required 
-                    value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
-                  />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label>New Password</label>
-                  <input 
-                    type="password" 
-                    required 
-                    value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-                  />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label>Confirm New Password</label>
-                  <input 
-                    type="password" 
-                    required 
-                    value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-                  />
-                </div>
-                <div className={styles.modalActions}>
-                  <button type="button" onClick={() => setIsPasswordModalOpen(false)} className={styles.cancelBtn}>Cancel</button>
-                  <button type="submit" className={styles.submitBtn} disabled={passwordLoading}>
-                    {passwordLoading ? "Updating..." : "Update Password"}
-                  </button>
-                </div>
-              </form>
+        <section className={styles.section}>
+          <h3 className={styles.sectionTitle}>Financial Timeline</h3>
+          <div className={styles.eventList}>
+            <div className={styles.eventItem}>
+              <div className={styles.eventDate}>
+                 <span>{resident?.nextDueDate ? new Date(resident.nextDueDate).getDate() : "17"}</span>
+                 <small>{resident?.nextDueDate ? new Date(resident.nextDueDate).toLocaleString('default', { month: 'short' }) : "MAY"}</small>
+              </div>
+              <div className={styles.eventInfo}>
+                <h4>Rent Payment Due</h4>
+                <p>Status: Unpaid • Due in {resident?.nextDueDate ? Math.ceil((new Date(resident.nextDueDate) - new Date()) / (1000 * 60 * 60 * 24)) : "27"} days</p>
+              </div>
+              <button className={styles.payBtnSmall} onClick={() => window.location.href = "/student/payments"}>Pay ₹{resident?.feeAmount || 0}</button>
             </div>
           </div>
-        )}
+        </section>
       </div>
+
+      <aside className={styles.infoPanel}>
+        <div className={styles.panelSection}>
+          <h4 className={styles.panelTitle}>Hostel Alerts</h4>
+          <div className={styles.announcementList}>
+            <div className={styles.announcement}>
+               <div className={styles.annIcon} style={{ background: '#ECFDF5', color: '#059669' }}>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+               </div>
+               <div className={styles.annText}>
+                 <h6>Maintenance Complete</h6>
+                 <p>Building B elevator is now operational.</p>
+                 <span>2 hours ago</span>
+               </div>
+            </div>
+            <div className={styles.announcement}>
+               <div className={styles.annIcon} style={{ background: '#FFF7ED', color: '#EA580C' }}>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+               </div>
+               <div className={styles.annText}>
+                 <h6>Partial Power Outage</h6>
+                 <p>Scheduled testing from 2 PM to 4 PM tomorrow.</p>
+                 <span>Yesterday</span>
+               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.panelSection}>
+          <h4 className={styles.panelTitle}>Quick Support</h4>
+          <div className={styles.contactCard}>
+             <div className={styles.contactItem}>
+               <div className={styles.contactIcon}>👤</div>
+               <div className={styles.contactInfo}>
+                 <h6>Warden Office</h6>
+                 <p>+91 98765 43210</p>
+               </div>
+             </div>
+             <div className={styles.contactItem}>
+               <div className={styles.contactIcon}>🛠️</div>
+               <div className={styles.contactInfo}>
+                 <h6>Maintenance Desk</h6>
+                 <p>Ext: 104 • 24/7 Available</p>
+               </div>
+             </div>
+          </div>
+          <button className={styles.complaintBtn} onClick={() => window.location.href = "/student/complaints"}>
+            Raise a Complaint
+          </button>
+        </div>
+
+        <div className={styles.promoCard}>
+           <h5>Want to earn credits?</h5>
+           <p>Refer a friend to Nestroom and get ₹500 off on your next rent!</p>
+           <button className={styles.promoBtn}>Learn More</button>
+        </div>
+      </aside>
     </div>
   );
 }

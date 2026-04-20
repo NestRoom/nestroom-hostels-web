@@ -1,347 +1,417 @@
-.container {
-  min-height: 100vh;
-  background: #FDF9F6;
-  font-family: 'Poppins', sans-serif;
-  color: #111827;
-  padding: 1.5rem;
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 3.5rem;
+  width: 100%;
 }
 
-.content {
-  max-width: 600px;
-  margin: 0 auto;
+.mainFeed {
+  min-width: 0;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
+.pageHeader {
+  margin-bottom: 3.5rem;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.nest { color: #111827; }
-.room { color: #3b3bff; }
-
-.userBadge {
-  background: white;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  color: #64748B;
-}
-
-.welcomeTitle {
+.title {
   font-size: 2.5rem;
   font-weight: 800;
   margin: 0;
-  letter-spacing: -0.02em;
+  color: #111827;
+  letter-spacing: -0.04em;
 }
 
-.welcomeSub {
-  color: #94A3B8;
+.subtitle {
+  color: #64748B;
   margin-top: 0.5rem;
   font-size: 1.1rem;
-  margin-bottom: 3rem;
+  font-weight: 500;
 }
 
-/* Attendance Card - Premium Glassmorphism */
-.attendanceCard {
-  position: relative;
+.statGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.roomCard, .kycCard {
   background: white;
-  border: 1px solid rgba(59, 59, 255, 0.1);
-  padding: 2.5rem;
-  border-radius: 2rem;
-  margin-bottom: 2rem;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(59, 59, 255, 0.08);
-}
-
-.attendanceGlow {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(59, 59, 255, 0.2) 0%, transparent 70%);
-  animation: rotate 10s linear infinite;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.attendanceContent {
-  position: relative;
-  z-index: 1;
+  border-radius: 2.5rem;
+  padding: 3rem;
+  border: 1px solid rgba(226, 232, 240, 0.4);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+.cardHeader h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #94A3B8;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tag {
+  background: #ECFDF5;
+  color: #059669;
+  padding: 0.5rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border: 1px solid #D1FAE5;
+}
+
+.roomNumber {
   text-align: center;
+  margin: 2rem 0;
+}
+
+.roomNumber .label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.roomNumber h2 {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #3b3bff;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.roomMeta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.metaLabel {
+  display: block;
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.metaValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.kycStatusWrapper {
+  display: flex;
+  flex-direction: column;
+  items-center: center;
+  text-align: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.kycIndicator {
+  padding: 0.875rem 2.5rem;
+  border-radius: 1.5rem;
+  font-weight: 900;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.pending { background: #FFF7ED; color: #EA580C; border: 1px solid #FFEDD5; }
+.verified { background: #ECFDF5; color: #059669; border: 1px solid #D1FAE5; }
+
+.kycHint {
+  font-size: 0.95rem;
+  color: #64748B;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.actionLink {
+  background: #3b3bff;
+  color: white;
+  border: none;
+  padding: 1.125rem;
+  border-radius: 1.5rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 25px rgba(59, 59, 255, 0.25);
+}
+
+.attendanceAlert {
+  background: linear-gradient(135deg, #3b3bff 0%, #1e1eff 100%);
+  color: white;
+  border-radius: 2.5rem;
+  padding: 2.5rem 3rem;
+  margin-bottom: 3.5rem;
+  box-shadow: 0 30px 60px rgba(59, 59, 255, 0.2);
+}
+
+.alertContent {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
 }
 
 .alertIcon {
   width: 64px;
   height: 64px;
-  background: #3b3bff;
-  color: white;
-  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 30px rgba(59, 59, 255, 0.5);
+  border-radius: 1.5rem;
+  backdrop-filter: blur(10px);
 }
 
-.alertIcon svg {
-  width: 32px;
-  height: 32px;
-}
-
-.attendanceTitle {
-  font-size: 1.75rem;
-  font-weight: 800;
+.alertText h4 {
   margin: 0;
-  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
-.attendanceDesc {
-  margin: 1rem 0 2rem;
-  color: #64748B;
-  font-weight: 500;
+.alertText p {
+  margin: 0.25rem 0 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .markBtn {
-  width: 100%;
-  background: #3b3bff;
+  background: white;
+  color: #3b3bff;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #94A3B8;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+}
+
+.eventItem {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid rgba(226, 232, 240, 0.4);
+}
+
+.eventDate {
+  width: 60px;
+  height: 60px;
+  background: #3b3bff10;
+  border-radius: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  items-center: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 900;
+}
+
+.eventDate span { font-size: 1.4rem; color: #3b3bff; }
+.eventDate small { font-size: 0.7rem; color: #3b3bff; text-transform: uppercase; }
+
+.eventInfo h4 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827; }
+.eventInfo p { margin: 0.25rem 0 0; font-size: 0.95rem; color: #64748B; }
+
+.payBtnSmall {
+  background: #111827;
   color: white;
-  padding: 1.25rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 1rem;
   font-weight: 800;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: all 0.2s;
-  box-shadow: 0 10px 20px rgba(59, 59, 255, 0.2);
 }
 
-.markBtn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
-}
-
-.markBtn:disabled {
-  background: #475569;
-  color: #94A3B8;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.geoHint {
-  margin-top: 1.5rem !important;
-  font-size: 0.75rem;
-  color: #64748B !important;
-  font-weight: 600 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Results */
-.resultCard {
-  padding: 1.5rem;
-  border-radius: 1.25rem;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.resSuccess {
-  background: #10b9811a;
-  border: 1px solid #10b98133;
-  color: #34d399;
-}
-
-.resError {
-  background: #ef44441a;
-  border: 1px solid #ef444433;
-  color: #f87171;
-}
-
-.resultHeader {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-
-.resultHeader button {
-  background: none;
-  border: none;
-  color: inherit;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-/* Grid */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.miniCard {
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  border-radius: 1.5rem;
+/* Info Panel Styles */
+.infoPanel {
   display: flex;
   flex-direction: column;
-  transition: all 0.2s;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  gap: 2.5rem;
 }
 
-.miniCard:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateX(4px);
-}
-
-.miniIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.miniIcon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.miniCardTitle {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.miniCardDesc {
-  color: #64748B;
-  font-size: 0.875rem;
-  margin: 0.25rem 0 0;
-}
-
-/* Modal Styles */
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1.5rem;
-}
-
-.modalContent {
-  background: white;
-  padding: 2.5rem;
-  border-radius: 2rem;
-  width: 100%;
-  max-width: 450px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.modalTitle {
-  font-size: 1.5rem;
+.panelTitle {
+  font-size: 0.9rem;
   font-weight: 800;
-  margin-bottom: 2rem;
+  color: #94A3B8;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.08em;
 }
 
-.passwordForm {
+.panelSection {
+  background: white;
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(226, 232, 240, 0.4);
+}
+
+.announcementList {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.inputGroup {
+.announcement {
+  display: flex;
+  gap: 1rem;
+}
+
+.annIcon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.annText h6 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.annText p {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 0.85rem;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+.annText span {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+.contactCard {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-.inputGroup label {
-  font-size: 0.875rem;
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contactIcon {
+  font-size: 1.25rem;
+}
+
+.contactInfo h6 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.contactInfo p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #3b3bff;
   font-weight: 600;
-  color: #64748B;
 }
 
-.inputGroup input {
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1.5px solid #F1F5F9;
-  background: #F8FAFC;
-  outline: none;
-  font-family: inherit;
-  font-size: 1rem;
+.complaintBtn {
+  width: 100%;
+  background: #F1F5F9;
+  border: none;
+  padding: 0.875rem;
+  border-radius: 1.25rem;
+  color: #64748B;
+  font-weight: 700;
+  cursor: pointer;
   transition: all 0.2s;
 }
 
-.inputGroup input:focus {
-  border-color: #3b3bff;
-  background: white;
-  box-shadow: 0 0 0 4px rgba(59, 59, 255, 0.05);
-}
-
-.modalActions {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.cancelBtn {
-  background: #F1F5F9;
-  color: #64748B;
-  border: none;
-  border-radius: 1rem;
-  padding: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.submitBtn {
-  background: #2C1DFF;
+.complaintBtn:hover {
+  background: #3b3bff;
   color: white;
-  border: none;
-  border-radius: 1rem;
-  padding: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 8px 16px rgba(44, 29, 255, 0.2);
 }
 
-.submitBtn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.promoCard {
+  background: #3b3bff;
+  padding: 2rem;
+  border-radius: 2rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.promoCard::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.promoCard h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.promoCard p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.promoBtn {
+  background: white;
+  color: #3b3bff;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+  .dashboardContainer {
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboardContainer {
+    grid-template-columns: 1fr;
+  }
 }
