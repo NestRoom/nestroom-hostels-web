@@ -11,6 +11,11 @@ export default function StudentDashboard() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null); // { success, message, status }
 
+  // Password states
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passwordLoading, setPasswordLoading] = useState(false);
+
   const checkAttendance = async () => {
     try {
       const res = await secureFetch("http://localhost:5001/v1/residents/attendance/active");
@@ -60,7 +65,6 @@ export default function StudentDashboard() {
             })
           });
 
-          
           const data = await res.json();
           if (data.status === 'success') {
             setResult({ success: true, message: data.data.message, status: data.data.status });
@@ -80,6 +84,34 @@ export default function StudentDashboard() {
       },
       { enableHighAccuracy: true }
     );
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("New passwords do not match!");
+      return;
+    }
+    setPasswordLoading(true);
+    try {
+      const res = await secureFetch("http://localhost:5001/v1/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(passwordData)
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert("Password changed successfully!");
+        setIsPasswordModalOpen(false);
+        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      } else {
+        alert(data.message || "Failed to change password");
+      }
+    } catch (e) {
+      alert("Error connecting to server");
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   return (
@@ -147,14 +179,57 @@ export default function StudentDashboard() {
                 <h3 className={styles.miniCardTitle}>Leave Request</h3>
                 <p className={styles.miniCardDesc}>Apply for home leave or medical leave.</p>
              </div>
-             <div className={styles.miniCard}>
-                <div className={styles.miniIcon} style={{ background: '#f59e0b1a', color: '#f59e0b' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+             <div className={styles.miniCard} onClick={() => setIsPasswordModalOpen(true)} style={{ cursor: 'pointer' }}>
+                <div className={styles.miniIcon} style={{ background: '#2C1DFF1a', color: '#2C1DFF' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
-                <h3 className={styles.miniCardTitle}>Notifications</h3>
-                <p className={styles.miniCardDesc}>Stay updated with hostel announcements.</p>
+                <h3 className={styles.miniCardTitle}>Security Settings</h3>
+                <p className={styles.miniCardDesc}>Update your portal login password.</p>
              </div>
         </div>
+
+        {isPasswordModalOpen && (
+          <div className={styles.modalOverlay} onClick={() => setIsPasswordModalOpen(false)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+              <h2 className={styles.modalTitle}>Change Password</h2>
+              <form onSubmit={handlePasswordChange} className={styles.passwordForm}>
+                <div className={styles.inputGroup}>
+                  <label>Current Password</label>
+                  <input 
+                    type="password" 
+                    required 
+                    value={passwordData.currentPassword}
+                    onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>New Password</label>
+                  <input 
+                    type="password" 
+                    required 
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>Confirm New Password</label>
+                  <input 
+                    type="password" 
+                    required 
+                    value={passwordData.confirmPassword}
+                    onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                  />
+                </div>
+                <div className={styles.modalActions}>
+                  <button type="button" onClick={() => setIsPasswordModalOpen(false)} className={styles.cancelBtn}>Cancel</button>
+                  <button type="submit" className={styles.submitBtn} disabled={passwordLoading}>
+                    {passwordLoading ? "Updating..." : "Update Password"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

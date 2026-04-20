@@ -371,6 +371,11 @@ function ResidentDetailModal({ resident, onClose }) {
               <p style={{ margin: '0.5rem 0', fontWeight: 500, color: '#10B981' }}>Security Deposit: Paid</p>
             </div>
             <div className={styles.formGroup}>
+              <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>PORTAL ACCESS</label>
+              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Code: {resident.residentId}</p>
+              <p style={{ margin: '0.5rem 0', fontWeight: 700, color: '#2C1DFF' }}>Password: {resident.plainPassword || "********"}</p>
+            </div>
+            <div className={styles.formGroup}>
               <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>MESS & SERVICES</label>
               <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Food: {resident.foodEnabled ? "Enabled" : "Disabled"}</p>
               <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Laundry: Premium</p>
