@@ -458,7 +458,7 @@ function ResidentDetailModal({ resident, hostelId, onClose, onUpdate }) {
                         onClick={() => resident.idCardPhoto && setFullScreenImg(resident.idCardPhoto)}
                         style={{ cursor: 'pointer', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '1.25rem', padding: '1rem', transition: 'all 0.2s' }}
                       >
-                          <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6B7280', marginBottom: '0.75rem', textAlign: 'center' }}>ID CARD (Aadhaar/PAN)</p>
+                          <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6B7280', marginBottom: '0.75rem', textAlign: 'center' }}>KYC DOCUMENT</p>
                           <div style={{ height: '160px', borderRadius: '0.75rem', overflow: 'hidden', background: '#F8FAFB', border: '1px solid #eee' }}>
                              {resident.idCardPhoto ? <img src={resident.idCardPhoto} alt="Aadhaar" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '0.7rem' }}>No Image provided</div>}
                           </div>
@@ -550,9 +550,10 @@ function ResidentDetailModal({ resident, hostelId, onClose, onUpdate }) {
 function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
   const [formData, setFormData] = useState({
     fullName: "", email: "", whatsappNumber: "", dateOfBirth: "",
-    gender: "", idCardType: "", idCardNumber: "",
+    gender: "", idCardType: "Aadhaar", idCardNumber: "",
+    collegeIdNumber: "",
     roomId: "", bedId: "", feeAmount: "", feeFrequency: "Monthly",
-    checkInDate: "", foodEnabled: false
+    checkInDate: "", foodEnabled: false, securityDeposit: ""
   });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -603,6 +604,7 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
         gender: cleanValue(formData.gender),
         idCardType: cleanValue(formData.idCardType),
         idCardNumber: cleanValue(formData.idCardNumber),
+        enrollmentNumber: cleanValue(formData.collegeIdNumber),
         roomId: formData.roomId,
         bedId: formData.bedId,
         feeAmount: Number(formData.feeAmount) || 0,
@@ -650,6 +652,11 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
           {errorMsg && <div style={{ padding: '1rem 2.5rem', color: '#991B1B', backgroundColor: '#FEF2F2', fontSize: '0.9rem', fontWeight: 600, whiteSpace: 'pre-wrap', borderBottom: '2px solid #FECACA' }}>{errorMsg}</div>}
           
           <div className={styles.formGrid}>
+            <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+              <label>College ID Card Number</label>
+              <input required type="text" name="collegeIdNumber" value={formData.collegeIdNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter College enrollment / ID number" />
+            </div>
+
             <div className={styles.formGroup}>
               <label>Full Name</label>
               <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className={styles.formInput} placeholder="Enter full name" />
@@ -676,18 +683,19 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
             </div>
 
             <div className={styles.formGroup}>
-              <label>ID Card Type</label>
+              <label>KYC Document Type</label>
               <select name="idCardType" value={formData.idCardType} onChange={handleChange} className={styles.formInput}>
                 <option value="">Select Type</option>
-                <option value="Aadhaar">Aadhaar</option>
-                <option value="PAN">PAN</option>
+                <option value="Aadhaar">Aadhaar (Recommended)</option>
+                <option value="PAN">PAN Card</option>
                 <option value="Passport">Passport</option>
+                <option value="Driving License">Driving License</option>
               </select>
             </div>
 
             <div className={styles.formGroup}>
-              <label>ID Card Number</label>
-              <input required type="text" name="idCardNumber" value={formData.idCardNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter ID number" />
+              <label>KYC Document Number</label>
+              <input required type="text" name="idCardNumber" value={formData.idCardNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter document number" />
             </div>
 
             <div className={styles.formGroup}>
@@ -695,8 +703,13 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
               <select required name="roomId" value={formData.roomId} onChange={handleChange} className={styles.formInput}>
                 <option value="">Select Room</option>
                 {allRooms.map(room => (
-                  <option key={room._id} value={room._id}>
-                    {room.buildingName} - Room {room.roomNumber} ({room.availableBeds || 0} left)
+                  <option 
+                    key={room._id} 
+                    value={room._id} 
+                    disabled={room.availableBeds === 0}
+                    style={{ color: room.availableBeds === 0 ? '#9CA3AF' : 'inherit' }}
+                  >
+                    {room.buildingName} - Room {room.roomNumber} ({room.availableBeds || 0} left) {room.availableBeds === 0 ? "— FULL" : ""}
                   </option>
                 ))}
               </select>

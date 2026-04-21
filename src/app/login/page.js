@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import LoginCard from "../components/AuthCard/LoginCard";
+import { secureFetch } from "../utils/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,10 +17,9 @@ export default function LoginPage() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5001/v1/auth/me", {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
+        const res = await secureFetch("http://localhost:5001/v1/auth/me");
         const data = await res.json();
+        
         if (data.success) {
           if (data.data.user.userType === 'resident') {
             router.push("/student/dashboard");

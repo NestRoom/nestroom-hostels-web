@@ -19,6 +19,11 @@ export default function NavBar() {
 
       try {
         const res = await secureFetch('http://localhost:5001/v1/auth/me');
+        if (res.status === 429) {
+           console.warn("Auth check rate limited");
+           return; // Keep current state
+        }
+        
         const data = await res.json();
         if (data.success) {
           setIsAuthenticated(true);
@@ -27,7 +32,10 @@ export default function NavBar() {
           setIsAuthenticated(false);
         }
       } catch (err) {
-        console.error("Auth check failed:", err);
+        // Skip logging if it's just a session redirect from secureFetch
+        if (err.message !== "Session expired. Please log in again.") {
+          console.error("Auth check failed:", err);
+        }
         setIsAuthenticated(false);
       }
     };

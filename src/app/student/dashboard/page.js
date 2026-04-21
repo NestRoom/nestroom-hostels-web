@@ -255,11 +255,6 @@ export default function StudentOverview() {
           </button>
         </div>
 
-        <div className={styles.promoCard}>
-           <h5>Want to earn credits?</h5>
-           <p>Refer a friend to Nestroom and get ₹500 off on your next rent!</p>
-           <button className={styles.promoBtn}>Learn More</button>
-        </div>
       </aside>
     </div>
   );
