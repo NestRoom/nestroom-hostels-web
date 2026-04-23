@@ -1,0 +1,194 @@
+.container {
+  max-width: 1200px;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.subtitle {
+  color: #64748B;
+  margin-top: 0.5rem;
+}
+
+.activeBill {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+}
+
+.billHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+}
+
+.periodTag {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.billHeaderLeft h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.billMeta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  color: #94A3B8;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.statusLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.pending { color: #f59e0b; }
+.overdue { color: #ef4444; }
+
+.overdueAlert {
+  background: #ef44441a;
+  color: #ef4444;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.payBtn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 10px 25px rgba(59, 59, 255, 0.2);
+}
+
+.payBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(59, 59, 255, 0.3);
+}
+
+.historyCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.8rem;
+  color: #94A3B8;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1rem;
+  border-bottom: 2px solid #F8FAFC;
+}
+
+.table td {
+  padding: 1rem;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1px solid #F8FAFC;
+}
+
+.payId { font-size: 0.85rem; color: #64748B; font-family: monospace; }
+.payAmount { font-weight: 700; }
+
+.success { color: #10b981; }
+.pending { color: #f59e0b; }
+.failed { color: #ef4444; }
+
+.noData {
+  text-align: center;
+  padding: 3rem;
+  color: #94A3B8;
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1100;
+}
+
+.success { background: #059669; color: white; }
+.error { background: #dc2626; color: white; }
+
+.toast button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+}

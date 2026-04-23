@@ -306,6 +306,27 @@ export default function NotificationPage() {
                     </>
                   )}
                 </div>
+
+                <div className={styles.seenBySection}>
+                   <h3 className={styles.sectionTitle}>
+                      <Eye size={18} /> Seen By ({selectedNotification.viewedBy?.length || 0})
+                   </h3>
+                   <div className={styles.seenByList}>
+                      {selectedNotification.viewedBy?.length > 0 ? (
+                        selectedNotification.viewedBy.map((view, i) => (
+                          <div key={i} className={styles.seenItem}>
+                             <div className={styles.seenAvatar}>{view.residentName?.[0]}</div>
+                             <div className={styles.seenInfo}>
+                                <div className={styles.seenName}>{view.residentName}</div>
+                                <div className={styles.seenTime}>{new Date(view.viewedAt).toLocaleString()}</div>
+                             </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className={styles.emptyText}>No residents have viewed this message yet.</p>
+                      )}
+                   </div>
+                </div>
               </>
             ) : (
               <div className={styles.emptyState}>

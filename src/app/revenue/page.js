@@ -238,10 +238,18 @@ export default function RevenuePage() {
                 <tr key={item._id}>
                   <td>
                     <div className={styles.residentCell}>
-                      <div className={styles.avatar}></div>
+                      <div className={styles.avatar}>
+                        {item.residentId?.kyc?.profilePhoto ? (
+                          <img src={item.residentId.kyc.profilePhoto} alt="Resident" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                        ) : (
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: '#94a3b8' }}>
+                            {item.residentId?.fullName?.charAt(0) || 'R'}
+                          </span>
+                        )}
+                      </div>
                       <div>
-                        <span className={styles.residentName}>User {item.paymentId}</span>
-                        <span className={styles.roomNumber}>Ref: {item.paymentId}</span>
+                        <span className={styles.residentName}>{item.residentId?.fullName || "Deleted Resident"}</span>
+                        <span className={styles.roomNumber}>{item.residentId?.residentId || item.paymentId}</span>
                       </div>
                     </div>
                   </td>

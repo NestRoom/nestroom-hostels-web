@@ -1,8 +1,8 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #FDF9F6;
-  color: #111827;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .mainContent {
@@ -40,10 +40,10 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #3b3bff 0%, #2a2acc 100%);
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 1rem;
+  border-radius: var(--radius-button) !important;
   padding: 0.85rem 1.75rem;
   font-weight: 700;
   font-size: 1rem;
@@ -85,7 +85,7 @@
 
 .navBtn:hover {
   background-color: #F3F4F6;
-  color: #3b3bff;
+  color: var(--primary);
 }
 
 .weekRange {
@@ -126,7 +126,7 @@
 }
 
 .todayDate {
-  background: #3b3bff;
+  background: var(--primary);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 0.75rem;
@@ -190,7 +190,7 @@
 
 .mealCard.empty:hover {
   background: white;
-  border-color: #3b3bff;
+  border-color: var(--primary);
 }
 
 .emptyText {
@@ -275,14 +275,14 @@
 }
 
 .presetItem:hover {
-  border-color: #3b3bff;
-  color: #3b3bff;
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .presetItem.activePreset {
-  background: rgba(59, 59, 255, 0.1);
-  color: #3b3bff;
-  border-color: #3b3bff;
+  background: rgba(44, 29, 255, 0.1);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .dietaryTags {
@@ -340,6 +340,10 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #F3F4F6;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
 }
 
 .modalHeader h2 {
@@ -376,7 +380,7 @@
 }
 
 .formInput:focus, .formTextarea:focus {
-  border-color: #3b3bff;
+  border-color: var(--primary);
   background: white;
   outline: none;
 }
@@ -407,9 +411,9 @@
 }
 
 .tagOption.selected {
-  background: #3b3bff;
+  background: var(--primary);
   color: white;
-  border-color: #3b3bff;
+  border-color: var(--primary);
 }
 
 .modalFooter {
@@ -434,8 +438,8 @@
 
 .submitBtn {
   padding: 0.75rem 2rem;
-  border-radius: 0.75rem;
-  background: #3b3bff;
+  border-radius: var(--radius-button) !important;
+  background: var(--primary);
   border: none;
   font-weight: 700;
   color: white;

@@ -313,6 +313,83 @@
   color: #0f172a;
 }
 
+.seenBySection {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 2px dashed #f1f5f9;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seenByList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seenItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  transition: all 0.2s;
+}
+
+.seenItem:hover {
+  background: white;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.seenAvatar {
+  width: 36px;
+  height: 36px;
+  background: #3b42f2;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.seenInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.seenName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.seenTime {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.emptyText {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 20px;
+}
+
 /* Modal Styles */
 .modalOverlay {
   position: fixed;

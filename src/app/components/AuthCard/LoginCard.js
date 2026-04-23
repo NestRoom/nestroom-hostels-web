@@ -4,9 +4,13 @@ import { useRouter } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
 
+import { setTokens } from '../../utils/auth';
+
 export default function LoginCard() {
   const router = useRouter();
+  const [loginType, setLoginType] = useState('owner'); // 'owner' or 'resident'
   const [email, setEmail] = useState('');
+  const [residentId, setResidentId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,18 +21,29 @@ export default function LoginCard() {
     setError('');
     setLoading(true);
 
+    const endpoint = loginType === 'resident' 
+      ? 'http://localhost:5001/v1/auth/resident/login' 
+      : 'http://localhost:5001/v1/auth/login';
+
+    const body = loginType === 'resident'
+      ? { residentId, email, password }
+      : { email, password };
+
     try {
-      const res = await fetch('http://localhost:5001/v1/auth/login', {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify(body)
       });
       const data = await res.json();
 
       if (data.success) {
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
-        router.push('/dashboard'); // redirect to dashboard on returning login
+        setTokens(data.data.accessToken, data.data.refreshToken);
+        if (loginType === 'resident') {
+          router.push('/student/dashboard');
+        } else {
+          router.push('/dashboard'); 
+        }
       } else {
         setError(data.error?.message || data.message || 'Login failed.');
       }
@@ -45,12 +60,49 @@ export default function LoginCard() {
       <div className={styles.card}>
         <div className={styles.cardGlow}></div>
       
-      <h2 className={styles.title}>Welcome Back</h2>
-      <p className={styles.subtitle}>Log in to manage your hostel.</p>
+      <div className={styles.typeToggle}>
+        <button 
+          className={`${styles.toggleBtn} ${loginType === 'owner' ? styles.active : ''}`}
+          onClick={() => setLoginType('owner')}
+        >
+          Owner / Staff
+        </button>
+        <button 
+          className={`${styles.toggleBtn} ${loginType === 'resident' ? styles.active : ''}`}
+          onClick={() => setLoginType('resident')}
+        >
+          Resident
+        </button>
+      </div>
+
+      <h2 className={styles.title}>{loginType === 'owner' ? 'Welcome Back' : 'Resident Portal'}</h2>
+      <p className={styles.subtitle}>
+        {loginType === 'owner' ? 'Log in to manage your hostel.' : 'Log in to access your dashboard.'}
+      </p>
       
       <form className={styles.form} onSubmit={handleLogin}>
+        {loginType === 'resident' && (
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Assigned Code</label>
+            <div className={styles.inputWrapper}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.icon}>
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input 
+                type="text" 
+                placeholder="e.g. RES-H01-2024-001" 
+                className={styles.input} 
+                required 
+                value={residentId}
+                onChange={(e) => setResidentId(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+
         <div className={styles.inputGroup}>
-          <label className={styles.label}>Owner Email</label>
+          <label className={styles.label}>{loginType === 'owner' ? 'Owner Email' : 'Email Address'}</label>
           <div className={styles.inputWrapper}>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.icon}>
               <path d="M4 10v11" />
@@ -60,7 +112,7 @@ export default function LoginCard() {
             </svg>
             <input 
               type="email" 
-              placeholder="name@hostel.com" 
+              placeholder="name@example.com" 
               className={styles.input} 
               required 
               value={email}
@@ -115,9 +167,11 @@ export default function LoginCard() {
         </button>
       </form>
       
-      <p className={styles.footerText}>
-        Don&apos;t have an account? <Link href="/signup" className={styles.link}>Sign up</Link>
-      </p>
+      {loginType === 'owner' && (
+        <p className={styles.footerText}>
+          Don&apos;t have an account? <Link href="/signup" className={styles.link}>Sign up</Link>
+        </p>
+      )}
       </div>
     </>
   );

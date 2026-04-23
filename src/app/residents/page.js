@@ -219,10 +219,10 @@ export default function ResidentsPage() {
             <thead>
               <tr>
                 <th>RESIDENT</th>
-                <th>ROOM NO.</th>
+                <th>ROOM / BED</th>
                 <th>JOIN DATE</th>
                 <th>FEES</th>
-                <th>FOOD</th>
+                <th>KYC STATUS</th>
                 <th>STATUS</th>
                 <th>ACTION</th>
               </tr>
@@ -254,8 +254,12 @@ export default function ResidentsPage() {
                     <div className={styles.residentPhone} style={{ fontSize: '0.75rem' }}>{resident.feeFrequency}</div>
                   </td>
                   <td>
-                    <span className={`${styles.statusBadge} ${resident.foodEnabled ? styles.statusActive : styles.statusNotice}`} style={{ fontSize: '0.65rem' }}>
-                      {resident.foodEnabled ? "Enabled" : "Disabled"}
+                    <span className={`${styles.statusBadge} ${
+                      resident.kyc?.kycStatus === 'Verified' ? styles.statusActive : 
+                      resident.kyc?.kycStatus === 'Rejected' ? styles.statusNotice : 
+                      styles.statusPending
+                    }`} style={{ fontSize: '0.7rem' }}>
+                      {resident.kyc?.kycStatus || "Not Set"}
                     </span>
                   </td>
                   <td>
@@ -318,7 +322,9 @@ export default function ResidentsPage() {
         {selectedResident && (
           <ResidentDetailModal 
             resident={selectedResident} 
-            onClose={() => setSelectedResident(null)} 
+            hostelId={hostelId}
+            onClose={() => setSelectedResident(null)}
+            onUpdate={() => { setSelectedResident(null); fetchData(); }}
           />
         )}
       </div>
@@ -326,60 +332,217 @@ export default function ResidentsPage() {
   );
 }
 
-function ResidentDetailModal({ resident, onClose }) {
+function ResidentDetailModal({ resident, hostelId, onClose, onUpdate }) {
+  const [processing, setProcessing] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [showRejectInput, setShowRejectInput] = useState(false);
+  const [fullScreenImg, setFullScreenImg] = useState(null);
+
   const formatDate = (dateString) => {
     if (!dateString) return "Not provided";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB", { day: '2-digit', month: 'long', year: 'numeric' });
   };
 
+  const handleKYC = async (action) => {
+    if (action === 'reject' && !rejectionReason) {
+      if (showRejectInput) {
+        alert("Please provide a reason for rejection.");
+        return;
+      }
+      setShowRejectInput(true);
+      return;
+    }
+    
+    setProcessing(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`http://localhost:5001/v1/hostels/${hostelId}/residents/${resident._id}/kyc`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          action, 
+          rejectionReason: action === 'reject' ? rejectionReason : null 
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.data.message);
+        onUpdate();
+      } else {
+        alert(data.error?.message || "Action failed.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Network error. Please check if the backend is running.");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} style={{ maxWidth: '700px' }} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.modalHeader}>
-          <h2>Resident Profile</h2>
-          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#111827' }}>&times;</button>
+      {/* Full Screen Image Portal */}
+      {fullScreenImg && (
+        <div 
+          onClick={(e) => { e.stopPropagation(); setFullScreenImg(null); }}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+        >
+          <img src={fullScreenImg} alt="FS" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '1rem', boxShadow: '0 0 50px rgba(0,0,0,0.5)' }} />
+          <button style={{ position: 'absolute', top: '20px', right: '20px', background: 'white', border: 'none', borderRadius: '50%', width: '40px', height: '40px', fontWeight: 800, cursor: 'pointer' }}>&times;</button>
         </div>
-        <div style={{ padding: '2.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem' }}>
-            <div className={styles.avatar} style={{ width: '90px', height: '90px', fontSize: '2.5rem', borderRadius: '1.5rem' }}>
-              {resident.fullName ? resident.fullName.charAt(0).toUpperCase() : "R"}
+      )}
+
+      <div className={styles.modalContent} style={{ maxWidth: '900px' }} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <h2 style={{ margin: 0 }}>Resident Profile Overview</h2>
+            <span className={`${styles.statusBadge} ${resident.kyc?.kycStatus === 'Verified' ? styles.statusActive : styles.statusNotice}`} style={{ background: resident.kyc?.kycStatus === 'Verified' ? '#ECFDF5' : '#FFFBEB', color: resident.kyc?.kycStatus === 'Verified' ? '#059669' : '#D97706', fontSize: '0.7rem' }}>
+              KYC {resident.kyc?.kycStatus || 'Pending'}
+            </span>
+          </div>
+          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr' }}>
+          {/* Left Panel: Profile & Bio */}
+          <div style={{ padding: '2.5rem', borderRight: '1px solid #F1F5F9', background: '#F9FAFB' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div 
+                className={styles.avatar} 
+                onClick={() => resident.kyc?.profilePhoto && setFullScreenImg(resident.kyc.profilePhoto)}
+                style={{ width: '120px', height: '120px', fontSize: '3rem', borderRadius: '2rem', margin: '0 auto 1.5rem', cursor: 'pointer', border: '3px solid white', boxShadow: '0 10px 20px rgba(0,0,0,0.05)' }}
+              >
+                 {resident.kyc?.profilePhoto ? <img src={resident.kyc.profilePhoto} alt="P" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (resident.fullName?.charAt(0) || "R")}
+              </div>
+              <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>{resident.fullName}</h3>
+              <p style={{ margin: '0.25rem 0 1rem', color: '#6B7280', fontSize: '0.9rem' }}>{resident.email}</p>
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                <span className={`${styles.statusBadge} ${resident.residentStatus === 'Active' ? styles.statusActive : styles.statusNotice}`}>
+                  {resident.residentStatus}
+                </span>
+              </div>
             </div>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800 }}>{resident.fullName}</h3>
-              <p style={{ margin: '0.25rem 0', color: '#6B7280', fontWeight: 500 }}>ID: {resident.residentId}</p>
-              <span className={`${styles.statusBadge} ${resident.residentStatus === 'Active' ? styles.statusActive : styles.statusNotice}`}>
-                {resident.residentStatus}
-              </span>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className={styles.formGroup}>
+                <label style={{ fontSize: '0.7rem', color: '#9CA3AF', letterSpacing: '0.05em' }}>REGISTRATION DETAILS</label>
+                <div style={{ marginTop: '0.5rem' }}>
+                   <p style={{ margin: '0.25rem 0', fontWeight: 700, fontSize: '0.95rem' }}>ID: {resident.residentId}</p>
+                   <p style={{ margin: '0.25rem 0', fontWeight: 600, fontSize: '0.9rem', color: '#3b3bff' }}>Pass: {resident.plainPassword || "********"}</p>
+                </div>
+              </div>
+              <div className={styles.formGroup}>
+                <label style={{ fontSize: '0.7rem', color: '#9CA3AF', letterSpacing: '0.05em' }}>ROOM ALLOCATION</label>
+                <p style={{ margin: '0.5rem 0', fontWeight: 700 }}>Room {resident.roomId?.roomNumber || "N/A"} - Bed {resident.bedId?.bedNumber || "N/A"}</p>
+              </div>
+              <div className={styles.formGroup}>
+                <label style={{ fontSize: '0.7rem', color: '#9CA3AF', letterSpacing: '0.05em' }}>CONTACT</label>
+                <p style={{ margin: '0.5rem 0', fontWeight: 700 }}>{resident.whatsappNumber || "N/A"}</p>
+                <p style={{ margin: '0.15rem 0', fontSize: '0.8rem', color: '#64748b' }}>Joined: {formatDate(resident.checkInDate)}</p>
+              </div>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
-            <div className={styles.formGroup}>
-              <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>CONTACT INFO</label>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>{resident.email}</p>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>{resident.whatsappNumber || "-"}</p>
-            </div>
-            <div className={styles.formGroup}>
-              <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>ALLOCATION</label>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Room {resident.roomId?.roomNumber || resident.roomId || "N/A"}</p>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Joined: {formatDate(resident.checkInDate)}</p>
-            </div>
-            <div className={styles.formGroup}>
-              <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>FINANCIALS</label>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>₹{resident.feeAmount} / {resident.feeFrequency}</p>
-              <p style={{ margin: '0.5rem 0', fontWeight: 500, color: '#10B981' }}>Security Deposit: Paid</p>
-            </div>
-            <div className={styles.formGroup}>
-              <label style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>MESS & SERVICES</label>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Food: {resident.foodEnabled ? "Enabled" : "Disabled"}</p>
-              <p style={{ margin: '0.5rem 0', fontWeight: 600 }}>Laundry: Premium</p>
-            </div>
+          {/* Right Panel: KYC & Activity */}
+          <div style={{ padding: '2.5rem' }}>
+              <div style={{ marginBottom: '2.5rem' }}>
+                  <h4 style={{ margin: '0 0 1.5rem', fontSize: '1rem', fontWeight: 800, color: '#111827', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                      KYC Documentation
+                  </h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                      <div 
+                        onClick={() => resident.idCardPhoto && setFullScreenImg(resident.idCardPhoto)}
+                        style={{ cursor: 'pointer', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '1.25rem', padding: '1rem', transition: 'all 0.2s' }}
+                      >
+                          <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6B7280', marginBottom: '0.75rem', textAlign: 'center' }}>KYC DOCUMENT</p>
+                          <div style={{ height: '160px', borderRadius: '0.75rem', overflow: 'hidden', background: '#F8FAFB', border: '1px solid #eee' }}>
+                             {resident.idCardPhoto ? <img src={resident.idCardPhoto} alt="Aadhaar" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '0.7rem' }}>No Image provided</div>}
+                          </div>
+                      </div>
+                      <div 
+                        onClick={() => resident.kyc?.collegeIdPhoto && setFullScreenImg(resident.kyc.collegeIdPhoto)}
+                        style={{ cursor: 'pointer', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '1.25rem', padding: '1rem', transition: 'all 0.2s' }}
+                      >
+                          <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6B7280', marginBottom: '0.75rem', textAlign: 'center' }}>COLLEGE ID CARD</p>
+                          <div style={{ height: '160px', borderRadius: '0.75rem', overflow: 'hidden', background: '#F8FAFB', border: '1px solid #eee' }}>
+                             {resident.kyc?.collegeIdPhoto ? <img src={resident.kyc.collegeIdPhoto} alt="College" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '0.7rem' }}>No Image provided</div>}
+                          </div>
+                      </div>
+                  </div>
+                  <p style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: '1rem', textAlign: 'center' }}>Tip: Click an image to view it in full screen.</p>
+              </div>
+
+              {resident.kyc?.kycStatus === 'Pending' && (
+                <div style={{ background: '#FFFBEB', border: '1px solid #FEF3C7', borderRadius: '1.5rem', padding: '1.75rem', boxShadow: '0 10px 30px rgba(245, 158, 11, 0.05)' }}>
+                   <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <div style={{ background: '#F59E0B', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800 }}>!</div>
+                      <div>
+                        <h5 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#92400E' }}>Verification Awaited</h5>
+                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#B45309' }}>Please review the documents above before making a decision.</p>
+                      </div>
+                   </div>
+                   
+                   {showRejectInput && (
+                     <div style={{ marginBottom: '1.25rem' }}>
+                        <textarea 
+                          placeholder="Provide a reason for rejection (this will be shown to the student)..." 
+                          style={{ width: '100%', padding: '1rem', borderRadius: '1rem', border: '2px solid #FED7AA', fontSize: '0.9rem', outline: 'none', background: 'white', minHeight: '100px' }}
+                          value={rejectionReason}
+                          onChange={(e) => setRejectionReason(e.target.value)}
+                        />
+                     </div>
+                   )}
+
+                   <div style={{ display: 'flex', gap: '1rem' }}>
+                      <button 
+                        onClick={() => handleKYC('approve')} 
+                        disabled={processing}
+                        className={styles.submitBtn} 
+                        style={{ flex: 1, padding: '1rem', fontSize: '0.95rem' }}
+                      >
+                        {processing ? 'Processing...' : 'Approve KYC'}
+                      </button>
+                      <button 
+                        onClick={() => handleKYC('reject')}
+                        disabled={processing}
+                        className={styles.secondaryBtn} 
+                        style={{ flex: 1, border: '2px solid #F87171', color: '#F87171', borderRadius: '1rem' }}
+                      >
+                        {showRejectInput ? 'Confirm Rejection' : 'Reject KYC'}
+                      </button>
+                   </div>
+                </div>
+              )}
+
+              {resident.kyc?.kycStatus === 'Verified' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#059669', background: '#F0FDF4', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #DCFCE7' }}>
+                   <div style={{ background: '#10B981', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>✓</div>
+                   <div>
+                      <p style={{ margin: 0, fontWeight: 800, fontSize: '1rem' }}>Documents Verified</p>
+                      <p style={{ margin: '0.15rem 0 0', fontSize: '0.85rem', opacity: 0.8 }}>Verification completed on {formatDate(resident.kyc.kycVerifiedAt)}</p>
+                   </div>
+                </div>
+              )}
+
+              {resident.kyc?.kycStatus === 'Rejected' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#DC2626', background: '#FEF2F2', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #FEE2E2' }}>
+                   <div style={{ background: '#EF4444', color: 'white', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>!</div>
+                   <div>
+                      <p style={{ margin: 0, fontWeight: 800, fontSize: '1rem' }}>KYC Rejected</p>
+                      <p style={{ margin: '0.15rem 0 0', fontSize: '0.85rem', opacity: 0.9 }}>Reason: {resident.kyc.rejectionReason}</p>
+                   </div>
+                </div>
+              )}
           </div>
         </div>
-        <div className={styles.modalFooter}>
-          <button className={styles.secondaryBtn} onClick={onClose}>Close</button>
-          <button className={styles.submitBtn} style={{ background: '#EF4444', boxShadow: '0 8px 16px rgba(239, 68, 68, 0.2)' }}>Terminated Residency</button>
+        <div className={styles.modalFooter} style={{ borderTop: '1px solid #F3F4F6' }}>
+           <button className={styles.secondaryBtn} onClick={onClose} style={{ border: 'none', background: 'transparent' }}>Return to Directory</button>
         </div>
       </div>
     </div>
@@ -389,9 +552,10 @@ function ResidentDetailModal({ resident, onClose }) {
 function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
   const [formData, setFormData] = useState({
     fullName: "", email: "", whatsappNumber: "", dateOfBirth: "",
-    gender: "", idCardType: "", idCardNumber: "",
+    gender: "", idCardType: "Aadhaar", idCardNumber: "",
+    collegeIdNumber: "",
     roomId: "", bedId: "", feeAmount: "", feeFrequency: "Monthly",
-    checkInDate: "", foodEnabled: false
+    checkInDate: "", foodEnabled: false, securityDeposit: ""
   });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -442,6 +606,7 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
         gender: cleanValue(formData.gender),
         idCardType: cleanValue(formData.idCardType),
         idCardNumber: cleanValue(formData.idCardNumber),
+        enrollmentNumber: cleanValue(formData.collegeIdNumber),
         roomId: formData.roomId,
         bedId: formData.bedId,
         feeAmount: Number(formData.feeAmount) || 0,
@@ -481,14 +646,21 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>Add New Resident</h2>
-          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#9CA3AF' }}>&times;</button>
+          <h2 style={{ margin: 0 }}>Add New Resident</h2>
+          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
         </div>
         
         <form onSubmit={handleSubmit}>
           {errorMsg && <div style={{ padding: '1rem 2.5rem', color: '#991B1B', backgroundColor: '#FEF2F2', fontSize: '0.9rem', fontWeight: 600, whiteSpace: 'pre-wrap', borderBottom: '2px solid #FECACA' }}>{errorMsg}</div>}
           
           <div className={styles.formGrid}>
+            <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+              <label>College ID Card Number</label>
+              <input required type="text" name="collegeIdNumber" value={formData.collegeIdNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter College enrollment / ID number" />
+            </div>
+
             <div className={styles.formGroup}>
               <label>Full Name</label>
               <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className={styles.formInput} placeholder="Enter full name" />
@@ -515,18 +687,19 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
             </div>
 
             <div className={styles.formGroup}>
-              <label>ID Card Type</label>
+              <label>KYC Document Type</label>
               <select name="idCardType" value={formData.idCardType} onChange={handleChange} className={styles.formInput}>
                 <option value="">Select Type</option>
-                <option value="Aadhaar">Aadhaar</option>
-                <option value="PAN">PAN</option>
+                <option value="Aadhaar">Aadhaar (Recommended)</option>
+                <option value="PAN">PAN Card</option>
                 <option value="Passport">Passport</option>
+                <option value="Driving License">Driving License</option>
               </select>
             </div>
 
             <div className={styles.formGroup}>
-              <label>ID Card Number</label>
-              <input required type="text" name="idCardNumber" value={formData.idCardNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter ID number" />
+              <label>KYC Document Number</label>
+              <input required type="text" name="idCardNumber" value={formData.idCardNumber} onChange={handleChange} className={styles.formInput} placeholder="Enter document number" />
             </div>
 
             <div className={styles.formGroup}>
@@ -534,8 +707,13 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
               <select required name="roomId" value={formData.roomId} onChange={handleChange} className={styles.formInput}>
                 <option value="">Select Room</option>
                 {allRooms.map(room => (
-                  <option key={room._id} value={room._id}>
-                    {room.buildingName} - Room {room.roomNumber} ({room.availableBeds || 0} left)
+                  <option 
+                    key={room._id} 
+                    value={room._id} 
+                    disabled={room.availableBeds === 0}
+                    style={{ color: room.availableBeds === 0 ? '#9CA3AF' : 'inherit' }}
+                  >
+                    {room.buildingName} - Room {room.roomNumber} ({room.availableBeds || 0} left) {room.availableBeds === 0 ? "— FULL" : ""}
                   </option>
                 ))}
               </select>

@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
+import { setTokens } from '../../utils/auth';
 
 export default function SignupCard() {
+
   const router = useRouter();
   const [step, setStep] = useState(1);
   
@@ -121,8 +123,7 @@ export default function SignupCard() {
       const data = await res.json();
       
       if (data.success) {
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
+        setTokens(data.data.accessToken, data.data.refreshToken);
         router.push('/profile');
       } else {
         let errMsg = data.error?.message || data.message || "Verification failed";
