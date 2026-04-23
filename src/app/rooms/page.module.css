@@ -1,8 +1,8 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #FDF9F6;
-  color: #111827;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .mainContent {
@@ -134,15 +134,15 @@
 .buildingGraphic:hover {
   transform: translateY(-12px) scale(1.02);
   background: white;
-  border-color: #3b3bff;
-  box-shadow: 0 25px 50px -15px rgba(59, 59, 255, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 25px 50px -15px rgba(44, 29, 255, 0.15);
 }
 
 .buildingIcon {
   width: 100px;
   height: 100px;
   margin: 0 auto 2rem auto;
-  color: #3b3bff;
+  color: var(--primary);
   opacity: 0.9;
 }
 
@@ -160,7 +160,7 @@
   color: #3b42f2;
   background: rgba(59, 66, 242, 0.08);
   padding: 0.5rem 1.25rem;
-  border-radius: 12px;
+  border-radius: var(--radius-button);
 }
 
 /* Modals & Blueprint Overlay */
@@ -195,7 +195,10 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #F3F4F6;
-  background: #FDF9F6;
+  background: var(--background);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .interiorHeader h3 {
@@ -213,8 +216,8 @@
 
 .floorContainer {
   margin-bottom: 4rem;
-  background: #FDF9F6;
-  border-radius: 2rem;
+  background: var(--background);
+  border-radius: var(--radius-card);
   padding: 2.5rem;
   border: 1px solid rgba(0,0,0,0.02);
 }
@@ -233,7 +236,7 @@
   content: '';
   width: 10px;
   height: 10px;
-  background: #3b3bff;
+  background: var(--primary);
   border-radius: 3px;
 }
 
@@ -254,8 +257,8 @@
 }
 
 .roomCard:hover {
-  border-color: #3b3bff;
-  box-shadow: 0 15px 30px -10px rgba(59, 59, 255, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 15px 30px -10px rgba(44, 29, 255, 0.15);
   transform: translateY(-4px);
 }
 
@@ -279,7 +282,7 @@
   color: white;
   border: none;
   padding: 0.85rem 1.75rem;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -315,17 +318,17 @@
 }
 
 .formInput:focus {
-  border-color: #3b42f2;
+  border-color: var(--primary);
   background: white;
-  box-shadow: 0 0 0 4px rgba(59, 66, 242, 0.1);
+  box-shadow: 0 0 0 4px rgba(44, 29, 255, 0.1);
   outline: none;
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #3b42f2 0%, #2a2acc 100%);
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-button) !important;
   padding: 1.15rem 2rem;
   font-weight: 800;
   font-size: 1.1rem;

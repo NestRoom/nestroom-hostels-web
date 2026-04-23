@@ -15,46 +15,47 @@
 }
 
 .header {
-  padding: 2rem 3rem;
+  padding: 2.5rem 3.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  background: rgba(253, 248, 246, 0.8);
-  backdrop-filter: blur(12px);
+  background: rgba(253, 248, 246, 0.85);
+  backdrop-filter: blur(15px);
   z-index: 100;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .titleSection h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #111827;
-  letter-spacing: -0.03em;
+  font-size: 2.25rem;
+  font-weight: 850;
+  color: var(--foreground);
+  letter-spacing: -0.04em;
   margin: 0;
 }
 
 .titleSection p {
   color: #64748b;
-  margin: 0.25rem 0 0 0;
-  font-size: 0.95rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .canvas {
-  padding: 1rem 3rem 5rem 3rem;
+  padding: 2rem 3.5rem 6rem 3.5rem;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: 100px;
-  gap: 20px;
+  gap: 24px;
   position: relative;
 }
 
 /* Widget Styles */
 .widget {
   background: white;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lg);
   border: 1px solid rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
@@ -64,12 +65,8 @@
   user-select: none;
 }
 
-.widget:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
 .widgetHeader {
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 1.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -77,13 +74,9 @@
   border-bottom: 1px solid #f1f5f9;
 }
 
-.widgetHeader:active {
-  cursor: grabbing;
-}
-
 .widgetTitle {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   color: #334155;
   display: flex;
   align-items: center;
@@ -92,195 +85,112 @@
 
 .widgetContent {
   flex-grow: 1;
-  padding: 1.5rem;
+  padding: 1.75rem;
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-/* Resize Handle */
-.resizeHandle {
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
-  width: 20px;
-  height: 20px;
-  cursor: nwse-resize;
-  background: transparent;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 2px;
-  z-index: 50;
-}
-
-.resizeHandle::after {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-right: 2px solid #cbd5e1;
-  border-bottom: 2px solid #cbd5e1;
-}
-
-/* Draggable instance */
-.dragging {
-  opacity: 0.8;
-  z-index: 1000;
-  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25) !important;
-  transform: scale(1.02);
-  border: 2px solid #3b82f6 !important;
-}
-
-.resizing {
-  z-index: 1000;
-  border: 2px solid #3b82f6 !important;
-}
-
-/* Custom Widget Content Styles */
+/* KPI Styles */
 .kpiValue {
-  font-size: 2.25rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-size: 2.75rem;
+  font-weight: 850;
+  color: var(--foreground);
+  letter-spacing: -0.05em;
   margin-bottom: 0.5rem;
 }
 
 .kpiLabel {
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .progressBar {
-  height: 8px;
+  height: 10px;
   background: #f1f5f9;
-  border-radius: 4px;
+  border-radius: 10px;
   overflow: hidden;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .progressFill {
   height: 100%;
   background: var(--primary);
-  border-radius: 4px;
-}
-
-.transactionList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.transactionItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.transactionItem:last-child {
-  border-bottom: none;
-}
-
-.transInfo h4 {
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.transInfo p {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  margin: 0;
-}
-
-.transAmount {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #10b981;
+  border-radius: 10px;
 }
 
 .actionGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .actionBtn {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 1rem;
-  border-radius: 1rem;
+  border: 1.5px solid #f1f5f9;
+  padding: 1.25rem;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .actionBtn:hover {
-  background: #3b42f2;
-  color: white;
-  border-color: #3b42f2;
-  transform: translateY(-2px);
+  background: white;
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(44, 29, 255, 0.05);
 }
 
 .actionBtn span {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
-}
-
-/* Food Widget */
-.foodCard {
-  background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);
-  border-radius: 1rem;
-  padding: 1rem;
-}
-
-.mealHeader {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #3b82f6;
-  text-transform: uppercase;
-}
-
-.mealItems {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1e293b;
 }
 
 .controls {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .saveBtn {
-  background: var(--primary);
+  background-color: var(--primary);
   color: white;
   border: none;
-  padding: 0.65rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(59, 59, 255, 0.2);
+  gap: 0.75rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.saveBtn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(44, 29, 255, 0.2);
 }
 
 .resetBtn {
-  background: transparent;
+  background: white;
   color: #ef4444;
-  border: 1px solid #fee2e2;
-  padding: 0.65rem 1.25rem;
-  border-radius: 0.75rem;
+  border: 1.5px solid #fee2e2;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn:hover {
+  background: #fff1f2;
 }

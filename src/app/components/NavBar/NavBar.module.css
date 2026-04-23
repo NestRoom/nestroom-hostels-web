@@ -4,71 +4,90 @@
     margin-top: 20px;
     height: 76px;
     border-radius: 100px;
-    box-shadow: inset 0px -4px 16px 5px #fff;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     align-items: center;
     justify-content: space-between;
-    text-shadow: 2px 2px 4px 0px #00000083;
+    padding: 0 10px;
+    box-shadow: var(--shadow-sm);
 }
+
 .logo {
     display: flex;
     flex-direction: row;
-    margin-left: 60;
+    margin-left: 30px;
     cursor: pointer;
+    align-items: center;
 }
+
 .nest {
     color: var(--foreground);
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
+    margin: 0;
 }
+
 .room {
     color: var(--primary);
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
+    margin: 0;
 }
+
 .navLinks {
     display: flex;
     flex-direction: row;
-    gap: 54px;
+    gap: 40px;
 }
+
 .link {
-    color: black;
+    color: #4b5563;
     font-weight: 600;
-    font-size: 21px;
+    font-size: 18px;
     cursor: pointer;
-    transition: all 0.1s ease;
+    transition: all 0.2s ease;
 }
+
 .link:hover {
-    color: #2C1DFF;
+    color: var(--primary);
 }
+
 .buttons {
     display: flex;
     flex-direction: row;
-    gap: 45px;
+    gap: 30px;
     margin-right: 10px;
     align-items: center;
 }
+
 .loginButton {
-    color: #2C1DFF;
-    font-size: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.1s ease;
-}
-.loginButton:hover {
-    color: black;
-}
-.signUpButton {
-    background-color: #2C1DFF;
-    padding: 12px 30px;
-    border-radius: 100px;
-    border: none;
-    box-shadow: inset 0px -4px 16px 3px #ffffffc1;
-    font-size: 24px;
+    color: var(--primary);
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.1s ease;
-    font-family: "Poppins", sans-serif;
+    transition: all 0.2s ease;
 }
+
+.loginButton:hover {
+    color: var(--foreground);
+}
+
+.signUpButton {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 24px;
+    border-radius: var(--radius-pill);
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
 .signUpButton:hover {
-    box-shadow: inset 0px -4px 20px 1px #ffffffc1;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(44, 29, 255, 0.2);
 }

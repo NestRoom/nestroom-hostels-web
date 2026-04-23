@@ -79,7 +79,7 @@
 .roomNumber h2 {
   font-size: 5rem;
   font-weight: 900;
-  color: #3b3bff;
+  color: var(--primary);
   margin: 0;
   line-height: 1;
   letter-spacing: -0.05em;
@@ -136,11 +136,11 @@
 }
 
 .actionLink {
-  background: #3b3bff;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 1.125rem;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 800;
   cursor: pointer;
   display: flex;
@@ -151,7 +151,7 @@
 }
 
 .attendanceAlert {
-  background: linear-gradient(135deg, #3b3bff 0%, #1e1eff 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #1e1eff 100%);
   color: white;
   border-radius: 2.5rem;
   padding: 2.5rem 3rem;
@@ -190,10 +190,10 @@
 
 .markBtn {
   background: white;
-  color: #3b3bff;
+  color: var(--primary);
   border: none;
   padding: 1rem 2rem;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 800;
   cursor: pointer;
 }
@@ -231,8 +231,8 @@
   font-weight: 900;
 }
 
-.eventDate span { font-size: 1.4rem; color: #3b3bff; }
-.eventDate small { font-size: 0.7rem; color: #3b3bff; text-transform: uppercase; }
+.eventDate span { font-size: 1.4rem; color: var(--primary); }
+.eventDate small { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; }
 
 .eventInfo {
   flex: 1;
@@ -343,7 +343,7 @@
   background: #FFF9F9;
   border: 1px solid rgba(232, 175, 170, 0.2);
   padding: 1rem;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-button) !important;
   color: #4A3E3E;
   font-weight: 800;
   font-size: 0.9rem;
@@ -353,8 +353,8 @@
 
 .actionBtnFull:hover {
   background: #FDF8F6;
-  border-color: #3b3bff;
-  color: #3b3bff;
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .contactCard {
@@ -383,7 +383,7 @@
 .contactInfo p {
   margin: 0;
   font-size: 0.85rem;
-  color: #3b3bff;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -392,7 +392,7 @@
   background: #F1F5F9;
   border: none;
   padding: 0.875rem;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-button) !important;
   color: #64748B;
   font-weight: 700;
   cursor: pointer;
@@ -400,12 +400,12 @@
 }
 
 .complaintBtn:hover {
-  background: #3b3bff;
+  background: var(--primary);
   color: white;
 }
 
 .promoCard {
-  background: #3b3bff;
+  background: var(--primary);
   padding: 2rem;
   border-radius: 2rem;
   color: white;
@@ -441,10 +441,10 @@
 
 .promoBtn {
   background: white;
-  color: #3b3bff;
+  color: var(--primary);
   border: none;
   padding: 0.6rem 1.25rem;
-  border-radius: 1rem;
+  border-radius: var(--radius-button) !important;
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;

@@ -425,7 +425,9 @@ export default function RoomsPage() {
                     </div>
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                       {isEditing && <button className={styles.primaryButton} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }} onClick={() => handleAddFloor(b.id)}>Add Floor</button>}
-                      <button onClick={() => setSelectedBuildingGrid(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827' }}><svg width="32" height="32" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+                      <button onClick={() => setSelectedBuildingGrid(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      </button>
                     </div>
                   </div>
                   <div className={styles.scrollingFloors}>
@@ -447,8 +449,12 @@ export default function RoomsPage() {
                               <span className={styles.roomType}>{room.type} • {room.bedCount} Beds</span>
                               {isEditing && (
                                 <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-                                  <button onClick={() => openRoomEditor(b.id, floor.level, room)} style={{ background: '#F3F4F6', border: 'none', padding: '6px', borderRadius: '8px', cursor: 'pointer' }}><svg width="14" height="14" stroke="#4B5563" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5l3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-                                  <button onClick={() => handleRemoveRoom(b.id, floor.level, room.id)} style={{ background: '#FEE2E2', border: 'none', padding: '6px', borderRadius: '8px', cursor: 'pointer' }}><svg width="14" height="14" stroke="#EF4444" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                                  <button onClick={() => openRoomEditor(b.id, floor.level, room)} style={{ background: '#F3F4F6', border: 'none', padding: '8px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} className={styles.roomActionBtn}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                  </button>
+                                  <button onClick={() => handleRemoveRoom(b.id, floor.level, room.id)} style={{ background: '#FEE2E2', border: 'none', padding: '8px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} className={styles.roomActionBtn}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                  </button>
                                 </div>
                               )}
                             </div>
@@ -466,9 +472,14 @@ export default function RoomsPage() {
 
       {selectedRoom && (
         <div className={styles.blueprintOverlay}>
-          <div className={styles.wizardCard} style={{ margin: 0, width: '450px', padding: '3rem' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>Update Room {roomEditData.number}</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className={styles.wizardCard} style={{ margin: 0, width: '500px', padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div className={styles.interiorHeader} style={{ padding: '2rem 3rem', background: 'white' }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0 }}>Update Room {roomEditData.number}</h3>
+              <button onClick={() => setSelectedRoom(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+            <div style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', overflowY: 'auto' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label style={{ fontWeight: 800, fontSize: '0.8rem', color: '#9CA3AF' }}>ROOM NUMBER</label>
                 <input className={styles.formInput} value={roomEditData.number} onChange={e => setRoomEditData({...roomEditData, number: e.target.value})} />
