@@ -404,9 +404,7 @@ function ResidentDetailModal({ resident, hostelId, onClose, onUpdate }) {
               KYC {resident.kyc?.kycStatus || 'Pending'}
             </span>
           </div>
-          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
+          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#111827' }}>&times;</button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr' }}>
           {/* Left Panel: Profile & Bio */}
@@ -646,10 +644,8 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 style={{ margin: 0 }}>Add New Resident</h2>
-          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
+          <h2>Add New Resident</h2>
+          <button className={styles.closeBtn} onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#9CA3AF' }}>&times;</button>
         </div>
         
         <form onSubmit={handleSubmit}>

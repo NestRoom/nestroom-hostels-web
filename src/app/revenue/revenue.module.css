@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background-color: var(--background);
+  background-color: #FDF9F6;
 }
 
 .container {
@@ -33,11 +33,11 @@
 }
 
 .recordBtn {
-  background-color: var(--primary);
+  background-color: #3b42f2;
   color: white;
   border: none;
   padding: 14px 28px;
-  border-radius: var(--radius-button) !important;
+  border-radius: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -179,7 +179,7 @@
   padding: 10px 18px;
   border: 1px solid #e2e8f0;
   background: white;
-  border-radius: var(--radius-button) !important;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
   color: #475569;
@@ -228,7 +228,7 @@
   width: 40px;
   height: 40px;
   background: #f1f5f9;
-  border-radius: var(--radius-button) !important;
+  border-radius: 12px;
 }
 
 .residentName {
@@ -367,7 +367,7 @@
   padding: 14px;
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: var(--radius-button) !important;
+  border-radius: 14px;
   font-weight: 700;
   color: #475569;
   cursor: pointer;
@@ -398,7 +398,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--primary);
+  background: #3b42f2;
 }
 
 .forecastDesc {
@@ -412,7 +412,7 @@
   padding: 14px;
   background: #eff6ff;
   border: none;
-  border-radius: var(--radius-button) !important;
+  border-radius: 14px;
   color: #3b82f6;
   font-weight: 700;
   cursor: pointer;

@@ -1,33 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-  --background: #FDF8F6; /* Premium soft beige-pink */
-  --foreground: #171717; /* Clean dark text */
-  --primary: #2C1DFF;   /* Brand Blue */
-  --primary-hover: #1a11e6;
+  --background: #FDF8F6; /* Premium soft beige-pink background from screenshot */
+  --foreground: #1e293b; /* Clean dark text */
+  --primary: #3b3bff;   /* vibrant brand blue */
   --accent: #E8AFAA;    /* Secondary warm accent */
   --card-bg: #FFFFFF;
   --sidebar-bg: #FFFFFF;
   --sidebar-inactive: #64748b;
-  --sidebar-active-bg: #2C1DFF;
+  --sidebar-active-bg: #3b3bff;
   --sidebar-active-text: #FFFFFF;
-  
-  /* Shared Tokens - Modern Architectural Feel */
-  --radius-button: 14px;
-  --radius-pill: 100px;
-  --radius-card: 24px;
-  --radius-modal: 28px;
-  
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 10px 25px rgba(44, 29, 255, 0.08);
-  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.03);
 }
 
 /* Enforce architectural theme even in dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #FDF8F6;
-    --foreground: #171717;
+    --foreground: #1e293b;
   }
 }
 
@@ -74,52 +63,10 @@ input, button, select, textarea {
   font-family: inherit !important;
 }
 
-/* Global Button Standardization */
-button, 
-.button, 
-[class*="Button"], 
-[class*="Btn"] {
-  border-radius: var(--radius-button) !important;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: inherit;
-}
-
-/* For elements that should stay circular (icons) */
-.btn-icon,
-[class*="iconBtn"] {
-  border-radius: 50% !important;
-}
-
-/* Standard Primary Button Utility */
-.premium-btn-primary {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  padding: 0.85rem 2rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.premium-btn-primary:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(44, 29, 255, 0.2);
-}
-
-/* Utility for card aesthetic */
+/* Utility for card aesthetic from screenshot */
 .premium-card {
   background: white;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-lg);
+  border-radius: 2rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
   border: 1px solid rgba(0,0,0,0.02);
-}
-
-/* Modal Scrollbar Standardization */
-.modalContent::-webkit-scrollbar {
-  width: 6px;
 }

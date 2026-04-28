@@ -22,11 +22,11 @@
 }
 
 .raiseBtn {
-  background: var(--primary);
+  background: #3b3bff;
   color: white;
   border: none;
   padding: 0.875rem 1.5rem;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
@@ -94,7 +94,7 @@
   border-radius: 2rem;
 }
 
-.open { background: rgba(44, 29, 255, 0.1); color: var(--primary); }
+.open { background: #3b3bff1a; color: #3b3bff; }
 .inprogress { background: #f59e0b1a; color: #f59e0b; }
 .resolved { background: #10b9811a; color: #10b981; }
 .closed { background: #64748B1a; color: #64748B; }
@@ -161,13 +161,11 @@
 
 .modalContent {
   background: white;
+  padding: 2.5rem;
   border-radius: 2rem;
   width: 100%;
   max-width: 550px;
-  max-height: 90vh;
-  overflow-y: auto;
   animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
 }
 
 @keyframes modalIn {
@@ -175,28 +173,16 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.modalHeader {
-  padding: 2.5rem 2.5rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #F1F5F9;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
-}
-
 .modalTitle {
   font-size: 1.5rem;
   font-weight: 800;
+  margin-bottom: 2rem;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 2.5rem;
 }
 
 .formRow {
@@ -229,9 +215,9 @@
 }
 
 .inputGroup input:focus, .inputGroup select:focus, .inputGroup textarea:focus {
-  border-color: var(--primary);
+  border-color: #3b3bff;
   background: white;
-  box-shadow: 0 0 0 4px rgba(44, 29, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(59, 59, 255, 0.05);
 }
 
 .modalActions {
@@ -245,17 +231,17 @@
   background: #F1F5F9;
   border: none;
   padding: 1rem;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   font-weight: 700;
   cursor: pointer;
 }
 
 .submitBtn {
-  background: var(--primary);
+  background: #3b3bff;
   color: white;
   border: none;
   padding: 1rem;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   font-weight: 700;
   cursor: pointer;
 }

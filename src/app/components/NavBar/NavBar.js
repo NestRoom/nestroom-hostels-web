@@ -52,7 +52,7 @@ export default function NavBar() {
       </div>
       <div className={styles.navLinks}>
         <div className={styles.link}>about</div>
-        <div className={styles.link}>contact</div>
+        <div className={styles.link}>features</div>
         <div className={styles.link}>pricing</div>
       </div>
       <div className={styles.buttons}>

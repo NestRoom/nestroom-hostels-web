@@ -141,6 +141,10 @@ export default function StudentOverview() {
                  <span className={styles.metaValue}>{resident?.bedId?.bedNumber || "A"}</span>
               </div>
               <div className={styles.metaItem}>
+                 <span className={styles.metaLabel}>Building</span>
+                 <span className={styles.metaValue}>{resident?.buildingId?.buildingNumber || "Main"}</span>
+              </div>
+              <div className={styles.metaItem}>
                  <span className={styles.metaLabel}>Floor</span>
                  <span className={styles.metaValue}>{resident?.roomId?.floorNumber || "1"}</span>
               </div>

@@ -17,11 +17,22 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
+  // Password Modal State
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [passwordFlow, setPasswordFlow] = useState('change'); // 'change', 'change_verify', 'forgot', 'forgot_verify'
+  const [pwdFormData, setPwdFormData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    otp: ''
+  });
+  const [pwdError, setPwdError] = useState('');
+  
   const [profileData, setProfileData] = useState({
     fullName: '',
     email: '',
     mobile: '',
-    profilePhoto: 'https://i.pravatar.cc/150?img=11', // default fallback
+    profilePhoto: 'https://ui-avatars.com/api/?name=Admin&background=E5E7EB&color=374151&size=150', // default fallback
     completionPercentage: 0,
     hasTwoFactor: false,
     hostels: [] // array of hostels
@@ -93,7 +104,7 @@ export default function ProfilePage() {
           fullName: user.fullName || '',
           email: user.email || '',
           mobile: user.whatsappNumber || '',
-          profilePhoto: user.profilePhoto || 'https://i.pravatar.cc/150?img=11',
+          profilePhoto: user.profilePhoto || 'https://ui-avatars.com/api/?name=Admin&background=E5E7EB&color=374151&size=150',
           completionPercentage,
           hasTwoFactor: !!user.twoFactorEnabled,
           hostels: formattedHostels
@@ -246,10 +257,101 @@ export default function ProfilePage() {
     }
   };
 
+  // Password Modal Handlers
+  const handlePwdFormChange = (e) => {
+    setPwdFormData({ ...pwdFormData, [e.target.name]: e.target.value });
+  };
 
-  const circleRadius = 26;
-  const circumference = 2 * Math.PI * circleRadius;
-  const strokeDashoffset = circumference - (profileData.completionPercentage / 100) * circumference;
+  const openPasswordModal = (flow = 'change') => {
+    setPasswordFlow(flow);
+    setPwdFormData({ currentPassword: '', newPassword: '', confirmPassword: '', otp: '' });
+    setPwdError('');
+    setPasswordModalOpen(true);
+  };
+
+  const handlePasswordFlowSubmit = async () => {
+    setPwdError('');
+    const token = localStorage.getItem('accessToken');
+    try {
+      if (passwordFlow === 'change') {
+        if (!pwdFormData.currentPassword || !pwdFormData.newPassword || !pwdFormData.confirmPassword) {
+           return setPwdError('All fields are required.');
+        }
+        if (pwdFormData.newPassword !== pwdFormData.confirmPassword) {
+           return setPwdError('New passwords do not match.');
+        }
+        // Send OTP
+        const res = await fetch('http://localhost:5001/v1/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: profileData.email })
+        });
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || 'Failed to send OTP');
+        }
+        setPasswordFlow('change_verify');
+      } else if (passwordFlow === 'change_verify') {
+        if (!pwdFormData.otp) return setPwdError('OTP is required.');
+        const res = await fetch('http://localhost:5001/v1/auth/change-password', {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify({ 
+            currentPassword: pwdFormData.currentPassword, 
+            newPassword: pwdFormData.newPassword,
+            confirmPassword: pwdFormData.confirmPassword,
+            otp: pwdFormData.otp
+          })
+        });
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || 'Failed to update password');
+        }
+        alert('Password updated successfully!');
+        setPasswordModalOpen(false);
+      } else if (passwordFlow === 'forgot') {
+        // Send OTP
+        const res = await fetch('http://localhost:5001/v1/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: profileData.email })
+        });
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || 'Failed to send OTP');
+        }
+        setPasswordFlow('forgot_verify');
+      } else if (passwordFlow === 'forgot_verify') {
+        if (!pwdFormData.otp || !pwdFormData.newPassword || !pwdFormData.confirmPassword) {
+           return setPwdError('All fields are required.');
+        }
+        if (pwdFormData.newPassword !== pwdFormData.confirmPassword) {
+           return setPwdError('New passwords do not match.');
+        }
+        const res = await fetch('http://localhost:5001/v1/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            email: profileData.email,
+            otp: pwdFormData.otp,
+            newPassword: pwdFormData.newPassword,
+            confirmPassword: pwdFormData.confirmPassword
+          })
+        });
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || 'Failed to reset password');
+        }
+        alert('Password reset successfully!');
+        setPasswordModalOpen(false);
+      }
+    } catch (err) {
+      setPwdError(err.message);
+    }
+  };
 
   return (
     <div className={styles.layout}>
@@ -264,20 +366,7 @@ export default function ProfilePage() {
           </div>
           
           <div className={styles.headerActions}>
-            <div className={styles.completionWidget}>
-              <div className={styles.progressCircle}>
-                <svg width="60" height="60">
-                  <circle cx="30" cy="30" r="26" fill="none" stroke="#E5E7EB" strokeWidth="6" />
-                  <circle cx="30" cy="30" r="26" fill="none" stroke="#3b3bff" strokeWidth="6" 
-                    strokeDasharray={circumference} 
-                    strokeDashoffset={strokeDashoffset} 
-                    transform="rotate(-90 30 30)"
-                    strokeLinecap="round" />
-                </svg>
-                <span className={styles.progressText} style={{ fontSize: '1rem' }}>{profileData.completionPercentage}%</span>
-              </div>
-              <span className={styles.completionLabel}>Avg Completion</span>
-            </div>
+
             {!isEditing && (
               <button className={styles.editProfileBtn} onClick={() => setIsEditing(true)}>
                 Edit Profile
@@ -445,7 +534,7 @@ export default function ProfilePage() {
         </div>
 
         {/* 3. Account Security Section */}
-        <div className={styles.section} style={{ borderBottom: 'none' }}>
+        <div className={styles.section} style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
           <div className={styles.sectionHeader}>
             <h3>Account Security</h3>
             <p>Manage authentication factors and roles.</p>
@@ -457,10 +546,10 @@ export default function ProfilePage() {
                   <h4>Change Password</h4>
                   <p>Send a reset link to update password</p>
                 </div>
-                <button className={styles.actionBtn}>Update</button>
+                <button className={styles.actionBtn} onClick={() => openPasswordModal('change')}>Update</button>
               </div>
 
-              <div className={styles.settingItem}>
+              <div className={styles.settingItem} style={{ opacity: 0.5, pointerEvents: 'none' }}>
                 <div className={styles.settingInfo}>
                   <h4>Two-Factor Authentication</h4>
                   {profileData.hasTwoFactor ? (
@@ -469,15 +558,15 @@ export default function ProfilePage() {
                     <p>Protect your account with 2FA</p>
                   )}
                 </div>
-                <button className={styles.actionBtn}>{profileData.hasTwoFactor ? 'Disable' : 'Enable'}</button>
+                <button className={styles.actionBtn} disabled>{profileData.hasTwoFactor ? 'Disable' : 'Enable'}</button>
               </div>
 
-              <div className={styles.settingItem}>
+              <div className={styles.settingItem} style={{ opacity: 0.5, pointerEvents: 'none' }}>
                 <div className={styles.settingInfo}>
                   <h4>Role Management</h4>
                   <p>Invite employees and grant access</p>
                 </div>
-                <button className={styles.actionBtn}>Manage</button>
+                <button className={styles.actionBtn} disabled>Manage</button>
               </div>
             </div>
           </div>
@@ -494,6 +583,74 @@ export default function ProfilePage() {
       <button className={styles.floatingModeToggle}>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       </button>
+
+      {/* Password Modal */}
+      {passwordModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button className={styles.modalClose} onClick={() => setPasswordModalOpen(false)}>×</button>
+            <h2 className={styles.modalTitle}>
+              {passwordFlow === 'change' ? 'Change Password' : passwordFlow === 'forgot' ? 'Forgot Password' : 'Verify OTP'}
+            </h2>
+            <p className={styles.modalSubtitle}>
+              {passwordFlow === 'change' && 'Enter your current password and a new password.'}
+              {passwordFlow === 'change_verify' && 'We have sent an OTP to your email. Enter it below to confirm.'}
+              {passwordFlow === 'forgot' && 'Click below to receive a password reset OTP on your email.'}
+              {passwordFlow === 'forgot_verify' && 'Enter the OTP sent to your email, and your new password.'}
+            </p>
+
+            {pwdError && <div style={{ color: '#EF4444', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500 }}>{pwdError}</div>}
+
+            <div className={styles.modalForm}>
+              {passwordFlow === 'change' && (
+                <>
+                  <div className={styles.inputGroup}>
+                    <label>CURRENT PASSWORD</label>
+                    <input type="password" name="currentPassword" value={pwdFormData.currentPassword} onChange={handlePwdFormChange} />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>NEW PASSWORD</label>
+                    <input type="password" name="newPassword" value={pwdFormData.newPassword} onChange={handlePwdFormChange} />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>CONFIRM NEW PASSWORD</label>
+                    <input type="password" name="confirmPassword" value={pwdFormData.confirmPassword} onChange={handlePwdFormChange} />
+                  </div>
+                  <button className={styles.modalLink} onClick={() => setPasswordFlow('forgot')}>Forgot current password?</button>
+                </>
+              )}
+
+              {passwordFlow === 'change_verify' && (
+                <div className={styles.inputGroup}>
+                  <label>OTP</label>
+                  <input type="text" name="otp" value={pwdFormData.otp} onChange={handlePwdFormChange} placeholder="123456" />
+                </div>
+              )}
+
+              {passwordFlow === 'forgot_verify' && (
+                <>
+                  <div className={styles.inputGroup}>
+                    <label>OTP</label>
+                    <input type="text" name="otp" value={pwdFormData.otp} onChange={handlePwdFormChange} placeholder="123456" />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>NEW PASSWORD</label>
+                    <input type="password" name="newPassword" value={pwdFormData.newPassword} onChange={handlePwdFormChange} />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>CONFIRM NEW PASSWORD</label>
+                    <input type="password" name="confirmPassword" value={pwdFormData.confirmPassword} onChange={handlePwdFormChange} />
+                  </div>
+                </>
+              )}
+
+              <button className={styles.modalActionBtn} onClick={handlePasswordFlowSubmit}>
+                {passwordFlow === 'change' ? 'Continue' : passwordFlow === 'forgot' ? 'Send OTP' : 'Verify & Update'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

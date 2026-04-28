@@ -1,8 +1,8 @@
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: #FDF9F6; /* Aesthetic beige background */
+  color: #111827;
 }
 
 .mainContent {
@@ -52,8 +52,8 @@
 }
 
 .searchInput:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(44, 29, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #3b3bff;
+  box-shadow: 0 0 0 4px rgba(59, 59, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
   width: 380px;
 }
 
@@ -71,10 +71,10 @@
 }
 
 .primaryButton {
-  background: var(--primary);
+  background: linear-gradient(135deg, #3b3bff 0%, #2a2acc 100%);
   color: white;
   border: none;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   padding: 0.85rem 1.75rem;
   font-weight: 700;
   font-size: 1rem;
@@ -199,7 +199,7 @@
 }
 
 .tab.active {
-  color: var(--primary);
+  color: #3b3bff;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
@@ -309,10 +309,6 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #F3F4F6;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
 }
 
 .modalHeader h2 {
@@ -352,9 +348,9 @@
 }
 
 .formInput:focus {
-  border-color: var(--primary);
+  border-color: #3b3bff;
   background: white;
-  box-shadow: 0 0 0 4px rgba(44, 29, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(59, 59, 255, 0.1);
   outline: none;
 }
 
@@ -370,7 +366,7 @@
 
 .secondaryBtn {
   padding: 0.9rem 2rem;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   background: white;
   border: 2px solid #F3F4F6;
   font-weight: 700;
@@ -380,8 +376,8 @@
 
 .submitBtn {
   padding: 0.9rem 2.5rem;
-  border-radius: var(--radius-button) !important;
-  background: var(--primary);
+  border-radius: 1rem;
+  background: #3b3bff;
   border: none;
   font-weight: 700;
   color: white;
@@ -398,7 +394,7 @@
 
 .pageBtn {
   padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-button) !important;
+  border-radius: 10px;
   border: 2px solid #F3F4F6;
   background: white;
   font-weight: 700;
