@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { secureFetch } from "../utils/auth";
 import dynamic from "next/dynamic";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 
 const GoogleMapGeofence = dynamic(() => import("../components/Map/GoogleMapGeofence"), { 
@@ -154,7 +154,7 @@ export default function AttendancePage() {
   return (
     <div className={styles.container}>
       {isLoading && <LoadingComponent />}
-      <Sidebar />
+      <AdminNav />
       
       <div className={styles.mainContent}>
         <div className={styles.header}>

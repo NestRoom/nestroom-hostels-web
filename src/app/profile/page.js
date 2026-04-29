@@ -2,14 +2,35 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import Sidebar from '../components/Sidebar/Sidebar';
+import AdminNav from '../components/AdminNav/AdminNav';
+import Footer from '../components/Footer/Footer';
 import Loading from '../components/Loading/Loading';
 import styles from './page.module.css';
+import { secureFetch } from '../utils/auth';
 
 const LocationPicker = dynamic(() => import('../components/Map/LocationPicker'), { 
   ssr: false, 
   loading: () => <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100%',background:'#F3F4F6',color:'#6B7280',fontSize:'0.9rem',fontWeight:500}}>Loading Map Engine...</div> 
 });
+
+import { 
+  UserCircle, 
+  Building2, 
+  ShieldCheck, 
+  MapPin, 
+  CreditCard, 
+  Camera, 
+  Plus, 
+  X,
+  Key,
+  Smartphone,
+  Mail,
+  Trash2,
+  CheckCircle,
+  Save,
+  ArrowLeft,
+  AlertCircle
+} from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -48,9 +69,7 @@ export default function ProfilePage() {
           return;
         }
 
-        const res = await fetch('http://localhost:5001/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await secureFetch('http://localhost:5001/v1/auth/me');
         
         if (!res.ok) {
           if (res.status === 401) router.push('/login');
@@ -67,9 +86,7 @@ export default function ProfilePage() {
         const formattedHostels = await Promise.all(fetchedHostels.map(async (hostelObj) => {
           let pComp = 0;
           try {
-            const compRes = await fetch(`http://localhost:5001/v1/hostels/${hostelObj._id}/profile-completion`, {
-              headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const compRes = await secureFetch(`http://localhost:5001/v1/hostels/${hostelObj._id}/profile-completion`);
             if (compRes.ok) {
               const compData = await compRes.json();
               pComp = compData.data?.overallCompletion || 0;
@@ -188,10 +205,9 @@ export default function ProfilePage() {
     const token = localStorage.getItem('accessToken');
     try {
       // 1. Update User Details
-      await fetch('http://localhost:5001/v1/auth/me', {
+      await secureFetch('http://localhost:5001/v1/auth/me', {
         method: 'PUT',
         headers: { 
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -220,10 +236,9 @@ export default function ProfilePage() {
           };
         }
 
-        await fetch(`http://localhost:5001/v1/hostels/${hostel._id}`, {
+        await secureFetch(`http://localhost:5001/v1/hostels/${hostel._id}`, {
           method: 'PUT',
           headers: { 
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -233,10 +248,9 @@ export default function ProfilePage() {
         });
 
         if (hostel.bankAccountName || hostel.bankAccountNumber) {
-          await fetch(`http://localhost:5001/v1/hostels/${hostel._id}/bank`, {
+          await secureFetch(`http://localhost:5001/v1/hostels/${hostel._id}/bank`, {
             method: 'PUT',
             headers: { 
-              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -293,10 +307,9 @@ export default function ProfilePage() {
         setPasswordFlow('change_verify');
       } else if (passwordFlow === 'change_verify') {
         if (!pwdFormData.otp) return setPwdError('OTP is required.');
-        const res = await fetch('http://localhost:5001/v1/auth/change-password', {
+        const res = await secureFetch('http://localhost:5001/v1/auth/change-password', {
           method: 'POST',
           headers: { 
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json' 
           },
           body: JSON.stringify({ 
@@ -356,233 +369,224 @@ export default function ProfilePage() {
   return (
     <div className={styles.layout}>
       {loading && <Loading text="Loading profile state..." />}
-      <Sidebar />
+      <AdminNav />
       
-      <main className={styles.mainContent}>
-        <div className={styles.header}>
-          <div>
-            <h1 className={styles.pageTitle}>Profile Settings</h1>
-            <p className={styles.pageSubtitle}>Manage your account details and hostel network.</p>
-          </div>
-          
-          <div className={styles.headerActions}>
-
-            {!isEditing && (
-              <button className={styles.editProfileBtn} onClick={() => setIsEditing(true)}>
-                Edit Profile
+      <main className={`${styles.mainContent} ${isEditing ? styles.editing : ''}`}>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <div className={styles.headerTitleGroup}>
+              <button className={styles.backBtn} onClick={() => router.push('/dashboard')}>
+                <ArrowLeft size={20} />
               </button>
-            )}
-          </div>
-        </div>
-
-        {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-
-        {/* 1. Basic Identity Section */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h3>Personal Identity</h3>
-            <p>Update your photo and personal details.</p>
-          </div>
-          <div className={styles.sectionBody}>
-            <div className={styles.avatarSection}>
-              <div className={styles.avatarWrapper}>
-                <img src={profileData.profilePhoto} alt="Profile Avatar" className={styles.avatarLarge} />
-              </div>
               <div>
-                {isEditing ? (
-                  <>
-                    <label className={styles.uploadLabel}>
-                      Change Photo
-                      <input type="file" accept="image/*" className={styles.hiddenInput} onChange={handlePhotoUpload} />
-                    </label>
-                    <span className={styles.photoHelp}>JPG, GIF or PNG. Max size of 2MB</span>
-                  </>
-                ) : (
-                  <span style={{ fontSize: "1.1rem", fontWeight: "600", color: "#111" }}>{profileData.fullName}</span>
-                )}
+                <h1 className={styles.pageTitle}>Account Settings</h1>
+                <p className={styles.pageSubtitle}>Manage your personal profile and hostel network</p>
               </div>
             </div>
+            
+            <div className={styles.headerActions}>
+              {!isEditing ? (
+                <button className={styles.editBtn} onClick={() => setIsEditing(true)}>
+                  <UserCircle size={18} />
+                  Edit Profile
+                </button>
+              ) : (
+                <div className={styles.editingActions}>
+                  <button className={styles.cancelBtn} onClick={() => setIsEditing(false)}>Cancel</button>
+                  <button className={styles.saveBtn} onClick={handleSave}>
+                    <Save size={18} />
+                    Save Profile
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
 
-            <div className={styles.twoColumn}>
-              <div className={styles.inputGroup}>
-                <label>FULL NAME</label>
-                <input type="text" name="fullName" value={profileData.fullName} onChange={handleUserChange} readOnly={!isEditing} />
-              </div>
-              <div className={styles.inputGroup}>
-                <label>EMAIL ADDRESS</label>
-                <input type="email" name="email" value={profileData.email} disabled />
-              </div>
-              <div className={styles.inputGroup}>
-                <label>MOBILE NUMBER</label>
-                <div className={styles.phoneInput}>
-                  <span className={styles.phonePrefix}>+91</span>
-                  <input type="text" name="mobile" value={profileData.mobile?.replace(/^\+91/, '')} onChange={handleUserChange} readOnly={!isEditing} />
+          {error && (
+            <div className={styles.errorBanner}>
+              <AlertCircle size={20} />
+              {error}
+            </div>
+          )}
+
+          <div className={styles.contentGrid}>
+            {/* Left Sidebar - Summary */}
+            <div className={styles.sidebar}>
+              <div className={styles.profileCard}>
+                <div className={styles.avatarSection}>
+                  <div className={styles.avatarWrapper}>
+                    <img src={profileData.profilePhoto} alt="Profile" className={styles.avatarLarge} />
+                    {isEditing && (
+                      <label className={styles.cameraOverlay}>
+                        <Camera size={20} />
+                        <input type="file" accept="image/*" className={styles.hiddenInput} onChange={handlePhotoUpload} />
+                      </label>
+                    )}
+                  </div>
+                  <h2 className={styles.profileName}>{profileData.fullName || 'Hostel Admin'}</h2>
+                  <p className={styles.profileRole}>Primary Administrator</p>
+                </div>
+
+                <div className={styles.statsList}>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Properties</span>
+                    <span className={styles.statValue}>{profileData.hostels.length}</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Security</span>
+                    <span className={styles.statValue}>{profileData.hasTwoFactor ? 'High' : 'Basic'}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* 2. Hostels Portfolio Section */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h3>Hostels Portfolio</h3>
-            <p>You currently own <strong>{profileData.hostels.length}</strong> hostel{profileData.hostels.length !== 1 ? 's' : ''}. Set details and pinpoint location.</p>
-          </div>
-          <div className={styles.sectionBody}>
-            {profileData.hostels.map((hostel, idx) => {
-              return (
-                <div key={hostel._id} className={styles.hostelItem}>
-                  <div className={styles.hostelHeader}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <h4>{isEditing ? (hostel.hostelName || `New Hostel`) : hostel.hostelName}</h4>
-                      <span className={styles.hostelBadge}>{hostel.hostelId}</span>
+            {/* Right Side - Details */}
+            <div className={styles.detailsArea}>
+              {/* Personal Section */}
+              <div className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <UserCircle className={styles.cardIcon} size={22} />
+                  <h3>Personal Identity</h3>
+                </div>
+                <div className={styles.cardBody}>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label>FULL NAME</label>
+                      <div className={styles.inputWrapper}>
+                        <UserCircle className={styles.fieldIcon} size={18} />
+                        <input type="text" name="fullName" value={profileData.fullName} onChange={handleUserChange} readOnly={!isEditing} />
+                      </div>
                     </div>
+                    <div className={styles.inputGroup}>
+                      <label>EMAIL ADDRESS</label>
+                      <div className={styles.inputWrapper}>
+                        <Mail className={styles.fieldIcon} size={18} />
+                        <input type="email" value={profileData.email} disabled />
+                      </div>
+                    </div>
+                    <div className={styles.inputGroup}>
+                      <label>WHATSAPP NUMBER</label>
+                      <div className={styles.inputWrapper}>
+                        <Smartphone className={styles.fieldIcon} size={18} />
+                        <input type="text" name="mobile" value={profileData.mobile} onChange={handleUserChange} readOnly={!isEditing} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hostels Section */}
+              <div className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <Building2 className={styles.cardIcon} size={22} />
+                  <h3>Hostels Portfolio</h3>
+                </div>
+                <div className={styles.cardBody}>
+                  <div className={styles.hostelList}>
+                    {profileData.hostels.map((hostel, idx) => (
+                      <div key={hostel._id} className={styles.hostelItem}>
+                        <div className={styles.hostelItemHeader}>
+                          <div className={styles.hostelInfo}>
+                            <h4>{hostel.hostelName || 'New Property'}</h4>
+                            <span className={styles.idBadge}>{hostel.hostelId}</span>
+                          </div>
+                          {isEditing && (
+                            <button className={styles.removeBtn} onClick={() => handleRemoveHostel(idx)}>
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
+
+                        <div className={styles.formGrid}>
+                          <div className={styles.inputGroup}>
+                            <label>HOSTEL NAME</label>
+                            <input type="text" name="hostelName" value={hostel.hostelName} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                          </div>
+                          <div className={styles.inputGroup}>
+                            <label>CITY / LOCATION</label>
+                            <div className={styles.inputWrapper}>
+                              <MapPin className={styles.fieldIcon} size={18} />
+                              <input type="text" name="address" value={hostel.address} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={styles.mapPreview}>
+                          <LocationPicker 
+                             defaultAddress={hostel.address} 
+                             onLocationChange={(newLocation) => handleMapLocationChange(newLocation, idx)}
+                             isEditing={isEditing}
+                          />
+                        </div>
+
+                        <div className={styles.bankSection}>
+                          <h5><CreditCard size={16} /> Banking Details</h5>
+                          <div className={styles.formGrid}>
+                            <div className={styles.inputGroup}>
+                              <label>ACCOUNT NAME</label>
+                              <input type="text" name="bankAccountName" value={hostel.bankAccountName} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <label>ACCOUNT NUMBER</label>
+                              <input type="text" name="bankAccountNumber" value={hostel.bankAccountNumber} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <label>IFSC CODE</label>
+                              <input type="text" name="ifscCode" value={hostel.ifscCode} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
                     {isEditing && (
-                      <button 
-                        onClick={() => handleRemoveHostel(idx)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#EF4444',
-                          cursor: 'pointer',
-                          padding: '0.25rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: '0.25rem',
-                          transition: 'background 0.2s'
-                        }}
-                        title="Remove Property"
-                        onMouseOver={(e) => e.currentTarget.style.background = '#FEE2E2'}
-                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
+                      <button className={styles.addHostelBtn} onClick={handleAddHostel}>
+                        <Plus size={18} />
+                        Register New Property
                       </button>
                     )}
                   </div>
+                </div>
+              </div>
 
-                  <div className={styles.twoColumn}>
-                    <div className={styles.inputGroup}>
-                      <label>HOSTEL NAME</label>
-                      <input type="text" name="hostelName" value={hostel.hostelName} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>LOCATION (LAT, LNG or City)</label>
-                      <input type="text" name="address" value={hostel.address} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
-                      <span className={styles.helperText}>Input coordinates like &quot;12.9716, 77.5946&quot; or visually select</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.mapContainer} style={{ position: 'relative' }}>
-                    <LocationPicker 
-                       defaultAddress={hostel.address} 
-                       onLocationChange={(newLocation) => handleMapLocationChange(newLocation, idx)}
-                       isEditing={isEditing}
-                    />
-                    {isEditing && (
-                      <div style={{ pointerEvents: 'none', position: 'absolute', top: 10, right: 10, background: 'rgba(255,255,255,0.9)', padding: '6px 12px', borderRadius: '4px', zIndex: 1000, fontSize: '0.8rem', fontWeight: 600, color: '#374151', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                        Drag marker to set exact location
+              {/* Security Section */}
+              <div className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <ShieldCheck className={styles.cardIcon} size={22} />
+                  <h3>Account Security</h3>
+                </div>
+                <div className={styles.cardBody}>
+                  <div className={styles.securityItem}>
+                    <div className={styles.securityInfo}>
+                      <div className={styles.securityTitle}>
+                        <Key size={18} />
+                        <span>Authentication Password</span>
                       </div>
-                    )}
+                      <p>Last updated 3 months ago. Regular updates improve security.</p>
+                    </div>
+                    <button className={styles.secondaryBtn} onClick={() => openPasswordModal('change')}>Update</button>
                   </div>
 
-                  <h5 style={{ marginTop: '1.5rem', marginBottom: '1rem', color: '#374151', fontSize: '0.9rem' }}>Bank Allocation</h5>
-                  <div className={styles.twoColumn}>
-                    <div className={styles.inputGroup}>
-                      <label>ACCOUNT NAME</label>
-                      <input type="text" name="bankAccountName" value={hostel.bankAccountName} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
+                  <div className={styles.securityItem}>
+                    <div className={styles.securityInfo}>
+                      <div className={styles.securityTitle}>
+                        <ShieldCheck size={18} />
+                        <span>Two-Factor Authentication</span>
+                        {profileData.hasTwoFactor && <span className={styles.activeTag}>Active</span>}
+                      </div>
+                      <p>Secure your account with an extra layer of identity verification.</p>
                     </div>
-                    <div className={styles.inputGroup}>
-                      <label>ACCOUNT NUMBER</label>
-                      <input type="text" name="bankAccountNumber" value={hostel.bankAccountNumber} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>IFSC CODE</label>
-                      <input type="text" name="ifscCode" value={hostel.ifscCode} onChange={(e) => handleHostelChange(idx, e)} readOnly={!isEditing} />
-                    </div>
-                  </div>
+                    <button className={styles.secondaryBtn} disabled>Configure</button>
                 </div>
-              );
-            })}
-            
-            {isEditing && (
-              <button 
-                onClick={handleAddHostel}
-                style={{
-                  padding: '1rem',
-                  backgroundColor: '#F3F4F6',
-                  border: '1px dashed #D1D5DB',
-                  color: '#4B5563',
-                  borderRadius: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  width: '100%',
-                  marginTop: '0.5rem',
-                  outline: 'none'
-                }}
-              >
-                + Add Another Property
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* 3. Account Security Section */}
-        <div className={styles.section} style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
-          <div className={styles.sectionHeader}>
-            <h3>Account Security</h3>
-            <p>Manage authentication factors and roles.</p>
-          </div>
-          <div className={styles.sectionBody}>
-            <div className={styles.settingsList}>
-              <div className={styles.settingItem}>
-                <div className={styles.settingInfo}>
-                  <h4>Change Password</h4>
-                  <p>Send a reset link to update password</p>
-                </div>
-                <button className={styles.actionBtn} onClick={() => openPasswordModal('change')}>Update</button>
-              </div>
-
-              <div className={styles.settingItem} style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                <div className={styles.settingInfo}>
-                  <h4>Two-Factor Authentication</h4>
-                  {profileData.hasTwoFactor ? (
-                    <p className={styles.enabledText}>Enabled via Authenticator App</p>
-                  ) : (
-                    <p>Protect your account with 2FA</p>
-                  )}
-                </div>
-                <button className={styles.actionBtn} disabled>{profileData.hasTwoFactor ? 'Disable' : 'Enable'}</button>
-              </div>
-
-              <div className={styles.settingItem} style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                <div className={styles.settingInfo}>
-                  <h4>Role Management</h4>
-                  <p>Invite employees and grant access</p>
-                </div>
-                <button className={styles.actionBtn} disabled>Manage</button>
               </div>
             </div>
           </div>
         </div>
-
-        {isEditing && (
-          <div className={styles.footerActions}>
-            <button className={styles.cancelBtn} onClick={() => setIsEditing(false)}>Cancel</button>
-            <button className={styles.saveBtn} onClick={handleSave}>Save Changes</button>
-          </div>
-        )}
+        </div>
+        <Footer />
       </main>
 
-      <button className={styles.floatingModeToggle}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-      </button>
+
 
       {/* Password Modal */}
       {passwordModalOpen && (

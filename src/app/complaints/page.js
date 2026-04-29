@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNav from '../components/AdminNav/AdminNav';
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./complaints.module.css";
 import { secureFetch } from "../utils/auth";
@@ -89,7 +89,7 @@ export default function ComplaintsPage() {
   return (
     <div className={styles.container}>
       {isLoading && <LoadingComponent />}
-      <Sidebar />
+      <AdminNav />
       
       <div className={styles.mainContent}>
         <div className={styles.header}>

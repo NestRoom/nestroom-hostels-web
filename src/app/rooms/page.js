@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '../components/Sidebar/Sidebar';
+import AdminNav from '../components/AdminNav/AdminNav';
 import Loading from '../components/Loading/Loading';
 import styles from './page.module.css';
 
@@ -300,7 +300,7 @@ export default function RoomsPage() {
     <div className={styles.container}>
       {loading && <Loading text="Mapping Property Infrastructure..." />}
       {saving && <Loading text="Saving Matrix State..." />}
-      <Sidebar />
+      <AdminNav />
       <div className={styles.mainContent}>
         
         <div className={styles.header}>

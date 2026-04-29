@@ -1,15 +1,14 @@
 .container {
-  display: flex;
+  display: block;
   min-height: 100vh;
-  background-color: #FDF9F6;
+  background-color: var(--background);
   color: #111827;
 }
 
 .mainContent {
   flex-grow: 1;
   padding: 3rem 4rem;
-  overflow-y: auto;
-  margin-left: 250px;
+  margin-left: 0;
 }
 
 .header {

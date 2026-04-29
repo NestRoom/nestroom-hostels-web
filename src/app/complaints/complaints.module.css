@@ -1,28 +1,28 @@
 .container {
-  display: flex;
-  height: 100vh;
+  display: block;
+  min-height: 100vh;
   background-color: var(--background);
 }
 
 .mainContent {
   flex: 1;
-  padding: 2.5rem;
-  overflow-y: auto;
-  margin-left: 280px; /* offset for sidebar */
+  padding: 3rem 4rem;
+  margin-left: 0;
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--foreground);
-  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.04em;
 }
 
 .subtitle {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
 
@@ -218,7 +218,7 @@ export default function FoodPage() {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
+      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           <div>

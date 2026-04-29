@@ -1,15 +1,14 @@
 .container {
-  display: flex;
+  display: block;
   min-height: 100vh;
-  background-color: #FDF9F6; /* Aesthetic beige background */
+  background-color: var(--background);
   color: #111827;
 }
 
 .mainContent {
   flex-grow: 1;
   padding: 3rem 4rem;
-  overflow-y: auto;
-  margin-left: 250px; /* Offset for Sidebar */
+  margin-left: 0;
 }
 
 .header {
@@ -231,7 +230,7 @@
 }
 
 .table tr:hover td {
-  background-color: #FDF9F6;
+  background-color: var(--background);
 }
 
 .residentInfo {
