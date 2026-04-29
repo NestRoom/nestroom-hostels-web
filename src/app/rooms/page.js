@@ -2,7 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '../components/Sidebar/Sidebar';
+import { 
+  Building2, 
+  Plus, 
+  Trash2, 
+  Edit3, 
+  LayoutGrid, 
+  Save, 
+  X, 
+  ChevronRight, 
+  DoorOpen, 
+  Bed, 
+  Layers,
+  ArrowRight,
+  Info
+} from 'lucide-react';
+import AdminNav from '../components/AdminNav/AdminNav';
 import Loading from '../components/Loading/Loading';
 import styles from './page.module.css';
 
@@ -294,19 +309,18 @@ export default function RoomsPage() {
   // KPIs
   const totalRooms = buildings.reduce((acc, b) => acc + b.floors.reduce((fAcc, f) => fAcc + f.rooms.length, 0), 0);
   const totalBeds = buildings.reduce((acc, b) => acc + b.floors.reduce((fAcc, f) => fAcc + f.rooms.reduce((rAcc, r) => rAcc + (parseInt(r.bedCount) || 0), 0), 0), 0);
-  const totalFloors = buildings.reduce((acc, b) => acc + b.floors.length, 0);
 
   return (
     <div className={styles.container}>
       {loading && <Loading text="Mapping Property Infrastructure..." />}
       {saving && <Loading text="Saving Matrix State..." />}
-      <Sidebar />
+      <AdminNav />
       <div className={styles.mainContent}>
         
         <div className={styles.header}>
-          <div>
+          <div className={styles.headerText}>
             <h1 className={styles.title}>Property Matrix</h1>
-            <p className={styles.subtitle}>Structure your hostels visually using our building-first architecture. Map every floor and room to reflect physical reality.</p>
+            <p className={styles.subtitle}>Visually architect your hostel infrastructure. Map buildings, levels, and units to mirror the physical world.</p>
           </div>
           <div className={styles.headerActions}>
             <button 
@@ -318,13 +332,13 @@ export default function RoomsPage() {
             >
               {isEditing ? (
                 <>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                  Sync to Live DB
+                  <Save size={20} />
+                  <span>Sync Infrastructure</span>
                 </>
               ) : (
                 <>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                  Configure Matrix
+                  <Edit3 size={20} />
+                  <span>Configure Matrix</span>
                 </>
               )}
             </button>
@@ -334,78 +348,132 @@ export default function RoomsPage() {
         {!isSetupMode && !selectedBuildingGrid && (
           <div className={styles.kpiContainer}>
             <div className={styles.kpiCard}>
-              <div className={styles.kpiIconWrapper} style={{ backgroundColor: 'rgba(59, 59, 255, 0.1)', color: '#3b3bff' }}>
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M16 10h.01M8 10h.01M8 14h.01M12 14h.01M16 14h.01"></path></svg>
+              <div className={styles.kpiIconWrapper} style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)' }}>
+                <Building2 size={24} color="white" />
               </div>
-              <div className={styles.kpiValue}>{buildings.length < 10 ? `0${buildings.length}` : buildings.length}</div>
-              <div className={styles.kpiTitle}>Total Buildings</div>
-              <div className={styles.kpiSubtitle} style={{ color: '#6B7280' }}>Hostel Infrastructure</div>
+              <div className={styles.kpiContent}>
+                <div className={styles.kpiValue}>{buildings.length < 10 ? `0${buildings.length}` : buildings.length}</div>
+                <div className={styles.kpiLabel}>
+                  <span className={styles.kpiTitle}>Buildings</span>
+                  <span className={styles.kpiSubtitle}>Property Blocks</span>
+                </div>
+              </div>
             </div>
             
             <div className={styles.kpiCard}>
-              <div className={styles.kpiIconWrapper} style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10B981' }}>
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <div className={styles.kpiIconWrapper} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+                <DoorOpen size={24} color="white" />
               </div>
-              <div className={styles.kpiValue}>{totalRooms < 10 ? `0${totalRooms}` : totalRooms}</div>
-              <div className={styles.kpiTitle}>Total Rooms</div>
-              <div className={styles.kpiSubtitle} style={{ color: '#10B981' }}>Across all floors</div>
+              <div className={styles.kpiContent}>
+                <div className={styles.kpiValue}>{totalRooms < 10 ? `0${totalRooms}` : totalRooms}</div>
+                <div className={styles.kpiLabel}>
+                  <span className={styles.kpiTitle}>Total Rooms</span>
+                  <span className={styles.kpiSubtitle}>Across all levels</span>
+                </div>
+              </div>
             </div>
 
             <div className={styles.kpiCard}>
-              <div className={styles.kpiIconWrapper} style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)', color: '#F97316' }}>
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+              <div className={styles.kpiIconWrapper} style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
+                <Bed size={24} color="white" />
               </div>
-              <div className={styles.kpiValue}>{totalBeds < 10 ? `0${totalBeds}` : totalBeds}</div>
-              <div className={styles.kpiTitle}>Total Bed Capacity</div>
-              <div className={styles.kpiSubtitle} style={{ color: '#F97316' }}>Property Occupancy</div>
+              <div className={styles.kpiContent}>
+                <div className={styles.kpiValue}>{totalBeds < 10 ? `0${totalBeds}` : totalBeds}</div>
+                <div className={styles.kpiLabel}>
+                  <span className={styles.kpiTitle}>Total Capacity</span>
+                  <span className={styles.kpiSubtitle}>Total Bed Units</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
 
         {isSetupMode ? (
           <div className={styles.wizardCard}>
-            <h2 className={styles.title} style={{ fontSize: '1.75rem', marginBottom: '1.5rem' }}>Initial Setup Wizard</h2>
-            <form onSubmit={handleSetupComplete} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <label style={{ fontWeight: 700, fontSize: '0.9rem', color: '#6B7280' }}>NUMBER OF BUILDINGS</label>
-                <input type="number" min="1" max="5" required className={styles.formInput} value={wizardData.buildingsCount} onChange={(e) => setWizardData({...wizardData, buildingsCount: parseInt(e.target.value) || 1})} />
+            <div className={styles.wizardHeader}>
+              <div className={styles.wizardIcon}>
+                <LayoutGrid size={32} color="#4f46e5" />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <label style={{ fontWeight: 700, fontSize: '0.9rem', color: '#6B7280' }}>DEFAULT FLOORS PER BUILDING</label>
-                <input type="number" min="1" max="10" required className={styles.formInput} value={wizardData.floorsCount} onChange={(e) => setWizardData({...wizardData, floorsCount: parseInt(e.target.value) || 1})} />
+              <h2 className={styles.wizardTitle}>Initial Setup Wizard</h2>
+              <p className={styles.wizardSubtitle}>Let's initialize your property structure. You can add more details later.</p>
+            </div>
+            <form onSubmit={handleSetupComplete} className={styles.wizardForm}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>NUMBER OF BUILDINGS</label>
+                <div className={styles.inputWrapper}>
+                  <Building2 size={18} className={styles.inputIcon} />
+                  <input type="number" min="1" max="5" required className={styles.formInput} value={wizardData.buildingsCount} onChange={(e) => setWizardData({...wizardData, buildingsCount: parseInt(e.target.value) || 1})} />
+                </div>
               </div>
-              <button type="submit" className={styles.primaryButton}>Generate Property View</button>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>DEFAULT FLOORS PER BUILDING</label>
+                <div className={styles.inputWrapper}>
+                  <Layers size={18} className={styles.inputIcon} />
+                  <input type="number" min="1" max="10" required className={styles.formInput} value={wizardData.floorsCount} onChange={(e) => setWizardData({...wizardData, floorsCount: parseInt(e.target.value) || 1})} />
+                </div>
+              </div>
+              <button type="submit" className={styles.primaryButton}>
+                Generate Property View
+                <ArrowRight size={20} />
+              </button>
             </form>
           </div>
         ) : (
           <div className={styles.buildingsCanvas}>
-            {buildings.map((building) => (
-              <div 
-                key={building.id} className={styles.buildingColumn} draggable={true}
-                onDragStart={(e) => handleDragStart(e, building.id)} onDragEnd={handleDragEnd}
-                onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, building.id)}
-              >
-                <div className={styles.buildingGraphic} onClick={() => setSelectedBuildingGrid(building.id)}>
-                  {isEditing && (
-                    <button onClick={(e) => { e.stopPropagation(); handleRemoveBuilding(building.id); }} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: '#FEE2E2', color: '#EF4444', borderRadius: '12px', padding: '8px', cursor: 'pointer', fontWeight: 800, fontSize: '0.7rem' }}>DROP</button>
-                  )}
-                  <svg className={styles.buildingIcon} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="3"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01M16 6h.01M12 10h.01"></path></svg>
-                  <div className={styles.buildingName}>{building.name}</div>
-                  <div className={styles.buildingStats}>{building.floors.length} Levels • {building.floors.reduce((a,f)=>a+f.rooms.length,0)} Units</div>
-                </div>
+            <div className={styles.canvasHeader}>
+              <h3 className={styles.canvasTitle}>Property Layout</h3>
+              <div className={styles.canvasHint}>
+                <Info size={14} />
+                <span>Click a building to view interior blueprint</span>
               </div>
-            ))}
-            
-            {isEditing && (
-              <div className={styles.buildingColumn} onClick={handleAddBuilding}>
-                <div className={styles.buildingGraphic} style={{ border: '3px dashed #E5E7EB', background: 'transparent', boxShadow: 'none' }}>
-                  <div style={{ color: '#9CA3AF', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                    <svg width="40" height="40" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-                    <span style={{ fontWeight: 800, fontSize: '1.2rem' }}>Add Building</span>
+            </div>
+            <div className={styles.buildingsGrid}>
+              {buildings.map((building) => (
+                <div 
+                  key={building.id} className={styles.buildingColumn} draggable={true}
+                  onDragStart={(e) => handleDragStart(e, building.id)} onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, building.id)}
+                >
+                  <div className={styles.buildingGraphic} onClick={() => setSelectedBuildingGrid(building.id)}>
+                    {isEditing && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleRemoveBuilding(building.id); }} 
+                        className={styles.dropButton}
+                        title="Remove Building"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                    <div className={styles.buildingIconContainer}>
+                      <Building2 size={48} className={styles.buildingIcon} />
+                    </div>
+                    <div className={styles.buildingInfo}>
+                      <div className={styles.buildingName}>{building.name}</div>
+                      <div className={styles.buildingStats}>
+                        <span>{building.floors.length} Levels</span>
+                        <span className={styles.statsDivider}>•</span>
+                        <span>{building.floors.reduce((a,f)=>a+f.rooms.length,0)} Units</span>
+                      </div>
+                    </div>
+                    <div className={styles.viewBlueprint}>
+                      <span>View Blueprint</span>
+                      <ChevronRight size={16} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              ))}
+              
+              {isEditing && (
+                <div className={styles.buildingColumn} onClick={handleAddBuilding}>
+                  <div className={`${styles.buildingGraphic} ${styles.addBuildingCard}`}>
+                    <div className={styles.addIconWrapper}>
+                      <Plus size={32} />
+                    </div>
+                    <span className={styles.addBuildingText}>Add Building</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -419,49 +487,84 @@ export default function RoomsPage() {
               return (
                 <>
                   <div className={styles.interiorHeader}>
-                    <div>
-                      <h3 style={{ margin: 0 }}>{b.name} Architecture</h3>
-                      <p style={{ margin: '0.25rem 0 0', color: '#6B7280', fontWeight: 600 }}>Blueprint System</p>
+                    <div className={styles.interiorTitleSection}>
+                      <div className={styles.interiorIconWrapper}>
+                        <Building2 size={24} color="#4f46e5" />
+                      </div>
+                      <div>
+                        <h3 className={styles.interiorTitle}>{b.name} Architecture</h3>
+                        <p className={styles.interiorSubtitle}>Blueprint System • Level Management</p>
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                      {isEditing && <button className={styles.primaryButton} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }} onClick={() => handleAddFloor(b.id)}>Add Floor</button>}
-                      <button onClick={() => setSelectedBuildingGrid(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <div className={styles.interiorActions}>
+                      {isEditing && (
+                        <button className={styles.addFloorButton} onClick={() => handleAddFloor(b.id)}>
+                          <Plus size={18} />
+                          <span>Add Level</span>
+                        </button>
+                      )}
+                      <button onClick={() => setSelectedBuildingGrid(null)} className={styles.closeModalButton}>
+                        <X size={24} />
                       </button>
                     </div>
                   </div>
                   <div className={styles.scrollingFloors}>
                     {[...b.floors].sort((a,b)=>b.level-a.level).map(floor => (
                       <div key={floor.level} className={styles.floorContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
-                          <span className={styles.floorTitle}>LEVEL {floor.level}</span>
+                        <div className={styles.floorHeader}>
+                          <div className={styles.floorLabel}>
+                            <div className={styles.floorDot} />
+                            <span className={styles.floorTitle}>LEVEL {floor.level}</span>
+                          </div>
                           {isEditing && (
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                              <button onClick={() => handleAddRoom(b.id, floor.level)} style={{ background: '#3b3bff', color: 'white', border: 'none', borderRadius: '12px', padding: '6px 12px', fontWeight: 700, cursor: 'pointer' }}>+ ROOM</button>
-                              <button onClick={() => handleRemoveFloor(b.id, floor.level)} style={{ background: '#FEE2E2', color: '#EF4444', border: 'none', borderRadius: '12px', padding: '6px 12px', fontWeight: 700, cursor: 'pointer' }}>DROP LEVEL</button>
+                            <div className={styles.floorActions}>
+                              <button onClick={() => handleAddRoom(b.id, floor.level)} className={styles.addRoomMini}>
+                                <Plus size={14} />
+                                <span>ROOM</span>
+                              </button>
+                              <button onClick={() => handleRemoveFloor(b.id, floor.level)} className={styles.dropLevelMini}>
+                                <Trash2 size={14} />
+                                <span>DROP</span>
+                              </button>
                             </div>
                           )}
                         </div>
                         <div className={styles.roomsGrid}>
                           {floor.rooms.map(room => (
                             <div key={room.id} className={styles.roomCard}>
-                              <span className={styles.roomNumber}>{room.number}</span>
-                              <span className={styles.roomType}>{room.type} • {room.bedCount} Beds</span>
+                              <div className={styles.roomIconWrapper}>
+                                <DoorOpen size={20} />
+                              </div>
+                              <div className={styles.roomMain}>
+                                <span className={styles.roomNumber}>{room.number}</span>
+                                <span className={styles.roomType}>{room.type} • {room.bedCount} Beds</span>
+                              </div>
                               {isEditing && (
-                                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-                                  <button onClick={() => openRoomEditor(b.id, floor.level, room)} style={{ background: '#F3F4F6', border: 'none', padding: '8px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} className={styles.roomActionBtn}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <div className={styles.roomEditActions}>
+                                  <button onClick={() => openRoomEditor(b.id, floor.level, room)} className={styles.editRoomButton}>
+                                    <Edit3 size={14} />
                                   </button>
-                                  <button onClick={() => handleRemoveRoom(b.id, floor.level, room.id)} style={{ background: '#FEE2E2', border: 'none', padding: '8px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} className={styles.roomActionBtn}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                  <button onClick={() => handleRemoveRoom(b.id, floor.level, room.id)} className={styles.deleteRoomButton}>
+                                    <Trash2 size={14} />
                                   </button>
                                 </div>
                               )}
                             </div>
                           ))}
+                          {floor.rooms.length === 0 && (
+                            <div className={styles.emptyFloor}>
+                              <span>No rooms added to this level yet.</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
+                    {b.floors.length === 0 && (
+                      <div className={styles.emptyBuilding}>
+                        <LayoutGrid size={48} />
+                        <p>No levels defined for this building.</p>
+                      </div>
+                    )}
                   </div>
                 </>
               );
@@ -472,34 +575,43 @@ export default function RoomsPage() {
 
       {selectedRoom && (
         <div className={styles.blueprintOverlay}>
-          <div className={styles.wizardCard} style={{ margin: 0, width: '500px', padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <div className={styles.interiorHeader} style={{ padding: '2rem 3rem', background: 'white' }}>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0 }}>Update Room {roomEditData.number}</h3>
-              <button onClick={() => setSelectedRoom(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
+          <div className={styles.editorModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.editorHeader}>
+              <div className={styles.editorIconWrapper}>
+                <Edit3 size={24} color="#4f46e5" />
+              </div>
+              <h3 className={styles.editorTitle}>Update Room {roomEditData.number}</h3>
             </div>
-            <div style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', overflowY: 'auto' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 800, fontSize: '0.8rem', color: '#9CA3AF' }}>ROOM NUMBER</label>
-                <input className={styles.formInput} value={roomEditData.number} onChange={e => setRoomEditData({...roomEditData, number: e.target.value})} />
+            <div className={styles.editorForm}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>ROOM NUMBER</label>
+                <div className={styles.inputWrapper}>
+                  <LayoutGrid size={18} className={styles.inputIcon} />
+                  <input className={styles.formInput} value={roomEditData.number} onChange={e => setRoomEditData({...roomEditData, number: e.target.value})} />
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 800, fontSize: '0.8rem', color: '#9CA3AF' }}>CAPACITY (BEDS)</label>
-                <input type="number" className={styles.formInput} value={roomEditData.bedCount} onChange={e => setRoomEditData({...roomEditData, bedCount: e.target.value})} />
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>CAPACITY (BEDS)</label>
+                <div className={styles.inputWrapper}>
+                  <Bed size={18} className={styles.inputIcon} />
+                  <input type="number" className={styles.formInput} value={roomEditData.bedCount} onChange={e => setRoomEditData({...roomEditData, bedCount: e.target.value})} />
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 800, fontSize: '0.8rem', color: '#9CA3AF' }}>ROOM TYPE</label>
-                <select className={styles.formInput} value={roomEditData.type} onChange={e => setRoomEditData({...roomEditData, type: e.target.value})}>
-                  <option value="Single">Single Deluxe</option>
-                  <option value="Double">Premium Double</option>
-                  <option value="Triple">Standard Triple</option>
-                  <option value="Dormitory">Dorm Shell</option>
-                </select>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>ROOM TYPE</label>
+                <div className={styles.inputWrapper}>
+                  <DoorOpen size={18} className={styles.inputIcon} />
+                  <select className={styles.formInput} value={roomEditData.type} onChange={e => setRoomEditData({...roomEditData, type: e.target.value})}>
+                    <option value="Single">Single Deluxe</option>
+                    <option value="Double">Premium Double</option>
+                    <option value="Triple">Standard Triple</option>
+                    <option value="Dormitory">Dorm Shell</option>
+                  </select>
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                <button onClick={() => setSelectedRoom(null)} style={{ flex: 1, padding: '1rem', background: '#F3F4F6', border: 'none', borderRadius: '1rem', fontWeight: 700, cursor: 'pointer' }}>Discard</button>
-                <button onClick={saveRoomDetails} className={styles.primaryButton} style={{ flex: 2, padding: '1rem' }}>Apply Matrix</button>
+              <div className={styles.editorActions}>
+                <button onClick={() => setSelectedRoom(null)} className={styles.discardButton}>Discard</button>
+                <button onClick={saveRoomDetails} className={styles.applyButton}>Apply Matrix</button>
               </div>
             </div>
           </div>

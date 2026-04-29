@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '../components/Sidebar/Sidebar';
+import AdminNav from '../components/AdminNav/AdminNav';
 import Loading from '../components/Loading/Loading';
 import styles from './notification.module.css';
 import { 
@@ -168,7 +168,7 @@ export default function NotificationPage() {
 
   if (loading) return (
     <div className={styles.wrapper}>
-      <Sidebar />
+      <AdminNav />
       <main className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Loading text="Loading Notifications..." />
       </main>
@@ -177,7 +177,7 @@ export default function NotificationPage() {
 
   return (
     <div className={styles.wrapper}>
-      <Sidebar />
+      <AdminNav />
       <main className={styles.container}>
         <header className={styles.header}>
           <div className={styles.titleSection}>
@@ -201,7 +201,9 @@ export default function NotificationPage() {
             <div className={styles.notificationList}>
               {notifications.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <p>No notifications sent yet.</p>
+                  <Bell size={48} className={styles.emptyIcon} />
+                  <h3>No notifications</h3>
+                  <p>Broadcast your first update to engage with residents.</p>
                 </div>
               ) : (
                 notifications.map((notif) => (
@@ -215,7 +217,7 @@ export default function NotificationPage() {
                         {notif.type}
                       </span>
                       <span className={styles.cardDate}>
-                        {new Date(notif.sentAt).toLocaleDateString()}
+                        {new Date(notif.sentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
                     <div className={styles.cardTitle}>{notif.title}</div>
@@ -231,7 +233,7 @@ export default function NotificationPage() {
                             </div>
                           )}
                        </div>
-                       <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 600 }}>
+                       <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                           {notif.deliveryStatus}
                        </div>
                     </div>
@@ -251,7 +253,7 @@ export default function NotificationPage() {
                         {selectedNotification.type}
                       </span>
                       <span className={styles.cardDate}>
-                        Sent at {new Date(selectedNotification.sentAt).toLocaleString()}
+                        Broadcast on {new Date(selectedNotification.sentAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                       </span>
                    </div>
                    <h2 className={styles.detailsTitle}>{selectedNotification.title}</h2>
@@ -261,9 +263,32 @@ export default function NotificationPage() {
                   {selectedNotification.message}
                 </div>
 
+                <div className={styles.analyticsGrid}>
+                  <div className={styles.analCard}>
+                     <div className={styles.analLabel}>Reach</div>
+                     <div className={styles.analValue}>{selectedNotification.totalViewCount}</div>
+                  </div>
+                  <div className={styles.analCard}>
+                     <div className={styles.analLabel}>View Rate</div>
+                     <div className={styles.analValue}>{selectedNotification.viewRate}%</div>
+                  </div>
+                  {selectedNotification.poll?.isPoll && (
+                    <>
+                      <div className={styles.analCard}>
+                        <div className={styles.analLabel}>Responses</div>
+                        <div className={styles.analValue}>{selectedNotification.poll.totalResponses}</div>
+                      </div>
+                      <div className={styles.analCard}>
+                        <div className={styles.analLabel}>Engagement</div>
+                        <div className={styles.analValue}>{selectedNotification.poll.responseRate}%</div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
                 {selectedNotification.poll?.isPoll && (
                   <div className={styles.pollContainer}>
-                    <h3 className={styles.pollTitle}>Poll Results: {selectedNotification.poll.pollQuestion}</h3>
+                    <h3 className={styles.pollTitle}>Poll Findings: {selectedNotification.poll.pollQuestion}</h3>
                     {selectedNotification.poll.pollOptions.map((option, idx) => {
                       const count = selectedNotification.poll.responseBreakdown?.[option] || 0;
                       const percentage = selectedNotification.poll.totalResponses > 0 
@@ -284,32 +309,9 @@ export default function NotificationPage() {
                   </div>
                 )}
 
-                <div className={styles.analyticsGrid}>
-                  <div className={styles.analCard}>
-                     <div className={styles.analLabel}>Total Views</div>
-                     <div className={styles.analValue}>{selectedNotification.totalViewCount}</div>
-                  </div>
-                  <div className={styles.analCard}>
-                     <div className={styles.analLabel}>View Rate</div>
-                     <div className={styles.analValue}>{selectedNotification.viewRate}%</div>
-                  </div>
-                  {selectedNotification.poll?.isPoll && (
-                    <>
-                      <div className={styles.analCard}>
-                        <div className={styles.analLabel}>Total Responses</div>
-                        <div className={styles.analValue}>{selectedNotification.poll.totalResponses}</div>
-                      </div>
-                      <div className={styles.analCard}>
-                        <div className={styles.analLabel}>Response Rate</div>
-                        <div className={styles.analValue}>{selectedNotification.poll.responseRate}%</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-
                 <div className={styles.seenBySection}>
                    <h3 className={styles.sectionTitle}>
-                      <Eye size={18} /> Seen By ({selectedNotification.viewedBy?.length || 0})
+                      <Users size={20} color="#3b42f2" /> Audience Activity ({selectedNotification.viewedBy?.length || 0})
                    </h3>
                    <div className={styles.seenByList}>
                       {selectedNotification.viewedBy?.length > 0 ? (
@@ -318,12 +320,12 @@ export default function NotificationPage() {
                              <div className={styles.seenAvatar}>{view.residentName?.[0]}</div>
                              <div className={styles.seenInfo}>
                                 <div className={styles.seenName}>{view.residentName}</div>
-                                <div className={styles.seenTime}>{new Date(view.viewedAt).toLocaleString()}</div>
+                                <div className={styles.seenTime}>{new Date(view.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(view.viewedAt).toLocaleDateString()}</div>
                              </div>
                           </div>
                         ))
                       ) : (
-                        <p className={styles.emptyText}>No residents have viewed this message yet.</p>
+                        <p className={styles.emptyText}>No audience activity recorded yet.</p>
                       )}
                    </div>
                 </div>
@@ -331,10 +333,10 @@ export default function NotificationPage() {
             ) : (
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>
-                  <Bell size={32} />
+                  <Bell size={48} />
                 </div>
-                <h3>Select a notification</h3>
-                <p>Pick a notification from the list to view detailed analytics.</p>
+                <h3>Engagement Details</h3>
+                <p>Select a broadcast from the history to view reach, poll results, and audience activity.</p>
               </div>
             )}
           </section>

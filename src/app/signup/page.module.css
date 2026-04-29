@@ -50,6 +50,7 @@
   color: #171717;
   line-height: 1.1;
   letter-spacing: -2px;
+  margin: 0;
 }
 
 .titleBlue {
@@ -58,6 +59,7 @@
   color: #2C1DFF;
   line-height: 1.1;
   letter-spacing: -2px;
+  margin: 0;
 }
 
 .description {

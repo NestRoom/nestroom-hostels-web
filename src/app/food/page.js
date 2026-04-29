@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
 
@@ -218,7 +218,7 @@ export default function FoodPage() {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
+      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           <div>
@@ -324,10 +324,8 @@ export default function FoodPage() {
           <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
             <div className={styles.modalContent} style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h2 style={{ margin: 0 }}>Edit {editingMeal.mealType} - {editingMeal.dayOfWeek}</h2>
-                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setIsEditModalOpen(false)}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
+                <h2>Edit {editingMeal.mealType} - {editingMeal.dayOfWeek}</h2>
+                <button style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setIsEditModalOpen(false)}>&times;</button>
               </div>
               <form onSubmit={saveMeal}>
                 <div className={styles.formContent}>

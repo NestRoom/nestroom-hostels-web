@@ -12,7 +12,7 @@ export default function Sidebar() {
   const [userMetadata, setUserMetadata] = useState({
     fullName: 'Loading...',
     role: 'Hostel Owner',
-    profilePhoto: 'https://i.pravatar.cc/150?img=11'
+    profilePhoto: 'https://ui-avatars.com/api/?name=Admin&background=E5E7EB&color=374151&size=150'
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Sidebar() {
           setUserMetadata({
             fullName: data.user.fullName || 'Hostel Owner',
             role: data.user.userType === 'owner' ? 'Hostel Owner' : 'Hostel Manager',
-            profilePhoto: data.user.profilePhoto || 'https://i.pravatar.cc/150?img=11'
+            profilePhoto: data.user.profilePhoto || 'https://ui-avatars.com/api/?name=Admin&background=E5E7EB&color=374151&size=150'
           });
         }
       } catch (e) {
@@ -56,6 +56,7 @@ export default function Sidebar() {
     { label: 'Attendance', icon: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /><path d="m9 16 2 2 4-4" /></>, path: '/attendance' },
     { label: 'Notification', icon: <><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></>, path: '/notification' },
     { label: 'Food', icon: <><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></>, path: '/food' },
+    { label: 'Complaints', icon: <><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></>, path: '/complaints' },
   ];
 
   return (
@@ -83,7 +84,7 @@ export default function Sidebar() {
       </nav>
 
       <div className={styles.bottomSection}>
-        <div className={styles.userInfo}>
+        <div className={styles.userInfo} onClick={() => router.push('/profile')}>
           <div className={styles.avatar}>
             <img src={userMetadata.profilePhoto} alt="Profile" />
           </div>

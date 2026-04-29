@@ -1,16 +1,14 @@
 .container {
-  display: flex;
-  background-color: #FDF9F6; /* Aesthetic beige to match dashboard theme */
+  display: block;
+  background-color: var(--background);
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
 }
 
 .mainContent {
   flex: 1;
-  margin-left: 260px; /* Offset for fixed sidebar */
-  padding: 2.5rem;
-  padding-top: 2rem;
-  overflow-y: auto;
+  margin-left: 0;
+  padding: 3rem 4rem;
   min-width: 0; /* Prevent flex overflow */
 }
 
@@ -18,15 +16,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: #111827;
-  letter-spacing: -0.025em;
-  margin: 0;
+  letter-spacing: -0.04em;
+  margin: 0 0 0.5rem 0;
 }
 
 .subtitle {

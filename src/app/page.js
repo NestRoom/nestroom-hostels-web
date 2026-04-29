@@ -30,7 +30,7 @@ export default function Home() {
                 <div className={styles.inputFieldWrapper}>
                   <input 
                     type="text" 
-                    placeholder="whatsapp number" 
+                    placeholder="mobile number" 
                     className={styles.inputField}
                     value={mobileNumber}
                     onChange={(e) => setMobileNumber(e.target.value)}

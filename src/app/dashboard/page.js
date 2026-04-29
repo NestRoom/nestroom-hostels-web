@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
 import { 
@@ -322,7 +322,7 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.wrapper}>
-      <Sidebar />
+      <AdminNav />
       <div className={styles.mainContent}>
         <div className={styles.header}>
           <div className={styles.titleSection}>

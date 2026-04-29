@@ -1,15 +1,14 @@
 .container {
-  display: flex;
+  display: block;
   min-height: 100vh;
   background-color: var(--background);
-  color: var(--foreground);
+  color: #111827;
 }
 
 .mainContent {
   flex-grow: 1;
   padding: 3rem 4rem;
-  overflow-y: auto;
-  margin-left: 250px;
+  margin-left: 0;
 }
 
 .header {
@@ -40,10 +39,10 @@
 }
 
 .primaryButton {
-  background: var(--primary);
+  background: linear-gradient(135deg, #3b3bff 0%, #2a2acc 100%);
   color: white;
   border: none;
-  border-radius: var(--radius-button) !important;
+  border-radius: 1rem;
   padding: 0.85rem 1.75rem;
   font-weight: 700;
   font-size: 1rem;
@@ -85,7 +84,7 @@
 
 .navBtn:hover {
   background-color: #F3F4F6;
-  color: var(--primary);
+  color: #3b3bff;
 }
 
 .weekRange {
@@ -126,7 +125,7 @@
 }
 
 .todayDate {
-  background: var(--primary);
+  background: #3b3bff;
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 0.75rem;
@@ -190,7 +189,7 @@
 
 .mealCard.empty:hover {
   background: white;
-  border-color: var(--primary);
+  border-color: #3b3bff;
 }
 
 .emptyText {
@@ -275,14 +274,14 @@
 }
 
 .presetItem:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: #3b3bff;
+  color: #3b3bff;
 }
 
 .presetItem.activePreset {
-  background: rgba(44, 29, 255, 0.1);
-  color: var(--primary);
-  border-color: var(--primary);
+  background: rgba(59, 59, 255, 0.1);
+  color: #3b3bff;
+  border-color: #3b3bff;
 }
 
 .dietaryTags {
@@ -340,10 +339,6 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #F3F4F6;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
 }
 
 .modalHeader h2 {
@@ -380,7 +375,7 @@
 }
 
 .formInput:focus, .formTextarea:focus {
-  border-color: var(--primary);
+  border-color: #3b3bff;
   background: white;
   outline: none;
 }
@@ -411,9 +406,9 @@
 }
 
 .tagOption.selected {
-  background: var(--primary);
+  background: #3b3bff;
   color: white;
-  border-color: var(--primary);
+  border-color: #3b3bff;
 }
 
 .modalFooter {
@@ -438,8 +433,8 @@
 
 .submitBtn {
   padding: 0.75rem 2rem;
-  border-radius: var(--radius-button) !important;
-  background: var(--primary);
+  border-radius: 0.75rem;
+  background: #3b3bff;
   border: none;
   font-weight: 700;
   color: white;
