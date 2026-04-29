@@ -1,338 +1,865 @@
 .container {
   display: block;
   min-height: 100vh;
-  background-color: var(--background);
+  background-color: #fdf8f6;
   color: #111827;
+  padding-bottom: 5rem;
 }
 
 .mainContent {
-  flex-grow: 1;
-  padding: 3rem 4rem;
-  margin-left: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2.5rem;
+  align-items: flex-end;
+  margin-bottom: 3rem;
 }
 
 .title {
-  font-size: 2.25rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 850;
   color: #111827;
   margin: 0 0 0.5rem 0;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
 }
 
 .subtitle {
   color: #6B7280;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   margin: 0;
   line-height: 1.5;
+  max-width: 600px;
 }
 
-.headerActions {
+.editModeButton {
+  background: white;
+  color: #111827;
+  border: 1px solid #E5E7EB;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 700;
   display: flex;
-  gap: 1.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-/* KPI Section */
+.editModeButton:hover {
+  border-color: #4f46e5;
+  color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.editModeActive {
+  background: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.editModeActive:hover {
+  color: white;
+  background: #4338ca;
+}
+
+/* KPIs */
 .kpiContainer {
-  display: flex;
-  gap: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
   margin-bottom: 3.5rem;
 }
 
 .kpiCard {
-  flex: 1;
   background: white;
-  border-radius: 1.75rem;
-  padding: 2rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
   display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  align-items: center;
+  gap: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease;
 }
 
 .kpiCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.08);
 }
 
 .kpiIconWrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 1rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kpiContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpiValue {
+  font-size: 2.25rem;
+  font-weight: 850;
+  color: #111827;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.kpiLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpiTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.kpiSubtitle {
+  font-size: 0.8rem;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Wizard */
+.wizardCard {
+  background: white;
+  border-radius: 2.5rem;
+  padding: 4rem;
+  max-width: 600px;
+  margin: 4rem auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.wizardHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.wizardIcon {
+  width: 72px;
+  height: 72px;
+  background: #f5f3ff;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.wizardTitle {
+  font-size: 1.75rem;
+  font-weight: 850;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.wizardSubtitle {
+  color: #6B7280;
+  font-size: 1rem;
+}
+
+.wizardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.formLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #9CA3AF;
+  letter-spacing: 0.05em;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1.25rem;
+  color: #9CA3AF;
+}
+
+.formInput {
+  width: 100%;
+  padding: 1rem 1.25rem 1rem 3.5rem;
+  border-radius: 1.25rem;
+  border: 2px solid #F3F4F6;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  background: #F9FAFB;
+  transition: all 0.2s;
+}
+
+.formInput:focus {
+  border-color: #4f46e5;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+
+.primaryButton {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 1.25rem;
+  padding: 1.25rem 2rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: all 0.3s;
+  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
+}
+
+.primaryButton:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.4);
+}
+
+/* Building Canvas */
+.buildingsCanvas {
+  background: white;
+  border-radius: 2.5rem;
+  padding: 3rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.canvasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding: 0 1rem;
+}
+
+.canvasTitle {
+  font-size: 1.5rem;
+  font-weight: 850;
+  color: #111827;
+}
+
+.canvasHint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9CA3AF;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.buildingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.buildingGraphic {
+  background: #F9FAFB;
+  border: 2px solid #F3F4F6;
+  border-radius: 2rem;
+  padding: 2.5rem 2rem;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.buildingGraphic:hover {
+  background: white;
+  border-color: #4f46e5;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+}
+
+.buildingIconContainer {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05);
+  color: #4f46e5;
+  transition: all 0.3s;
 }
 
-.kpiValue {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #111827;
-  margin-bottom: 0.85rem;
-  letter-spacing: -0.05em;
-}
-
-.kpiTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #6B7280;
-}
-
-.kpiSubtitle {
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-}
-
-/* Architect Canvas */
-.buildingsCanvas {
-  position: relative;
-  background-image: 
-    radial-gradient(rgba(59, 59, 255, 0.15) 1.5px, transparent 1.5px);
-  background-size: 30px 30px;
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0,0,0,0.05);
-  border-radius: 2.5rem;
-  min-height: 600px;
-  padding: 5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 300px;
-  gap: 4rem;
-  box-shadow: 0 20px 60px -20px rgba(0,0,0,0.05);
-}
-
-.buildingGraphic {
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 2px solid white;
-  border-radius: 2.25rem;
-  padding: 3rem 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05);
-}
-
-.buildingGraphic:hover {
-  transform: translateY(-12px) scale(1.02);
-  background: white;
-  border-color: #3b3bff;
-  box-shadow: 0 25px 50px -15px rgba(59, 59, 255, 0.15);
-}
-
-.buildingIcon {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 2rem auto;
-  color: #3b3bff;
-  opacity: 0.9;
+.buildingGraphic:hover .buildingIconContainer {
+  background: #f5f3ff;
+  transform: scale(1.1);
 }
 
 .buildingName {
+  font-size: 1.4rem;
   font-weight: 850;
-  font-size: 1.6rem;
   color: #111827;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
 }
 
 .buildingStats {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #3b42f2;
-  background: rgba(59, 66, 242, 0.08);
-  padding: 0.5rem 1.25rem;
-  border-radius: 12px;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Modals & Blueprint Overlay */
-.blueprintOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.5);
-  backdrop-filter: blur(12px);
-  z-index: 1000;
+.statsDivider {
+  color: #D1D5DB;
+}
+
+.viewBlueprint {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+}
+
+.buildingGraphic:hover .viewBlueprint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropButton {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dropButton:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.addBuildingCard {
+  border: 2px dashed #D1D5DB;
+  background: transparent;
+  justify-content: center;
+}
+
+.addBuildingCard:hover {
+  border-style: solid;
+  border-color: #4f46e5;
+  background: #f5f3ff;
+}
+
+.addIconWrapper {
+  width: 64px;
+  height: 64px;
+  background: #F3F4F6;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9CA3AF;
+  margin-bottom: 1rem;
+  transition: all 0.3s;
+}
+
+.addBuildingCard:hover .addIconWrapper {
+  background: white;
+  color: #4f46e5;
+  transform: rotate(90deg);
+}
+
+.addBuildingText {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #9CA3AF;
+}
+
+.addBuildingCard:hover .addBuildingText {
+  color: #4f46e5;
+}
+
+/* Blueprint Overlay (Modal) */
+.blueprintOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .interiorMap {
   width: 100%;
-  max-width: 1000px;
-  max-height: 90vh;
+  max-width: 1100px;
+  height: 90vh;
   background: white;
   border-radius: 2.5rem;
-  box-shadow: 0 30px 70px -15px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .interiorHeader {
-  padding: 2.5rem 3rem;
+  padding: 2rem 3rem;
+  background: white;
+  border-bottom: 1px solid #F3F4F6;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #F3F4F6;
-  background: #FDF9F6;
+  flex-shrink: 0;
 }
 
-.interiorHeader h3 {
+.interiorTitleSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.interiorIconWrapper {
+  width: 54px;
+  height: 54px;
+  background: #f5f3ff;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.interiorTitle {
   font-size: 1.75rem;
   font-weight: 850;
+  color: #111827;
+  margin: 0;
   letter-spacing: -0.03em;
+}
+
+.interiorSubtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6B7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.interiorActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.addFloorButton {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 750;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addFloorButton:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+}
+
+.closeModalButton {
+  background: #F3F4F6;
+  color: #4B5563;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.closeModalButton:hover {
+  background: #E5E7EB;
+  color: #111827;
+  transform: rotate(90deg);
 }
 
 .scrollingFloors {
   flex-grow: 1;
   overflow-y: auto;
   padding: 3rem;
-  background: white;
+  background: #F9FAFB;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Custom Scrollbar */
+.scrollingFloors::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollingFloors::-webkit-scrollbar-track {
+  background: #F9FAFB;
+}
+
+.scrollingFloors::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 10px;
+}
+
+.scrollingFloors::-webkit-scrollbar-thumb:hover {
+  background: #D1D5DB;
 }
 
 .floorContainer {
-  margin-bottom: 4rem;
-  background: #FDF9F6;
+  background: white;
   border-radius: 2rem;
   padding: 2.5rem;
-  border: 1px solid rgba(0,0,0,0.02);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
-.floorTitle {
-  font-weight: 800;
-  color: #111827;
-  font-size: 1.25rem;
+.floorHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
-.floorTitle::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  background: #3b3bff;
-  border-radius: 3px;
+.floorLabel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.floorDot {
+  width: 12px;
+  height: 12px;
+  background: #4f46e5;
+  border-radius: 4px;
+}
+
+.floorTitle {
+  font-size: 1.25rem;
+  font-weight: 850;
+  color: #111827;
+  letter-spacing: 0.05em;
+}
+
+.floorActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.addRoomMini, .dropLevelMini {
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.85rem;
+  font-weight: 800;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.addRoomMini {
+  background: #f5f3ff;
+  color: #4f46e5;
+}
+
+.addRoomMini:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.dropLevelMini {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.dropLevelMini:hover {
+  background: #ef4444;
+  color: white;
 }
 
 .roomsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
 }
 
 .roomCard {
-  background: white;
-  border: 2px solid #F3F4F6;
+  background: #F9FAFB;
+  border: 1px solid #F3F4F6;
   border-radius: 1.5rem;
-  padding: 1.75rem 1.25rem;
-  text-align: center;
-  transition: all 0.3s ease;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s;
   position: relative;
 }
 
 .roomCard:hover {
-  border-color: #3b3bff;
-  box-shadow: 0 15px 30px -10px rgba(59, 59, 255, 0.15);
-  transform: translateY(-4px);
+  background: white;
+  border-color: #4f46e5;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+  transform: scale(1.02);
+}
+
+.roomIconWrapper {
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  flex-shrink: 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.roomCard:hover .roomIconWrapper {
+  color: #4f46e5;
+  background: #f5f3ff;
+}
+
+.roomMain {
+  display: flex;
+  flex-direction: column;
 }
 
 .roomNumber {
-  font-weight: 900;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 850;
   color: #111827;
-  display: block;
+  line-height: 1.2;
 }
 
 .roomType {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #6B7280;
-  margin-top: 0.5rem;
 }
 
-/* Edit State UI */
-.editModeButton {
-  background: #111827;
-  color: white;
-  border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 1.25rem;
-  font-weight: 700;
+.roomEditActions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.roomCard:hover .roomEditActions {
+  opacity: 1;
+}
+
+.editRoomButton, .deleteRoomButton {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: all 0.2s;
 }
 
-.editModeActive {
-  background: #10B981;
-  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+.editRoomButton {
+  background: #f3f4f6;
+  color: #4B5563;
 }
 
-.wizardCard {
-  background: white;
-  border-radius: 2rem;
-  padding: 4rem;
-  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1);
-  max-width: 650px;
-  margin: 4rem auto;
-}
-
-.formInput {
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  border: 2px solid #F3F4F6;
-  font-size: 1rem;
-  font-weight: 600;
+.editRoomButton:hover {
+  background: #e5e7eb;
   color: #111827;
+}
+
+.deleteRoomButton {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.deleteRoomButton:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.emptyFloor {
+  grid-column: 1 / -1;
+  padding: 3rem;
+  text-align: center;
   background: #F9FAFB;
-  transition: all 0.3s;
+  border: 2px dashed #E5E7EB;
+  border-radius: 1.5rem;
+  color: #9CA3AF;
+  font-weight: 650;
 }
 
-.formInput:focus {
-  border-color: #3b42f2;
+/* Editor Modal */
+.editorModal {
+  width: 100%;
+  max-width: 500px;
   background: white;
-  box-shadow: 0 0 0 4px rgba(59, 66, 242, 0.1);
-  outline: none;
+  border-radius: 2.5rem;
+  padding: 3rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease;
 }
 
-.primaryButton {
-  background: linear-gradient(135deg, #3b42f2 0%, #2a2acc 100%);
+.editorHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.editorIconWrapper {
+  width: 56px;
+  height: 56px;
+  background: #f5f3ff;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editorTitle {
+  font-size: 1.5rem;
+  font-weight: 850;
+  color: #111827;
+  margin: 0;
+}
+
+.editorForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.editorActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.discardButton {
+  flex: 1;
+  padding: 1rem;
+  background: #F3F4F6;
+  color: #4B5563;
+  border: none;
+  border-radius: 1.25rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.discardButton:hover {
+  background: #E5E7EB;
+  color: #111827;
+}
+
+.applyButton {
+  flex: 2;
+  padding: 1rem;
+  background: #4f46e5;
   color: white;
   border: none;
   border-radius: 1.25rem;
-  padding: 1.15rem 2rem;
   font-weight: 800;
-  font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(59, 66, 242, 0.25);
-  transition: all 0.3s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
-.primaryButton:hover {
-  transform: translateY(-3px);
+.applyButton:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+}
+
+.emptyBuilding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem;
+  color: #D1D5DB;
+  text-align: center;
+}
+
+.emptyBuilding p {
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
