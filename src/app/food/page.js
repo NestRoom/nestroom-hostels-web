@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
+import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 
 export default function FoodPage() {
   const [hostelId, setHostelId] = useState("");
@@ -219,29 +220,27 @@ export default function FoodPage() {
   return (
     <div className={styles.container}>
       <AdminNav />
-      <div className={styles.mainContent}>
-        <div className={styles.header}>
+      <main className={styles.mainContent}>
+        <header className={styles.header}>
           <div>
-            <h1 className={styles.title}>Food Schedule</h1>
-            <p className={styles.subtitle}>Plan and manage weekly meals for residents.</p>
+            <h1 className={styles.title}>Menu Planner</h1>
+            <p className={styles.subtitle}>Curate and visualize weekly culinary experiences for residents.</p>
           </div>
-          <div className={styles.headerActions}>
-            <div className={styles.weekNav}>
-              <button className={styles.navBtn} onClick={handlePrevWeek}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <div className={styles.weekRange}>{formatDateLabel(currentWeekStart)}</div>
-              <button className={styles.navBtn} onClick={handleNextWeek}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </div>
+          <div className={styles.weekNav}>
+            <button className={styles.navBtn} onClick={handlePrevWeek}>
+              <ChevronLeft size={24} />
+            </button>
+            <div className={styles.weekRange}>{formatDateLabel(currentWeekStart)}</div>
+            <button className={styles.navBtn} onClick={handleNextWeek}>
+              <ChevronRight size={24} />
+            </button>
           </div>
-        </div>
+        </header>
 
         {isLoading ? (
-          <div className={styles.loadingContainer}>
+          <div className={styles.loadingContainer} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
             <LoadingComponent />
-            <p style={{ fontWeight: 600, color: "#6B7280" }}>Fetching menu...</p>
+            <p style={{ fontWeight: 750, color: "#6B7280", marginTop: '1rem' }}>Synchronizing Schedule...</p>
           </div>
         ) : (
           <div className={styles.calendarGrid}>
@@ -260,13 +259,13 @@ export default function FoodPage() {
               return (
                 <div key={day} className={styles.dayColumn}>
                   <div className={styles.dayHeader}>
-                    <span className={styles.dayName}>{day}</span>
+                    <span className={styles.dayName}>{day.substring(0, 3)}</span>
                     <span className={`${styles.dayDate} ${active ? styles.todayDate : ""}`}>
                         {date.getDate()}
                     </span>
                   </div>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     {mealTypes.map(mType => {
                       const meal = findMeal(day, mType.type);
                       return (
@@ -278,17 +277,19 @@ export default function FoodPage() {
                           {meal ? (
                             <>
                               <div className={styles.mealTime}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <Clock size={14} />
                                 {meal.time}
                               </div>
                               <div className={styles.menuList}>
                                 {meal.menu?.map((item, i) => (
-                                    <span key={i} className={styles.menuItem}>{item}{i < meal.menu.length -1 ? ', ' : ''}</span>
+                                    <span key={i} className={styles.menuItem}>
+                                      {item}{i < meal.menu.length - 1 ? ' • ' : ''}
+                                    </span>
                                 ))}
-                                {(!meal.menu || meal.menu.length === 0) && <span style={{ color: '#9CA3AF' }}>Not set</span>}
+                                {(!meal.menu || meal.menu.length === 0) && <span className={styles.emptyText}>Menu not set</span>}
                               </div>
-                              <div className={styles.dietaryTags} style={{ marginTop: 'auto' }}>
-                                {meal.dietaryTags?.map(tag => (
+                              <div style={{ marginTop: 'auto', display: 'flex', gap: '0.4rem' }}>
+                                {meal.dietaryTags?.slice(0, 1).map(tag => (
                                   <span key={tag} className={`${styles.tag} ${tag === 'Vegetarian' ? styles.tagVeg : tag === 'Non-Vegetarian' ? styles.tagNonVeg : styles.tagVegan}`}>
                                     {tag}
                                   </span>
@@ -296,7 +297,7 @@ export default function FoodPage() {
                               </div>
                             </>
                           ) : (
-                            <span className={styles.emptyText}>No meal set</span>
+                            <span className={styles.emptyText}>—</span>
                           )}
                         </div>
                       );
@@ -309,54 +310,53 @@ export default function FoodPage() {
         )}
 
         {!isLoading && !scheduleData && (
-            <div className={styles.emptyState} style={{ marginTop: '3rem' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥗</div>
-                <h3>No schedule for this week</h3>
-                <p>You haven't planned any meals for this week yet. Start by clicking on any card to add a dish.</p>
-                <button className={styles.primaryButton} onClick={() => {
-                     const day = weekDays[0];
-                     openEditMeal(day, mealTypes[0], null);
-                }}>Create Week Schedule</button>
+            <div className={styles.emptyState}>
+                <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🍽️</div>
+                <h3>No Culinary Roadmap Defined</h3>
+                <p>The menu for this week hasn't been drafted yet. Initialize a new schedule to keep your residents informed.</p>
+                <button className={styles.submitBtn} onClick={() => openEditMeal(weekDays[0], mealTypes[0], null)}>
+                  Create Weekly Schedule
+                </button>
             </div>
         )}
 
         {isEditModalOpen && (
           <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
-            <div className={styles.modalContent} style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalContent} style={{ maxWidth: '650px' }} onClick={e => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h2>Edit {editingMeal.mealType} - {editingMeal.dayOfWeek}</h2>
-                <button style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setIsEditModalOpen(false)}>&times;</button>
+                <h2>Plan {editingMeal.mealType} • {editingMeal.dayOfWeek}</h2>
+                <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}>&times;</button>
               </div>
               <form onSubmit={saveMeal}>
                 <div className={styles.formContent}>
                   <div className={styles.formGroup}>
-                    <label>Serving Time</label>
+                    <label>Distribution Time</label>
                     <input 
                       className={styles.formInput} 
-                      placeholder="e.g. 08:30 - 09:30"
+                      placeholder="e.g. 08:30 AM - 09:30 AM"
                       value={editingMeal.time}
                       onChange={e => setEditingMeal({...editingMeal, time: e.target.value})}
                     />
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label>Menu Items (Selected: {editingMeal.menu.length})</label>
+                    <label>Selected Menu Items ({editingMeal.menu.length})</label>
                     <div className={styles.selectedItemsList}>
                         {editingMeal.menu.map(item => (
                             <span key={item} className={styles.selectedItemChip} onClick={() => toggleMenuItem(item)}>
-                                {item} <span>&times;</span>
+                                {item} <span style={{ marginLeft: '4px', opacity: 0.7 }}>&times;</span>
                             </span>
                         ))}
                         <input 
                             className={styles.itemInput}
-                            placeholder="Type and press Enter to add..."
+                            placeholder="Add item..."
                             onKeyDown={addCustomMenuItem}
                         />
                     </div>
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label>Common {editingMeal.mealType} Presets</label>
+                    <label>Quick Selection Presets</label>
                     <div className={styles.presetGrid}>
                         {editingMeal.presets.map(item => (
                             <div 
@@ -371,7 +371,7 @@ export default function FoodPage() {
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label>Dietary Type</label>
+                    <label>Dietary Classification</label>
                     <div className={styles.tagSelector}>
                       {["Vegetarian", "Non-Vegetarian", "Vegan"].map(tag => (
                         <div 
@@ -386,14 +386,14 @@ export default function FoodPage() {
                   </div>
                 </div>
                 <div className={styles.modalFooter}>
-                  <button type="button" className={styles.secondaryBtn} onClick={() => setIsEditModalOpen(false)}>Cancel</button>
-                  <button type="submit" className={styles.submitBtn}>Update Schedule</button>
+                  <button type="button" className={styles.secondaryBtn} onClick={() => setIsEditModalOpen(false)}>Discard</button>
+                  <button type="submit" className={styles.submitBtn}>Save Schedule</button>
                 </div>
               </form>
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
