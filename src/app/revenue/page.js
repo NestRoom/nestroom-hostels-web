@@ -173,69 +173,68 @@ export default function RevenuePage() {
   ];
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.container}>
       <AdminNav />
-      <main className={styles.container}>
+      <main className={styles.mainContent}>
         <header className={styles.header}>
-          <div className={styles.titleSection}>
-            <h1>Payments Tracking</h1>
-            <p className={styles.subtitle}>Manage collections, dues, and transaction history.</p>
+          <div>
+            <h1 className={styles.title}>Revenue Ledger</h1>
+            <p className={styles.subtitle}>Track collections, analyze growth, and manage transaction history.</p>
           </div>
-          <button className={styles.recordBtn} onClick={handleRecordPayment}>
-            <Wallet size={18} />
+          <button className={styles.primaryButton} onClick={handleRecordPayment}>
+            <Wallet size={20} />
             Record Payment
           </button>
         </header>
 
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statInfo}>
-              <h3>Total Revenue</h3>
-              <div className={styles.statValue}>₹{(dashboardData?.stats?.totalRevenue || 0).toLocaleString()}</div>
-              <div className={`${styles.statTrend} ${styles.trendUp}`}>
-                <TrendingUp size={16} />
-                <span>+12.5% from last period</span>
-              </div>
+        {/* KPI Dashboard */}
+        <div className={styles.kpiContainer}>
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#f5f3ff', color: '#4f46e5' }}>
+              <Wallet size={28} />
             </div>
-            <div className={styles.statIcon}>
-              <Wallet size={24} />
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue}>₹{(dashboardData?.stats?.totalRevenue || 0).toLocaleString()}</div>
+              <div className={styles.kpiLabel}>
+                <span className={styles.kpiTitle}>Total Revenue</span>
+                <span className={styles.kpiSubtitle} style={{ color: '#10b981' }}>+12.5% vs last month</span>
+              </div>
             </div>
           </div>
 
-          <div className={styles.statCard}>
-            <div className={styles.statInfo}>
-              <h3>Pending Dues</h3>
-              <div className={`${styles.statValue} ${styles.dueAmount}`}>₹{(dashboardData?.stats?.pendingDues || 0).toLocaleString()}</div>
-              <div className={`${styles.statTrend} ${styles.trendDown}`}>
-                <TrendingDown size={16} />
-                <span>8 residents overdue</span>
-              </div>
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#fffbeb', color: '#d97706' }}>
+              <AlertCircle size={28} />
             </div>
-            <div className={`${styles.statIcon} ${styles.duesIcon}`}>
-              <AlertCircle size={24} />
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue} style={{ color: '#d97706' }}>₹{(dashboardData?.stats?.pendingDues || 0).toLocaleString()}</div>
+              <div className={styles.kpiLabel}>
+                <span className={styles.kpiTitle}>Pending Collections</span>
+                <span className={styles.kpiSubtitle}>8 residents overdue</span>
+              </div>
             </div>
           </div>
 
-          <div className={styles.statCard}>
-            <div className={styles.statInfo}>
-              <h3>Upcoming Renewals</h3>
-              <div className={styles.statValue}>{dashboardData?.stats?.upcomingRenewals || 0}</div>
-              <div className={styles.statTrend} style={{ color: '#3b82f6' }}>
-                <Clock size={16} />
-                <span>Next 7 days</span>
-              </div>
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#ecfdf5', color: '#059669' }}>
+              <TrendingUp size={28} />
             </div>
-            <div className={`${styles.statIcon} ${styles.renewalsIcon}`}>
-              <Users size={24} />
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue}>{dashboardData?.stats?.upcomingRenewals || 0}</div>
+              <div className={styles.kpiLabel}>
+                <span className={styles.kpiTitle}>Upcoming Renewals</span>
+                <span className={styles.kpiSubtitle}>Next 7 days</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className={styles.chartSection}>
+        {/* Growth Analysis Chart */}
+        <div className={styles.chartContainer}>
           <div className={styles.chartHeader}>
             <div className={styles.chartTitle}>
-              <h3>Revenue Growth</h3>
-              <p className={styles.chartSubtitle}>Financial performance across {timeframe} periods</p>
+              <h3>Revenue Analysis</h3>
+              <p>Visualizing financial performance trends</p>
             </div>
             <div className={styles.timeframeToggle}>
               {['daily', 'weekly', 'monthly', 'yearly'].map((tf) => (
@@ -250,13 +249,13 @@ export default function RevenuePage() {
             </div>
           </div>
           
-          <div style={{ width: '100%', height: 350, marginTop: '20px' }}>
+          <div style={{ width: '100%', height: 350 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={dashboardData?.trends || []}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b42f2" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#3b42f2" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -264,28 +263,28 @@ export default function RevenuePage() {
                   dataKey="label" 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 12 }}
+                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
                   dy={10}
                 />
                 <YAxis 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 12 }}
+                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
                   tickFormatter={(value) => `₹${value}`}
                 />
                 <Tooltip 
                   contentStyle={{ 
-                    borderRadius: '16px', 
+                    borderRadius: '20px', 
                     border: 'none', 
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                    padding: '12px 16px'
+                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.1)',
+                    padding: '16px'
                   }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="earnings" 
-                  stroke="#3b42f2" 
-                  strokeWidth={3}
+                  stroke="#4f46e5" 
+                  strokeWidth={4}
                   fillOpacity={1} 
                   fill="url(#colorRev)" 
                 />
@@ -294,58 +293,41 @@ export default function RevenuePage() {
           </div>
         </div>
 
-        {/* Transaction History */}
-        <div className={styles.historySection}>
-          <div className={styles.historyHeader}>
-            <div className={styles.historyTitle}>
-              <h3>Recent Transactions</h3>
-            </div>
-            <div className={styles.historyFilters}>
-              {isSearchOpen ? (
-                <div className={styles.searchWrapper}>
-                  <Search size={16} className={styles.searchIcon} />
-                  <input 
-                    type="text" 
-                    className={styles.searchInput}
-                    placeholder="Search name or payment ID..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    autoFocus
-                    onBlur={() => !searchTerm && setIsSearchOpen(false)}
-                  />
-                </div>
-              ) : (
-                <button className={styles.filterBtn} onClick={() => setIsSearchOpen(true)}>
-                  <Search size={16} /> Search
-                </button>
-              )}
-              
-              <div className={styles.filterWrapper}>
-                <button className={styles.filterBtn}>
-                  <Filter size={16} /> {statusFilter}
-                </button>
-                <select 
-                  className={styles.filterSelect}
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <option value="All">All Status</option>
-                  <option value="Success">Success</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Failed">Failed</option>
-                </select>
-              </div>
-
-              <button className={styles.filterBtn} onClick={handleExport}>
-                <Download size={16} /> Export
-              </button>
-            </div>
+        {/* Transaction History Filter Bar */}
+        <div className={styles.filtersBar}>
+          <div className={styles.searchBox}>
+            <Search size={20} className={styles.searchIcon} />
+            <input 
+              type="text" 
+              placeholder="Search by resident or payment ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
+          <div className={styles.filtersGroup}>
+            <div className={styles.filterItem}>
+              <Filter size={18} />
+              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                <option value="All">All Status</option>
+                <option value="Success">Successful</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+            <button className={styles.filterItem} onClick={handleExport}>
+              <Download size={18} />
+              Export CSV
+            </button>
+          </div>
+        </div>
 
-          <table className={styles.historyTable}>
+        {/* Ledger Table */}
+        <div className={styles.tableWrapper}>
+          <table className={styles.revenueTable}>
             <thead>
               <tr>
                 <th>Resident</th>
+                <th>Transaction ID</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Method</th>
@@ -354,80 +336,71 @@ export default function RevenuePage() {
               </tr>
             </thead>
             <tbody>
-              {filteredPayments && filteredPayments.length > 0 ? (
+              {filteredPayments.length > 0 ? (
                 filteredPayments.map((tx) => (
                   <tr key={tx._id}>
                     <td>
-                      <div className={styles.residentCell}>
-                        <div className={styles.avatar}>
+                      <div className={styles.residentProfile}>
+                        <div className={styles.residentAvatar}>
                           {tx.residentId?.kyc?.profilePhoto ? (
-                            <img src={tx.residentId.kyc.profilePhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={tx.residentId.kyc.profilePhoto} alt="" />
                           ) : (
-                            <Users size={20} color="#64748b" />
+                            <Users size={20} />
                           )}
                         </div>
-                        <div>
-                          <span className={styles.residentName}>{tx.residentId?.fullName || "Resident"}</span>
-                          <span className={styles.roomNumber}>{tx.paymentId}</span>
+                        <div className={styles.residentDetails}>
+                          <span className={styles.resName}>{tx.residentId?.fullName || "Resident"}</span>
+                          <span className={styles.resId}>{tx.residentId?.residentId || 'RID-N/A'}</span>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className={styles.amountCell}>
-                        <span>₹{(tx.amount || 0).toLocaleString()}</span>
-                      </div>
+                      <span className={styles.resId}>{tx.paymentId || 'PAY-N/A'}</span>
                     </td>
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-                        {new Date(tx.paidAt || tx.createdAt).toLocaleDateString()}
-                      </div>
+                      <div className={styles.amountCell}>₹{(tx.amount || 0).toLocaleString()}</div>
                     </td>
                     <td>
-                      <div className={styles.methodCell}>
-                        {tx.paymentMethod === 'Razorpay' ? (
-                          <img 
-                            src="https://razorpay.com/favicon.ico" 
-                            alt="Razorpay" 
-                            style={{ width: '16px', height: '16px', objectFit: 'contain' }} 
-                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-                          />
-                        ) : null}
-                        {tx.paymentMethod === 'Razorpay' ? (
-                          <CreditCard size={14} style={{ display: 'none' }} />
-                        ) : (
-                          <CreditCard size={14} />
-                        )}
+                      <div className={styles.dateCell}>{new Date(tx.paidAt || tx.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                    </td>
+                    <td>
+                      <div className={styles.methodBadge}>
+                        <CreditCard size={14} />
                         {tx.paymentMethod}
                       </div>
                     </td>
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-                        <span className={`${styles.statusBadge} ${tx.paymentStatus === 'Success' ? styles.statusSuccessful : styles.statusPending}`}>
-                          {tx.paymentStatus}
-                        </span>
-                      </div>
+                      <span className={`${styles.statusBadge} ${tx.paymentStatus === 'Success' ? styles.success : tx.paymentStatus === 'Pending' ? styles.pending : styles.failed}`}>
+                        {tx.paymentStatus}
+                      </span>
                     </td>
                     <td>
                       <button className={styles.actionBtn}>
-                        <ChevronRight size={18} />
+                        <ChevronRight size={20} />
                       </button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                    No recent transactions found.
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '5rem', color: '#94a3b8' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                      <CreditCard size={48} opacity={0.3} />
+                      <p style={{ fontWeight: 700, fontSize: '1.1rem' }}>No transactions match your filters</p>
+                    </div>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>
-            <span>Showing {payments?.length || 0} recent transactions</span>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button className={styles.actionBtn}><ChevronLeft size={16} /></button>
-              <button className={styles.actionBtn}><ChevronRight size={16} /></button>
+          
+          <div className={styles.pagination}>
+            <span className={styles.paginationInfo}>
+              Showing {filteredPayments.length} transactions
+            </span>
+            <div className={styles.paginationBtns}>
+              <button disabled={pagination.page === 1}><ChevronLeft size={24} /></button>
+              <button disabled={true}><ChevronRight size={24} /></button>
             </div>
           </div>
         </div>

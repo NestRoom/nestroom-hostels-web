@@ -741,21 +741,55 @@
   margin-top: 0;
 }
 
-.checkboxLabel {
+.switchWrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   cursor: pointer;
-  margin-top: 1.75rem;
-  font-weight: 700;
-  color: #111827;
+  margin-top: 1rem;
+  user-select: none;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  transition: background 0.2s;
 }
 
-.checkboxLabel input {
-  width: 1.25rem;
-  height: 1.25rem;
-  accent-color: #4f46e5;
-  cursor: pointer;
+.switchWrapper:hover {
+  background: #f9fafb;
+}
+
+.switch {
+  width: 48px;
+  height: 26px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.switch.active {
+  background: #4f46e5;
+}
+
+.switchHandle {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.switch.active .switchHandle {
+  left: 25px;
+}
+
+.switchLabel {
+  font-weight: 750;
+  color: #374151;
+  font-size: 0.95rem;
 }
 
 /* Pagination */

@@ -629,11 +629,16 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
               <label>Security Deposit (INR)</label>
               <input type="number" placeholder="5000" value={formData.securityDeposit} onChange={e => setFormData({...formData, securityDeposit: e.target.value})} />
             </div>
-            <div className={styles.field}>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" checked={formData.foodEnabled} onChange={e => setFormData({...formData, foodEnabled: e.target.checked})} />
-                <span>Enable Food Mess Plan</span>
-              </label>
+            <div className={styles.field} style={{ gridColumn: 'span 2' }}>
+              <div 
+                className={styles.switchWrapper} 
+                onClick={() => setFormData({...formData, foodEnabled: !formData.foodEnabled})}
+              >
+                <div className={`${styles.switch} ${formData.foodEnabled ? styles.active : ''}`}>
+                  <div className={styles.switchHandle}></div>
+                </div>
+                <span className={styles.switchLabel}>Enable Food Mess Plan</span>
+              </div>
             </div>
           </div>
           
