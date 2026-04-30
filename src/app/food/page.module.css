@@ -85,7 +85,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding-top: 5rem;
+  padding-top: 104px; /* Matches dayHeader height (80px) + dayColumn gap (24px) */
 }
 
 .timeSlotLabel {
@@ -131,7 +131,6 @@
   background: white;
   border-radius: 1.5rem;
   border: 1px solid rgba(0, 0, 0, 0.04);
-  margin-bottom: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
 }
 
