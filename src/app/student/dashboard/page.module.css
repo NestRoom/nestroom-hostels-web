@@ -1,3 +1,20 @@
+:root {
+  --primary: #3b3bff;
+  --primary-light: #eff1ff;
+  --primary-hover: #2a2acc;
+  --success: #059669;
+  --error: #dc2626;
+  --warning: #d97706;
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 30px -10px rgba(59, 59, 255, 0.15);
+  --shadow-lg: 0 20px 50px -15px rgba(59, 59, 255, 0.25);
+  --radius-lg: 2.5rem;
+}
+
 .dashboardContainer {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -116,8 +133,9 @@
 }
 
 .metaItem {
-    flex-direction: column;
-    gap: 0.4rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
 }
 
 .metaLabel {
@@ -153,29 +171,35 @@
 .kycStatusWrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 1.5rem;
   flex: 1;
-  justify-content: center;
 }
 
 .kycIndicator {
-  padding: 1.25rem 3rem;
-  border-radius: 3rem;
-  font-weight: 900;
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
+  align-self: flex-start;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 850;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.pending { background: #FFF7ED; color: #EA580C; border: 1px solid #FFEDD5; box-shadow: 0 15px 30px -5px rgba(234, 88, 12, 0.2); }
-.verified { background: #ECFDF5; color: #059669; border: 1px solid #D1FAE5; box-shadow: 0 15px 30px -5px rgba(5, 150, 105, 0.2); }
+.pending { 
+  background: #fffbeb; 
+  color: #d97706; 
+  border: 1px solid #fef3c7;
+}
+
+.verified { 
+  background: #ecfdf5; 
+  color: #059669; 
+  border: 1px solid #d1fae5;
+}
 
 .kycHint {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: #64748B;
-  margin-bottom: 2.5rem;
   line-height: 1.6;
   font-weight: 500;
 }

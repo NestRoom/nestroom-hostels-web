@@ -102,7 +102,7 @@
 .kpiIconWrapper {
   width: 68px;
   height: 68px;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +298,7 @@
 .buildingGraphic {
   background: #F9FAFB;
   border: 2px solid #F3F4F6;
-  border-radius: 2.25rem;
+  border-radius: var(--card-radius);
   padding: 3rem 2rem;
   position: relative;
   cursor: pointer;
@@ -320,7 +320,7 @@
   width: 100px;
   height: 100px;
   background: white;
-  border-radius: 2.25rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,7 +383,7 @@
   border: none;
   width: 44px;
   height: 44px;
-  border-radius: 14px;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -415,7 +415,7 @@
   width: 72px;
   height: 72px;
   background: #F3F4F6;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -499,7 +499,7 @@
   width: 64px;
   height: 64px;
   background: #f5f3ff;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -532,7 +532,7 @@
   color: white;
   border: none;
   padding: 1rem 2rem;
-  border-radius: 1.25rem;
+  border-radius: 1.5rem;
   font-weight: 850;
   display: flex;
   align-items: center;
@@ -554,7 +554,7 @@
   border: none;
   width: 54px;
   height: 54px;
-  border-radius: 1.25rem;
+  border-radius: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -599,7 +599,7 @@
 
 .floorContainer {
   background: white;
-  border-radius: 2.25rem;
+  border-radius: var(--card-radius);
   padding: 3rem;
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0, 0, 0, 0.02);
@@ -683,7 +683,7 @@
 .roomCard {
   background: #F9FAFB;
   border: 2px solid #F3F4F6;
-  border-radius: 1.75rem;
+  border-radius: 2rem;
   padding: 1.75rem;
   display: flex;
   align-items: center;
@@ -703,7 +703,7 @@
   width: 52px;
   height: 52px;
   background: white;
-  border-radius: 1.25rem;
+  border-radius: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -754,7 +754,7 @@
 .editRoomButton, .deleteRoomButton {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -820,7 +820,7 @@
   width: 68px;
   height: 68px;
   background: #f5f3ff;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
