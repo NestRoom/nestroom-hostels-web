@@ -169,8 +169,9 @@ export default function NotificationPage() {
   if (loading) return (
     <div className={styles.wrapper}>
       <AdminNav />
-      <main className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Loading text="Loading Notifications..." />
+      <main className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loading />
+        <p style={{ marginTop: '1.5rem', fontWeight: 800, color: '#6b7280' }}>Synchronizing Communications...</p>
       </main>
     </div>
   );
@@ -181,20 +182,20 @@ export default function NotificationPage() {
       <main className={styles.container}>
         <header className={styles.header}>
           <div className={styles.titleSection}>
-            <h1>Notifications</h1>
-            <p className={styles.subtitle}>Send updates and engage with your residents.</p>
+            <h1>Communications</h1>
+            <p className={styles.subtitle}>Broadcast updates and monitor resident engagement analytics.</p>
           </div>
           <button className={styles.createBtn} onClick={() => setIsModalOpen(true)}>
-            <Plus size={20} />
-            Create New
+            <Send size={20} />
+            New Broadcast
           </button>
         </header>
 
         <div className={styles.mainGrid}>
-          {/* List Section */}
+          {/* History Sidebar */}
           <section className={styles.listSection}>
             <div className={styles.listHeader}>
-              <h2>History</h2>
+              <h2>Broadcast History</h2>
               <span className={styles.cardDate}>{notifications.length} Sent</span>
             </div>
             
@@ -202,8 +203,8 @@ export default function NotificationPage() {
               {notifications.length === 0 ? (
                 <div className={styles.emptyState}>
                   <Bell size={48} className={styles.emptyIcon} />
-                  <h3>No notifications</h3>
-                  <p>Broadcast your first update to engage with residents.</p>
+                  <h3>No transmissions yet</h3>
+                  <p>Initialize your first broadcast to begin engaging with residents.</p>
                 </div>
               ) : (
                 notifications.map((notif) => (
@@ -233,7 +234,7 @@ export default function NotificationPage() {
                             </div>
                           )}
                        </div>
-                       <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                       <div style={{ fontSize: '10px', color: '#10b981', fontWeight: 850, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                           {notif.deliveryStatus}
                        </div>
                     </div>
@@ -243,7 +244,7 @@ export default function NotificationPage() {
             </div>
           </section>
 
-          {/* Details Section */}
+          {/* Analytics & Details Section */}
           <section className={styles.detailsSection}>
             {selectedNotification ? (
               <>
@@ -266,21 +267,21 @@ export default function NotificationPage() {
                 <div className={styles.analyticsGrid}>
                   <div className={styles.analCard}>
                      <div className={styles.analLabel}>Reach</div>
-                     <div className={styles.analValue}>{selectedNotification.totalViewCount}</div>
+                     <div className={styles.analValue}>{selectedNotification.totalViewCount || 0}</div>
                   </div>
                   <div className={styles.analCard}>
                      <div className={styles.analLabel}>View Rate</div>
-                     <div className={styles.analValue}>{selectedNotification.viewRate}%</div>
+                     <div className={styles.analValue}>{selectedNotification.viewRate || 0}%</div>
                   </div>
                   {selectedNotification.poll?.isPoll && (
                     <>
                       <div className={styles.analCard}>
                         <div className={styles.analLabel}>Responses</div>
-                        <div className={styles.analValue}>{selectedNotification.poll.totalResponses}</div>
+                        <div className={styles.analValue}>{selectedNotification.poll.totalResponses || 0}</div>
                       </div>
                       <div className={styles.analCard}>
                         <div className={styles.analLabel}>Engagement</div>
-                        <div className={styles.analValue}>{selectedNotification.poll.responseRate}%</div>
+                        <div className={styles.analValue}>{selectedNotification.poll.responseRate || 0}%</div>
                       </div>
                     </>
                   )}
@@ -288,7 +289,10 @@ export default function NotificationPage() {
 
                 {selectedNotification.poll?.isPoll && (
                   <div className={styles.pollContainer}>
-                    <h3 className={styles.pollTitle}>Poll Findings: {selectedNotification.poll.pollQuestion}</h3>
+                    <h3 className={styles.pollTitle}>
+                      <PieChart size={20} style={{ marginRight: '8px' }} />
+                      Poll Results: {selectedNotification.poll.pollQuestion}
+                    </h3>
                     {selectedNotification.poll.pollOptions.map((option, idx) => {
                       const count = selectedNotification.poll.responseBreakdown?.[option] || 0;
                       const percentage = selectedNotification.poll.totalResponses > 0 
@@ -311,55 +315,64 @@ export default function NotificationPage() {
 
                 <div className={styles.seenBySection}>
                    <h3 className={styles.sectionTitle}>
-                      <Users size={20} color="#3b42f2" /> Audience Activity ({selectedNotification.viewedBy?.length || 0})
+                      <Users size={22} color="#4f46e5" strokeWidth={2.5} /> 
+                      Audience Feed ({selectedNotification.viewedBy?.length || 0})
                    </h3>
                    <div className={styles.seenByList}>
                       {selectedNotification.viewedBy?.length > 0 ? (
                         selectedNotification.viewedBy.map((view, i) => (
                           <div key={i} className={styles.seenItem}>
-                             <div className={styles.seenAvatar}>{view.residentName?.[0]}</div>
+                             <div className={styles.seenAvatar} style={{ background: '#f5f3ff', color: '#4f46e5' }}>
+                               {view.residentName?.[0]}
+                             </div>
                              <div className={styles.seenInfo}>
                                 <div className={styles.seenName}>{view.residentName}</div>
-                                <div className={styles.seenTime}>{new Date(view.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(view.viewedAt).toLocaleDateString()}</div>
+                                <div className={styles.seenTime}>
+                                  {new Date(view.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(view.viewedAt).toLocaleDateString()}
+                                </div>
                              </div>
                           </div>
                         ))
                       ) : (
-                        <p className={styles.emptyText}>No audience activity recorded yet.</p>
+                        <div className={styles.emptyState} style={{ padding: '2rem 0' }}>
+                          <p className={styles.emptyText}>Monitoring audience activity...</p>
+                        </div>
                       )}
                    </div>
                 </div>
               </>
             ) : (
-              <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>
-                  <Bell size={48} />
+              <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', opacity: 0.8 }}>
+                <div style={{ background: '#f5f3ff', padding: '2.5rem', borderRadius: '3rem', marginBottom: '2rem' }}>
+                  <Bell size={64} color="#4f46e5" />
                 </div>
-                <h3>Engagement Details</h3>
-                <p>Select a broadcast from the history to view reach, poll results, and audience activity.</p>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 850 }}>Engagement Analytics</h3>
+                <p style={{ maxWidth: '350px', color: '#6b7280', fontWeight: 500, marginTop: '0.5rem' }}>
+                  Select a broadcast from your history to view reach, poll results, and real-time audience activity.
+                </p>
               </div>
             )}
           </section>
         </div>
 
-        {/* Create Modal */}
+        {/* New Broadcast Modal */}
         {isModalOpen && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modalContent}>
+          <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h2>Create New Notification</h2>
+                <h2>New Communication</h2>
                 <button onClick={() => setIsModalOpen(false)} className={styles.closeBtn}>
-                  <X size={24} />
+                  <X size={28} strokeWidth={2.5} />
                 </button>
               </div>
 
               <form onSubmit={handleCreateNotification}>
                 <div className={styles.formGroup}>
-                  <label>Title</label>
+                  <label>Subject</label>
                   <input 
                     type="text" 
                     className={styles.formInput} 
-                    placeholder="e.g., Monthly Maintenance Work"
+                    placeholder="e.g., Monthly Maintenance Scheduled"
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -367,19 +380,19 @@ export default function NotificationPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>Message Content</label>
+                  <label>Message Payload</label>
                   <textarea 
                     className={styles.formTextarea} 
-                    placeholder="Describe your update in detail..."
+                    placeholder="Compose your broadcast message here..."
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                   <div className={styles.formGroup}>
-                    <label>Category</label>
+                    <label>Transmission Category</label>
                     <select 
                       className={styles.formSelect}
                       value={formData.type}
@@ -391,41 +404,41 @@ export default function NotificationPage() {
                     </select>
                   </div>
                   <div className={styles.formGroup}>
-                    <label>Recipients</label>
+                    <label>Audience Targeting</label>
                     <select 
                       className={styles.formSelect}
                       value={formData.recipientType}
                       onChange={(e) => setFormData({...formData, recipientType: e.target.value})}
                     >
-                      <option value="AllResidents">All Residents</option>
-                      {/* Add more types if needed by backend later */}
+                      <option value="AllResidents">Universal (All Residents)</option>
                     </select>
                   </div>
                 </div>
 
-                <div className={styles.formGroup}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className={styles.formGroup} style={{ background: '#f9fafb', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid #f3f4f6' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                      <input 
                         type="checkbox" 
                         id="isPoll" 
+                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
                         checked={formData.poll.isPoll}
                         onChange={(e) => setFormData({
                           ...formData, 
                           poll: { ...formData.poll, isPoll: e.target.checked }
                         })}
                      />
-                     <label htmlFor="isPoll" style={{ margin: 0 }}>Include a Poll</label>
+                     <label htmlFor="isPoll" style={{ margin: 0, cursor: 'pointer', fontSize: '1rem', fontWeight: 800 }}>Enable Interactive Poll</label>
                   </div>
                 </div>
 
                 {formData.poll.isPoll && (
                   <div className={styles.pollOptionsGroup}>
                      <div className={styles.formGroup}>
-                        <label>Poll Question</label>
+                        <label>Poll Query</label>
                         <input 
                           type="text" 
                           className={styles.formInput} 
-                          placeholder="e.g., What should we have for Sunday Dinner?"
+                          placeholder="What is your question?"
                           value={formData.poll.pollQuestion}
                           onChange={(e) => setFormData({
                             ...formData, 
@@ -434,25 +447,28 @@ export default function NotificationPage() {
                         />
                      </div>
                      <label>Options</label>
-                     {formData.poll.pollOptions.map((opt, idx) => (
-                        <div key={idx} className={styles.pollOptionInput}>
-                           <input 
-                            type="text" 
-                            className={styles.formInput} 
-                            placeholder={`Option ${idx + 1}`}
-                            value={opt}
-                            onChange={(e) => updatePollOption(idx, e.target.value)}
-                           />
-                        </div>
-                     ))}
-                     <button type="button" className={styles.addOptionBtn} onClick={addPollOption}>
-                        + Add Option
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {formData.poll.pollOptions.map((opt, idx) => (
+                           <div key={idx} className={styles.pollOptionInput}>
+                              <input 
+                                type="text" 
+                                className={styles.formInput} 
+                                placeholder={`Option ${idx + 1}`}
+                                value={opt}
+                                onChange={(e) => updatePollOption(idx, e.target.value)}
+                              />
+                           </div>
+                        ))}
+                     </div>
+                     <button type="button" className={styles.addOptionBtn} style={{ marginTop: '1rem' }} onClick={addPollOption}>
+                        + Add Response Option
                      </button>
                   </div>
                 )}
 
-                <button type="submit" className={styles.submitBtn} disabled={isSending}>
-                  {isSending ? 'Sending...' : 'Broadcast Notification'}
+                <button type="submit" className={styles.submitBtn} style={{ marginTop: '1rem' }} disabled={isSending}>
+                  <Send size={20} />
+                  {isSending ? 'Transmitting...' : 'Broadcast Transmission'}
                 </button>
               </form>
             </div>
