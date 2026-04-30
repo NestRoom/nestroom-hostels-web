@@ -40,23 +40,23 @@
   background: #f43f5e;
   color: white;
   border: none;
-  border-radius: var(--button-radius);
-  padding: 1rem 1.75rem;
+  border-radius: 3rem;
+  padding: 1.25rem 3.5rem;
   font-weight: 850;
-  font-size: 1rem;
+  font-size: 1.25rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  transition: all 0.3s;
-  box-shadow: 0 10px 20px -5px rgba(244, 63, 94, 0.3);
+  gap: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 15px 35px -10px rgba(244, 63, 94, 0.5);
 }
 
 .surpriseBtn:hover {
   background: #e11d48;
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px -10px rgba(244, 63, 94, 0.4);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 45px -12px rgba(244, 63, 94, 0.6);
 }
 
 /* Tabs */

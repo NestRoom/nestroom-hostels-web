@@ -42,20 +42,21 @@
   background: var(--primary);
   color: white;
   border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: var(--button-radius);
+  padding: 1.25rem 3.5rem;
+  border-radius: 2rem;
   font-weight: 850;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
-  transition: all 0.3s;
+  gap: 1rem;
+  box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.45);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.2rem;
 }
 
 .saveBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 45px -12px rgba(79, 70, 229, 0.55);
   background: var(--primary-hover);
 }
 
@@ -63,9 +64,10 @@
   background: white;
   color: #EF4444;
   border: 2px solid #FEE2E2;
-  padding: 0.85rem 1.5rem;
-  border-radius: var(--button-radius);
+  padding: 1.25rem 2rem;
+  border-radius: 2rem;
   font-weight: 850;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -73,6 +75,7 @@
 .resetBtn:hover {
   background: #FEF2F2;
   border-color: #FCA5A5;
+  transform: translateY(-2px);
 }
 
 .canvas {

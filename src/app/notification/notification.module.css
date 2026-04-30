@@ -36,23 +36,23 @@
   background: var(--primary);
   color: white;
   border: none;
-  padding: 1.25rem 2.5rem;
-  border-radius: var(--button-radius);
+  padding: 1.25rem 3.5rem;
+  border-radius: 2rem;
   font-weight: 850;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.85rem;
+  gap: 1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
-  font-size: 1.1rem;
+  box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.45);
+  font-size: 1.2rem;
 }
 
 .createBtn:hover {
   background: var(--primary-hover);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.5);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 45px -12px rgba(79, 70, 229, 0.55);
 }
 
 .createBtn:active {
