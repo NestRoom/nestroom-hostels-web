@@ -186,26 +186,27 @@
 
 .submitBtn {
   width: 100%;
-  padding: 1.25rem;
-  background: #4A3E3E;
+  padding: 1.25rem 3.5rem;
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 800;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: 850;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 10px 30px rgba(74, 62, 62, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.4);
 }
 
-.submitBtn:hover {
-  background: #362C2C;
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(74, 62, 62, 0.3);
+.submitBtn:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 45px -12px rgba(79, 70, 229, 0.6);
 }
 
 .submitBtn:disabled {
-  background: #C4B5B5;
+  background: #cbd5e1;
+  color: #64748b;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;

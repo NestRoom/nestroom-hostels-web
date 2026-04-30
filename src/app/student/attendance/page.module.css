@@ -56,28 +56,30 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #3b3bff 0%, #2a2acc 100%);
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 1rem;
-  padding: 0.85rem 1.75rem;
-  font-weight: 700;
-  font-size: 1rem;
+  border-radius: 2rem;
+  padding: 1.25rem 3.5rem;
+  font-weight: 850;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  box-shadow: 0 8px 20px rgba(59, 59, 255, 0.25);
+  gap: 0.75rem;
+  box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.4);
 }
 
 .primaryButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(59, 59, 255, 0.35);
+  transform: translateY(-4px) scale(1.02);
+  background: var(--primary-hover);
+  box-shadow: 0 20px 45px -12px rgba(79, 70, 229, 0.6);
 }
 
 .primaryButton:disabled {
-  background: #9CA3AF;
+  background: #cbd5e1;
+  color: #64748b;
   box-shadow: none;
   cursor: not-allowed;
   transform: none;
@@ -86,79 +88,103 @@
 .summaryCards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
 .statCard {
   background: white;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  padding: 2.5rem;
+  border-radius: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
 .statLabel {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #6B7280;
+  font-size: 0.85rem;
+  font-weight: 850;
+  color: #94A3B8;
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.1em;
 }
 
 .statValue {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 2.75rem;
+  font-weight: 900;
   color: #111827;
+  letter-spacing: -0.05em;
 }
 
 .attendanceAlert {
-  background: linear-gradient(135deg, #3b3bff 0%, #1e1eff 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #312e81 100%);
   color: white;
   border-radius: 2.5rem;
-  padding: 2.5rem 3rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 30px 60px rgba(59, 59, 255, 0.2);
+  padding: 3rem 4rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 30px 60px rgba(79, 70, 229, 0.3);
 }
 
 .alertContent {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 3rem;
 }
 
 .alertIcon {
-  width: 64px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1.5rem;
+  border-radius: 2rem;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .alertText h4 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 850;
+  letter-spacing: -0.04em;
 }
 
 .alertText p {
-  margin: 0.25rem 0 0;
-  font-size: 1.1rem;
+  margin: 0.5rem 0 0;
+  font-size: 1.2rem;
   opacity: 0.9;
+  font-weight: 500;
 }
 
 .markBtn {
   background: white;
-  color: #3b3bff;
+  color: var(--primary);
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 1.25rem;
-  font-weight: 800;
+  padding: 1.25rem 3rem;
+  border-radius: 2rem;
+  font-weight: 850;
+  font-size: 1.1rem;
   cursor: pointer;
   margin-left: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.markBtn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.markBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .markBtn:disabled {
