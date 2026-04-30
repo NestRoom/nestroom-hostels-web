@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import AdminNav from '../components/AdminNav/AdminNav';
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./complaints.module.css";
+import { secureFetch } from "../utils/auth";
 import { 
   AlertCircle, 
   CheckCircle2, 
