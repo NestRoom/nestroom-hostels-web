@@ -1,40 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-  --background: #FDF8F6; /* Premium soft beige-pink background from screenshot */
-  --foreground: #1e293b; /* Clean dark text */
-  --primary: #3b3bff;   /* vibrant brand blue */
-  --accent: #E8AFAA;    /* Secondary warm accent */
+  --background: #fdf8f6;
+  --foreground: #111827;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary: #6B7280;
   --card-bg: #FFFFFF;
-  --sidebar-bg: #FFFFFF;
-  --sidebar-inactive: #64748b;
-  --sidebar-active-bg: #3b3bff;
-  --sidebar-active-text: #FFFFFF;
-}
-
-/* Enforce architectural theme even in dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #FDF8F6;
-    --foreground: #1e293b;
-  }
-}
-
-html,
-body {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: 'Poppins', sans-serif !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --card-radius: 2.5rem;
+  --button-radius: 1.25rem;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 25px 50px -15px rgba(0, 0, 0, 0.1);
+  --font-main: 'Poppins', sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-main) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, button, select, textarea {
+  font-family: inherit !important;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 a {
@@ -42,6 +43,7 @@ a {
   text-decoration: none;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -59,14 +61,36 @@ a {
   background: #94a3b8;
 }
 
-input, button, select, textarea {
-  font-family: inherit !important;
+/* Premium Component Classes (Optional usage) */
+.premium-btn-primary {
+  background: var(--primary);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: var(--button-radius);
+  border: none;
+  font-weight: 850;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
 }
 
-/* Utility for card aesthetic from screenshot */
+.premium-btn-primary:hover {
+  transform: translateY(-2px);
+  background: var(--primary-hover);
+  box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
+}
+
 .premium-card {
-  background: white;
-  border-radius: 2rem;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-  border: 1px solid rgba(0,0,0,0.02);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
 }

@@ -11,6 +11,10 @@ import {
   Maximize2, ArrowUpRight, DollarSign, Activity,
   MessageSquare, AlertCircle, ShieldCheck, Clock
 } from "lucide-react";
+import { 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
+} from 'recharts';
+import { secureFetch } from "../utils/auth";
 
 const DEFAULT_LAYOUT = [
   { id: 'stats', x: 0, y: 0, w: 12, h: 2, type: 'stats' },
@@ -19,7 +23,6 @@ const DEFAULT_LAYOUT = [
   { id: 'attendance', x: 0, y: 6, w: 4, h: 3, type: 'attendance' },
   { id: 'food', x: 4, y: 6, w: 4, h: 3, type: 'food' },
   { id: 'complaints', x: 8, y: 6, w: 4, h: 3, type: 'complaints' },
-  { id: 'actions', x: 0, y: 9, w: 12, h: 2, type: 'actions' },
 ];
 
 export default function DashboardPage() {
@@ -298,23 +301,6 @@ export default function DashboardPage() {
           </div>
         );
 
-      case 'actions':
-        return (
-          <div className={styles.actionGrid}>
-            {[
-              { label: 'Add Resident', icon: <PlusCircle size={24} />, route: '/residents' },
-              { label: 'Revenue List', icon: <DollarSign size={24} />, route: '/revenue' },
-              { label: 'Broadcast', icon: <Bell size={24} />, route: '/notification' },
-              { label: 'Hostel Info', icon: <Maximize2 size={24} />, route: '/profile' }
-            ].map(action => (
-              <div key={action.label} className={styles.actionBtn} onClick={() => router.push(action.route)}>
-                  {action.icon}
-                  <span>{action.label}</span>
-              </div>
-            ))}
-          </div>
-        );
-
       default: return null;
     }
   };
@@ -327,7 +313,6 @@ export default function DashboardPage() {
       case 'food': return { label: 'Culinary Schedule', icon: <Utensils size={20} color="#f59e0b" strokeWidth={2.5} /> };
       case 'attendance': return { label: 'Resident Verification', icon: <ShieldCheck size={20} color="#4f46e5" strokeWidth={2.5} /> };
       case 'complaints': return { label: 'Grievance Monitor', icon: <MessageSquare size={20} color="#ef4444" strokeWidth={2.5} /> };
-      case 'actions': return { label: 'Operational Control', icon: <PlusCircle size={20} color="#8b5cf6" strokeWidth={2.5} /> };
       default: return { label: 'Data Node', icon: <Activity size={20} /> };
     }
   };

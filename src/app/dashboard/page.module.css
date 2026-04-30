@@ -1,8 +1,8 @@
 .wrapper {
   display: block;
   min-height: 100vh;
-  background-color: #fdf8f6;
-  color: #111827;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .mainContent {
@@ -21,13 +21,13 @@
 .titleSection h1 {
   font-size: 2.75rem;
   font-weight: 850;
-  color: #111827;
+  color: var(--foreground);
   letter-spacing: -0.05em;
   margin: 0 0 0.5rem 0;
 }
 
 .titleSection p {
-  color: #6B7280;
+  color: var(--secondary);
   font-size: 1.15rem;
   font-weight: 500;
   margin: 0;
@@ -39,11 +39,11 @@
 }
 
 .saveBtn {
-  background: #4f46e5;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.85rem 1.75rem;
-  border-radius: 1.25rem;
+  border-radius: var(--button-radius);
   font-weight: 850;
   cursor: pointer;
   display: flex;
@@ -56,6 +56,7 @@
 .saveBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
+  background: var(--primary-hover);
 }
 
 .resetBtn {
@@ -63,7 +64,7 @@
   color: #EF4444;
   border: 2px solid #FEE2E2;
   padding: 0.85rem 1.5rem;
-  border-radius: 1.25rem;
+  border-radius: var(--button-radius);
   font-weight: 850;
   cursor: pointer;
   transition: all 0.2s;
@@ -86,7 +87,7 @@
 /* Widget Styles */
 .widget {
   background: white;
-  border-radius: 2.5rem;
+  border-radius: var(--card-radius);
   border: 1px solid rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
@@ -94,12 +95,12 @@
   position: relative;
   transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease;
   user-select: none;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 .widget:hover {
-  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.1);
-  border-color: #4f46e5;
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
 }
 
 .widgetHeader {
@@ -120,7 +121,7 @@
 .widgetTitle {
   font-size: 1rem;
   font-weight: 850;
-  color: #111827;
+  color: var(--foreground);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -163,12 +164,12 @@
   z-index: 1000;
   box-shadow: 0 40px 80px -20px rgba(79, 70, 229, 0.3) !important;
   transform: scale(1.02);
-  border: 2px solid #4f46e5 !important;
+  border: 2px solid var(--primary) !important;
 }
 
 .resizing {
   z-index: 1000;
-  border: 2px solid #4f46e5 !important;
+  border: 2px solid var(--primary) !important;
 }
 
 /* KPI Styles */
@@ -177,13 +178,13 @@
   font-weight: 850;
   letter-spacing: -0.05em;
   margin-bottom: 0.25rem;
-  color: #111827;
+  color: var(--foreground);
 }
 
 .kpiLabel {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #6B7280;
+  color: var(--secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -197,7 +198,7 @@
 
 .progressFill {
   height: 100%;
-  background: #4f46e5;
+  background: var(--primary);
   border-radius: 1rem;
 }
 
@@ -221,7 +222,7 @@
 
 .transactionItem:hover {
   background: white;
-  border-color: #4f46e5;
+  border-color: var(--primary);
   transform: translateX(5px);
 }
 
@@ -229,12 +230,12 @@
   font-size: 0.95rem;
   font-weight: 850;
   margin: 0;
-  color: #111827;
+  color: var(--foreground);
 }
 
 .transInfo p {
   font-size: 0.8rem;
-  color: #6B7280;
+  color: var(--secondary);
   margin: 0;
   font-weight: 600;
 }
@@ -271,8 +272,8 @@
 
 .actionBtn:hover {
   background: #f5f3ff;
-  color: #4f46e5;
-  border-color: #4f46e5;
+  color: var(--primary);
+  border-color: var(--primary);
   transform: translateY(-5px);
   box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.1);
 }
@@ -297,7 +298,7 @@
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
   font-weight: 850;
-  color: #4f46e5;
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
