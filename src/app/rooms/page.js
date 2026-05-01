@@ -20,6 +20,7 @@ import {
 import AdminNav from '../components/AdminNav/AdminNav';
 import Loading from '../components/Loading/Loading';
 import styles from './page.module.css';
+import { secureFetch } from '../utils/auth';
 
 export default function RoomsPage() {
   const router = useRouter();
@@ -48,9 +49,7 @@ export default function RoomsPage() {
           return;
         }
 
-        const meRes = await fetch('http://localhost:5001/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const meRes = await secureFetch('/v1/auth/me');
         if (!meRes.ok) throw new Error('Auth failed');
         const { data: meData } = await meRes.json();
         
@@ -62,9 +61,7 @@ export default function RoomsPage() {
         }
         setActiveHostelId(targetHostel);
 
-        const roomsRes = await fetch(`http://localhost:5001/v1/hostels/${targetHostel}/rooms`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const roomsRes = await secureFetch(`/v1/hostels/${targetHostel}/rooms`);
         const { data: roomsData } = await roomsRes.json();
 
         if (roomsData?.buildings?.length > 0) {
@@ -241,15 +238,16 @@ export default function RoomsPage() {
        for (let i = 0; i < buildings.length; i++) {
          let bObj = buildings[i];
          if (!bObj._id || String(bObj.id).startsWith('temp_')) {
-           const res = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/buildings`, {
-             method: 'POST', headers,
+           const res = await secureFetch(`/v1/hostels/${activeHostelId}/buildings`, {
+             method: 'POST', 
+             headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({ buildingName: bObj.name, buildingNumber: `B${i+1}`, floorCount: bObj.floors.length || 1, address: "Property" })
            });
            if (!res.ok) throw new Error("Failed building");
          }
        }
        
-       const refetchB = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/buildings`, { headers });
+       const refetchB = await secureFetch(`/v1/hostels/${activeHostelId}/buildings`);
        const { data: latestB } = await refetchB.json();
        const latestBuildingsData = latestB.buildings;
 
@@ -266,17 +264,21 @@ export default function RoomsPage() {
 
        const roomsToDelete = originalRooms.filter(orig => !currentUIRooms.find(cr => cr._id === orig._id));
        for (const rDelete of roomsToDelete) {
-         try { await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/rooms/${rDelete._id}`, { method: 'DELETE', headers }); } catch (e) {}
+         try { await secureFetch(`/v1/hostels/${activeHostelId}/rooms/${rDelete._id}`, { method: 'DELETE' }); } catch (e) {}
        }
 
        for (const rObj of currentUIRooms) {
          if (!rObj._id || String(rObj.uiTempId).startsWith('temp_')) {
-           await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/rooms`, {
-             method: 'POST', headers, body: JSON.stringify({ buildingId: rObj.dbBuildingId, floorNumber: rObj.floorNumber, roomNumber: rObj.roomNumber, roomType: rObj.roomType, bedCount: rObj.bedCount, monthlyFee: 1000 })
+           await secureFetch(`/v1/hostels/${activeHostelId}/rooms`, {
+             method: 'POST', 
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ buildingId: rObj.dbBuildingId, floorNumber: rObj.floorNumber, roomNumber: rObj.roomNumber, roomType: rObj.roomType, bedCount: rObj.bedCount, monthlyFee: 1000 })
            });
          } else {
-           await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/rooms/${rObj._id}`, {
-             method: 'PUT', headers, body: JSON.stringify({ bedCount: rObj.bedCount, roomType: rObj.roomType, roomNumber: rObj.roomNumber })
+           await secureFetch(`/v1/hostels/${activeHostelId}/rooms/${rObj._id}`, {
+             method: 'PUT', 
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ bedCount: rObj.bedCount, roomType: rObj.roomType, roomNumber: rObj.roomNumber })
            });
          }
        }
@@ -395,7 +397,7 @@ export default function RoomsPage() {
                 <LayoutGrid size={32} color="#4f46e5" />
               </div>
               <h2 className={styles.wizardTitle}>Initial Setup Wizard</h2>
-              <p className={styles.wizardSubtitle}>Let's initialize your property structure. You can add more details later.</p>
+              <p className={styles.wizardSubtitle}>Let&apos;s initialize your property structure. You can add more details later.</p>
             </div>
             <form onSubmit={handleSetupComplete} className={styles.wizardForm}>
               <div className={styles.formGroup}>

@@ -49,14 +49,14 @@ export default function AttendancePage() {
       if (!token) return;
 
       // 1. Get Me
-      const meRes = await secureFetch('http://localhost:5001/v1/auth/me');
+      const meRes = await secureFetch('/v1/auth/me');
       const meData = await meRes.json();
       const hId = meData.data?.user?.hostels?.[0]?._id;
       if (!hId) return;
       setHostelId(hId);
 
       // 2. Get Hostel Config
-      const hostelRes = await secureFetch(`http://localhost:5001/v1/hostels/${hId}`);
+      const hostelRes = await secureFetch(`/v1/hostels/${hId}`);
       const hostelData = await hostelRes.json();
       const h = hostelData.data;
       setConfig({
@@ -76,7 +76,7 @@ export default function AttendancePage() {
       const todayEnd = new Date();
       todayEnd.setHours(23, 59, 59, 999);
       
-      const recordsRes = await secureFetch(`http://localhost:5001/v1/hostels/${hId}/attendance?limit=100&fromDate=${todayStart.toISOString()}&toDate=${todayEnd.toISOString()}`);
+      const recordsRes = await secureFetch(`/v1/hostels/${hId}/attendance?limit=100&fromDate=${todayStart.toISOString()}&toDate=${todayEnd.toISOString()}`);
       const recordsData = await recordsRes.json();
       const records = recordsData.data?.records || [];
       setAttendanceRecords(records);
@@ -110,7 +110,7 @@ export default function AttendancePage() {
       const dateEnd = new Date(historyDate);
       dateEnd.setHours(23, 59, 59, 999);
       
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/attendance?limit=100&fromDate=${dateStart.toISOString()}&toDate=${dateEnd.toISOString()}`);
+      const res = await secureFetch(`/v1/hostels/${hostelId}/attendance?limit=100&fromDate=${dateStart.toISOString()}&toDate=${dateEnd.toISOString()}`);
       const data = await res.json();
       setHistoryRecords(data.data?.records || []);
     } catch (e) {
@@ -127,7 +127,7 @@ export default function AttendancePage() {
   const triggerSurpriseCheck = async () => {
     if (!hostelId) return;
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/attendance/request?isSurprise=true`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/attendance/request?isSurprise=true`, {
         method: 'POST'
       });
       const data = await res.json();
@@ -145,7 +145,7 @@ export default function AttendancePage() {
   const saveConfig = async (e) => {
     e.preventDefault();
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/attendance/config`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/attendance/config`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json'

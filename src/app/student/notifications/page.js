@@ -14,7 +14,7 @@ export default function NotificationsPage() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/notifications");
+      const res = await secureFetch("/v1/residents/notifications");
       const data = await res.json();
       if (data.success) {
         setNotifications(data.data.notifications);
@@ -32,7 +32,7 @@ export default function NotificationsPage() {
 
   const markAsRead = async (id) => {
     try {
-      await secureFetch(`http://localhost:5001/v1/residents/notifications/${id}/read`, {
+      await secureFetch(`/v1/residents/notifications/${id}/read`, {
         method: "PUT"
       });
       // Optionally update local state to mark as read immediately

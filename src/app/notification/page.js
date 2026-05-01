@@ -6,9 +6,9 @@ import AdminNav from '../components/AdminNav/AdminNav';
 import Loading from '../components/Loading/Loading';
 import styles from './notification.module.css';
 import { 
-  Plus, Bell, PieChart, Users, Eye, X, Send, 
   CheckCircle2, AlertTriangle, CreditCard, ClipboardCheck, Info
 } from 'lucide-react';
+import { secureFetch } from '../utils/auth';
 
 const NOTIFICATION_TYPES = [
   { value: 'Announcement', icon: <Info size={16} />, className: styles.typeAnnouncement },
@@ -50,9 +50,7 @@ export default function NotificationPage() {
           return;
         }
 
-        const meRes = await fetch('http://localhost:5001/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const meRes = await secureFetch('/v1/auth/me');
         if (!meRes.ok) throw new Error('Auth failed');
         const { data: meData } = await meRes.json();
         
@@ -64,9 +62,7 @@ export default function NotificationPage() {
         setActiveHostelId(targetHostel);
 
         // Fetch Notifications
-        const res = await fetch(`http://localhost:5001/v1/hostels/${targetHostel}/notifications`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await secureFetch(`/v1/hostels/${targetHostel}/notifications`);
         const { data } = await res.json();
         setNotifications(data.notifications || []);
         
@@ -105,10 +101,9 @@ export default function NotificationPage() {
         payload.type = 'Survey'; // Force survey type for polls
       }
 
-      const res = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/notifications`, {
+      const res = await secureFetch(`/v1/hostels/${activeHostelId}/notifications`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
@@ -117,9 +112,7 @@ export default function NotificationPage() {
       if (res.ok) {
         const { data } = await res.json();
         // Refresh notifications
-        const listRes = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/notifications`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const listRes = await secureFetch(`/v1/hostels/${activeHostelId}/notifications`);
         const { data: listData } = await listRes.json();
         setNotifications(listData.notifications || []);
         setIsModalOpen(false);

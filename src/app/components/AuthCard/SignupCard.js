@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
-import { setTokens } from '../../utils/auth';
+import { setTokens, API_URL } from '../../utils/auth';
 
 export default function SignupCard() {
 
@@ -75,7 +75,7 @@ export default function SignupCard() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/v1/auth/owner/signup', {
+      const res = await fetch(`${API_URL}/v1/auth/owner/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -108,7 +108,7 @@ export default function SignupCard() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/v1/auth/owner/verify-signup', {
+      const res = await fetch(`${API_URL}/v1/auth/owner/verify-signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

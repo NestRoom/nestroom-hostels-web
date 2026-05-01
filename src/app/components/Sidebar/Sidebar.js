@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { secureFetch } from '../../utils/auth';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -21,9 +22,7 @@ export default function Sidebar() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
       try {
-        const res = await fetch('http://localhost:5001/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await secureFetch('/v1/auth/me');
         if (res.ok) {
           const { data } = await res.json();
           setUserMetadata({

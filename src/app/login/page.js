@@ -17,7 +17,7 @@ export default function LoginPage() {
       if (!token) return;
 
       try {
-        const res = await secureFetch("http://localhost:5001/v1/auth/me");
+        const res = await secureFetch("/v1/auth/me");
         const data = await res.json();
         
         if (data.success) {

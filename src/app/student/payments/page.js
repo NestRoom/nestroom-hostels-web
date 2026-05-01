@@ -20,9 +20,9 @@ export default function StudentPayments() {
   const fetchData = async () => {
     try {
       const [profileRes, upcomingRes, historyRes] = await Promise.all([
-        secureFetch("http://localhost:5001/v1/residents/profile"),
-        secureFetch("http://localhost:5001/v1/residents/payments/upcoming"),
-        secureFetch("http://localhost:5001/v1/residents/payments/history")
+        secureFetch("/v1/residents/profile"),
+        secureFetch("/v1/residents/payments/upcoming"),
+        secureFetch("/v1/residents/payments/history")
       ]);
 
       const profileData = await profileRes.json();
@@ -46,7 +46,7 @@ export default function StudentPayments() {
 
     try {
       // 1. Initialize Order
-      const res = await secureFetch("http://localhost:5001/v1/residents/payments/initialize", {
+      const res = await secureFetch("/v1/residents/payments/initialize", {
         method: "POST"
       });
       const order = await res.json();
@@ -68,7 +68,7 @@ export default function StudentPayments() {
         handler: async function (response) {
           // 3. Verify Payment
           try {
-            const verifyRes = await secureFetch("http://localhost:5001/v1/residents/payments/verify", {
+            const verifyRes = await secureFetch("/v1/residents/payments/verify", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -110,7 +110,7 @@ export default function StudentPayments() {
 
   const handleDownloadInvoice = async (paymentId) => {
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/residents/payments/invoice/${paymentId}`);
+      const res = await secureFetch(`/v1/residents/payments/invoice/${paymentId}`);
       if (!res.ok) throw new Error("Failed to download invoice");
       
       const blob = await res.blob();

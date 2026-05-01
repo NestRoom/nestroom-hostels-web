@@ -26,7 +26,7 @@ export default function ComplaintsPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const meRes = await secureFetch('http://localhost:5001/v1/auth/me');
+      const meRes = await secureFetch('/v1/auth/me');
       const meData = await meRes.json();
       const hId = meData.data.user.hostels?.[0]?._id;
       if (!hId) {
@@ -35,7 +35,7 @@ export default function ComplaintsPage() {
       }
       setHostelId(hId);
 
-      const compRes = await secureFetch(`http://localhost:5001/v1/hostels/${hId}/complaints?limit=100`);
+      const compRes = await secureFetch(`/v1/hostels/${hId}/complaints?limit=100`);
       const compData = await compRes.json();
       if (compData.success) {
         setComplaints(compData.data.complaints || []);
@@ -54,7 +54,7 @@ export default function ComplaintsPage() {
   const handleResolve = async (complaintId) => {
     if (!confirm("Mark this complaint as resolved?")) return;
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/complaints/${complaintId}/status`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/complaints/${complaintId}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "Resolved", remarks: "Resolved by admin" })
@@ -73,7 +73,7 @@ export default function ComplaintsPage() {
   const handleDelete = async (complaintId) => {
     if (!confirm("Are you sure you want to remove this complaint?")) return;
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/complaints/${complaintId}`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/complaints/${complaintId}`, {
         method: "DELETE"
       });
       const data = await res.json();

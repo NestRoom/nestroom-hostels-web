@@ -5,6 +5,7 @@ import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { secureFetch, API_URL } from "../utils/auth";
 
 export default function FoodPage() {
   const [hostelId, setHostelId] = useState("");
@@ -50,9 +51,7 @@ export default function FoodPage() {
       if (!token) return;
 
       // 1. Get Me & Hostel ID
-      const meRes = await fetch("http://localhost:5001/v1/auth/me", {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const meRes = await secureFetch("/v1/auth/me");
       const { data: meData } = await meRes.json();
       const hId = meData.user.hostels?.[0]?._id;
       if (!hId) return;
@@ -62,9 +61,7 @@ export default function FoodPage() {
       const midWeek = new Date(weekStart);
       midWeek.setDate(midWeek.getDate() + 3);
       
-      const res = await fetch(`http://localhost:5001/v1/hostels/${hId}/food-schedule?date=${midWeek.toISOString()}`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const res = await secureFetch(`/v1/hostels/${hId}/food-schedule?date=${midWeek.toISOString()}`);
       const data = await res.json();
       
       if (data.success) {
@@ -160,11 +157,10 @@ export default function FoodPage() {
     }
 
     try {
-        const res = await fetch(`http://localhost:5001/v1/hostels/${hostelId}/food-schedule`, {
+        const res = await secureFetch("/v1/hostels/" + hostelId + "/food-schedule", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(newSchedule)
         });
@@ -313,7 +309,7 @@ export default function FoodPage() {
             <div className={styles.emptyState}>
                 <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🍽️</div>
                 <h3>No Culinary Roadmap Defined</h3>
-                <p>The menu for this week hasn't been drafted yet. Initialize a new schedule to keep your residents informed.</p>
+                <p>The menu for this week hasn&apos;t been drafted yet. Initialize a new schedule to keep your residents informed.</p>
                 <button className={styles.submitBtn} onClick={() => openEditMeal(weekDays[0], mealTypes[0], null)}>
                   Create Weekly Schedule
                 </button>

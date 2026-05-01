@@ -16,9 +16,9 @@ export default function StudentOverview() {
   const fetchData = async () => {
     try {
       const [profileRes, activeRes, notifRes] = await Promise.all([
-        secureFetch("http://localhost:5001/v1/residents/profile"),
-        secureFetch("http://localhost:5001/v1/residents/attendance/active"),
-        secureFetch("http://localhost:5001/v1/residents/notifications?limit=5")
+        secureFetch("/v1/residents/profile"),
+        secureFetch("/v1/residents/attendance/active"),
+        secureFetch("/v1/residents/notifications?limit=5")
       ]);
 
       const profileData = await profileRes.json();
@@ -59,7 +59,7 @@ export default function StudentOverview() {
       async (position) => {
         try {
           const { latitude, longitude, accuracy } = position.coords;
-          const res = await secureFetch("http://localhost:5001/v1/residents/attendance/submit", {
+          const res = await secureFetch("/v1/residents/attendance/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status: "Present", latitude, longitude, accuracy })

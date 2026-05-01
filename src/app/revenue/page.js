@@ -37,7 +37,7 @@ export default function RevenuePage() {
           return;
         }
 
-        const meRes = await secureFetch('http://localhost:5001/v1/auth/me');
+        const meRes = await secureFetch('/v1/auth/me');
         if (!meRes.ok) throw new Error('Auth failed');
         const meData = await meRes.json();
         
@@ -56,7 +56,7 @@ export default function RevenuePage() {
         await Promise.all([
           (async () => {
             try {
-              const res = await secureFetch(`http://localhost:5001/v1/hostels/${targetHostelId}/revenue?timeframe=${timeframe}`);
+              const res = await secureFetch(`/v1/hostels/${targetHostelId}/revenue?timeframe=${timeframe}`);
               const data = await res.json();
               if (data.success) setDashboardData(data.data);
             } catch (e) {
@@ -65,7 +65,7 @@ export default function RevenuePage() {
           })(),
           (async () => {
             try {
-              const res = await secureFetch(`http://localhost:5001/v1/hostels/${targetHostelId}/payments?limit=50`);
+              const res = await secureFetch(`/v1/hostels/${targetHostelId}/payments?limit=50`);
               const data = await res.json();
               if (data.success) setPayments(data.data.payments || []);
             } catch (e) {
@@ -85,7 +85,7 @@ export default function RevenuePage() {
   const fetchDashboardData = async () => {
     if (!activeHostelId) return;
     try {
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${activeHostelId}/revenue?timeframe=${timeframe}`);
+      const res = await secureFetch(`/v1/hostels/${activeHostelId}/revenue?timeframe=${timeframe}`);
       const data = await res.json();
       if (data.success) setDashboardData(data.data);
     } catch (error) {
@@ -97,7 +97,7 @@ export default function RevenuePage() {
     if (!activeHostelId) return;
     try {
       setLoading(true);
-      const res = await secureFetch(`http://localhost:5001/v1/hostels/${activeHostelId}/payments?limit=50`);
+      const res = await secureFetch(`/v1/hostels/${activeHostelId}/payments?limit=50`);
       const data = await res.json();
       if (data.success) setPayments(data.data.payments || []);
     } catch (error) {

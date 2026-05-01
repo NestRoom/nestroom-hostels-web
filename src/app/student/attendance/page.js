@@ -33,9 +33,9 @@ export default function StudentAttendance() {
     setLoading(true);
     try {
       const [activeRes, historyRes, leavesRes] = await Promise.all([
-        secureFetch("http://localhost:5001/v1/residents/attendance/active"),
-        secureFetch("http://localhost:5001/v1/residents/attendance/history"),
-        secureFetch("http://localhost:5001/v1/residents/leaves")
+        secureFetch("/v1/residents/attendance/active"),
+        secureFetch("/v1/residents/attendance/history"),
+        secureFetch("/v1/residents/leaves")
       ]);
 
       const activeData = await activeRes.json();
@@ -84,7 +84,7 @@ export default function StudentAttendance() {
         try {
           const { latitude, longitude, accuracy } = position.coords;
           
-          const res = await secureFetch("http://localhost:5001/v1/residents/attendance/submit", {
+          const res = await secureFetch("/v1/residents/attendance/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status: "Present", latitude, longitude, accuracy })
@@ -117,7 +117,7 @@ export default function StudentAttendance() {
     setApplyingLeave(true);
     
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/leaves", {
+      const res = await secureFetch("/v1/residents/leaves", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(leaveForm)
