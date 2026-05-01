@@ -69,7 +69,7 @@ export default function ProfilePage() {
           return;
         }
 
-        const res = await secureFetch('http://localhost:5001/v1/auth/me');
+        const res = await secureFetch('/v1/auth/me');
         
         if (!res.ok) {
           if (res.status === 401) router.push('/login');
@@ -86,7 +86,7 @@ export default function ProfilePage() {
         const formattedHostels = await Promise.all(fetchedHostels.map(async (hostelObj) => {
           let pComp = 0;
           try {
-            const compRes = await secureFetch(`http://localhost:5001/v1/hostels/${hostelObj._id}/profile-completion`);
+            const compRes = await secureFetch(`/v1/hostels/${hostelObj._id}/profile-completion`);
             if (compRes.ok) {
               const compData = await compRes.json();
               pComp = compData.data?.overallCompletion || 0;
@@ -205,7 +205,7 @@ export default function ProfilePage() {
     const token = localStorage.getItem('accessToken');
     try {
       // 1. Update User Details
-      await secureFetch('http://localhost:5001/v1/auth/me', {
+      await secureFetch('/v1/auth/me', {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json'
@@ -236,7 +236,7 @@ export default function ProfilePage() {
           };
         }
 
-        await secureFetch(`http://localhost:5001/v1/hostels/${hostel._id}`, {
+        await secureFetch(`/v1/hostels/${hostel._id}`, {
           method: 'PUT',
           headers: { 
             'Content-Type': 'application/json'
@@ -248,7 +248,7 @@ export default function ProfilePage() {
         });
 
         if (hostel.bankAccountName || hostel.bankAccountNumber) {
-          await secureFetch(`http://localhost:5001/v1/hostels/${hostel._id}/bank`, {
+          await secureFetch(`/v1/hostels/${hostel._id}/bank`, {
             method: 'PUT',
             headers: { 
               'Content-Type': 'application/json'
@@ -295,7 +295,7 @@ export default function ProfilePage() {
            return setPwdError('New passwords do not match.');
         }
         // Send OTP
-        const res = await fetch('http://localhost:5001/v1/auth/forgot-password', {
+        const res = await fetch('/v1/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: profileData.email })
@@ -307,7 +307,7 @@ export default function ProfilePage() {
         setPasswordFlow('change_verify');
       } else if (passwordFlow === 'change_verify') {
         if (!pwdFormData.otp) return setPwdError('OTP is required.');
-        const res = await secureFetch('http://localhost:5001/v1/auth/change-password', {
+        const res = await secureFetch('/v1/auth/change-password', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json' 
@@ -327,7 +327,7 @@ export default function ProfilePage() {
         setPasswordModalOpen(false);
       } else if (passwordFlow === 'forgot') {
         // Send OTP
-        const res = await fetch('http://localhost:5001/v1/auth/forgot-password', {
+        const res = await fetch('/v1/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: profileData.email })
@@ -344,7 +344,7 @@ export default function ProfilePage() {
         if (pwdFormData.newPassword !== pwdFormData.confirmPassword) {
            return setPwdError('New passwords do not match.');
         }
-        const res = await fetch('http://localhost:5001/v1/auth/reset-password', {
+        const res = await fetch('/v1/auth/reset-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 

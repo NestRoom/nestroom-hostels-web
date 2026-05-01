@@ -28,6 +28,7 @@ import {
 import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
+import { secureFetch } from "../utils/auth";
 
 export default function ResidentsPage() {
   const [residents, setResidents] = useState([]);
@@ -59,24 +60,18 @@ export default function ResidentsPage() {
       const token = localStorage.getItem("accessToken");
       if (!token) return;
 
-      const meRes = await fetch('http://localhost:5001/v1/auth/me', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const meRes = await secureFetch('/v1/auth/me');
       const { data: meData } = await meRes.json();
       const hId = meData.user.hostels?.[0]?._id;
       if (!hId) return;
       setHostelId(hId);
 
-      const resRooms = await fetch(`http://localhost:5001/v1/hostels/${hId}/rooms`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const resRooms = await secureFetch(`/v1/hostels/${hId}/rooms`);
       const dataRooms = await resRooms.json();
       const bData = dataRooms.data?.buildings || [];
       setBuildings(bData);
 
-      const resResidents = await fetch(`http://localhost:5001/v1/hostels/${hId}/residents?page=${currentPage}&limit=${limit}&search=${searchQuery}&status=${statusFilter === 'All' ? '' : statusFilter}`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const resResidents = await secureFetch(`/v1/hostels/${hId}/residents?page=${currentPage}&limit=${limit}&search=${searchQuery}&status=${statusFilter === 'All' ? '' : statusFilter}`);
       const dataResidents = await resResidents.json();
       
       if (dataResidents.data) {
@@ -355,9 +350,9 @@ function ResidentDetailModal({ resident, hostelId, onClose, onUpdate }) {
     setProcessing(true);
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await fetch(`http://localhost:5001/v1/hostels/${hostelId}/residents/${resident._id}/kyc`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/residents/${resident._id}/kyc`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, rejectionReason })
       });
       const data = await res.json();
@@ -491,9 +486,9 @@ function AddResidentModal({ isOpen, onClose, buildings, hostelId, onSuccess }) {
         enrollmentNumber: formData.collegeIdNumber // Backend expects enrollmentNumber
       };
 
-      const res = await fetch(`http://localhost:5001/v1/hostels/${hostelId}/residents`, {
+      const res = await secureFetch(`/v1/hostels/${hostelId}/residents`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const data = await res.json();

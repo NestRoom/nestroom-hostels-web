@@ -58,17 +58,17 @@ export default function DashboardPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const meRes = await secureFetch("http://localhost:5001/v1/auth/me");
+      const meRes = await secureFetch("/v1/auth/me");
       const { data: meData } = await meRes.json();
       const hId = meData.user.hostels?.[0]?._id;
       if (!hId) return;
 
       const [revRes, foodRes, resRes, compRes, attRes] = await Promise.all([
-        secureFetch(`http://localhost:5001/v1/hostels/${hId}/revenue`),
-        secureFetch(`http://localhost:5001/v1/hostels/${hId}/food-schedule`),
-        secureFetch(`http://localhost:5001/v1/hostels/${hId}/residents?limit=5`),
-        secureFetch(`http://localhost:5001/v1/hostels/${hId}/complaints?limit=5`),
-        secureFetch(`http://localhost:5001/v1/hostels/${hId}/attendance`),
+        secureFetch(`/v1/hostels/${hId}/revenue`),
+        secureFetch(`/v1/hostels/${hId}/food-schedule`),
+        secureFetch(`/v1/hostels/${hId}/residents?limit=5`),
+        secureFetch(`/v1/hostels/${hId}/complaints?limit=5`),
+        secureFetch(`/v1/hostels/${hId}/attendance`),
       ]);
 
       const [rev, food, resList, compList, attList] = await Promise.all([

@@ -27,7 +27,7 @@ export default function StudentProfile() {
 
   const fetchProfile = async () => {
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/profile");
+      const res = await secureFetch("/v1/residents/profile");
       const data = await res.json();
       if (data.success) {
         setResident(data.data.resident);
@@ -65,7 +65,7 @@ export default function StudentProfile() {
     if (files.collegeIdPhoto) formData.append("collegeIdPhoto", files.collegeIdPhoto);
 
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/kyc-upload", {
+      const res = await secureFetch("/v1/residents/kyc-upload", {
         method: "POST",
         body: formData, // secureFetch handles multipart/form-data when body is FormData
       });

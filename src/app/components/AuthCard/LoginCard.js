@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
 
-import { setTokens } from '../../utils/auth';
+import { setTokens, API_URL } from '../../utils/auth';
 
 export default function LoginCard() {
   const router = useRouter();
@@ -22,8 +22,8 @@ export default function LoginCard() {
     setLoading(true);
 
     const endpoint = loginType === 'resident' 
-      ? 'http://localhost:5001/v1/auth/resident/login' 
-      : 'http://localhost:5001/v1/auth/login';
+      ? `${API_URL}/v1/auth/resident/login` 
+      : `${API_URL}/v1/auth/login`;
 
     const body = loginType === 'resident'
       ? { residentId, email, password }

@@ -28,7 +28,7 @@ export default function StudentComplaints() {
 
   const fetchComplaints = async () => {
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/complaints");
+      const res = await secureFetch("/v1/residents/complaints");
       const data = await res.json();
       if (data.success) {
         setComplaints(data.data.complaints);
@@ -50,7 +50,7 @@ export default function StudentComplaints() {
     attachments.forEach(file => formData.append("attachments", file));
 
     try {
-      const res = await secureFetch("http://localhost:5001/v1/residents/complaints", {
+      const res = await secureFetch("/v1/residents/complaints", {
         method: "POST",
         body: formData
       });

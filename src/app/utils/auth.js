@@ -31,21 +31,31 @@ export const isAuthenticated = () => {
     return typeof window !== 'undefined' && !!localStorage.getItem('accessToken');
 };
 
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+
 export const secureFetch = async (url, options = {}) => {
+    // Substitute hardcoded localhost with env variable if present, 
+    // or prepend API_URL if it's a relative path
+    const normalizedUrl = url.startsWith('http://localhost:5001') 
+        ? url.replace('http://localhost:5001', API_URL)
+        : url.startsWith('/') 
+            ? `${API_URL}${url}` 
+            : url;
+
     const accessToken = getAccessToken();
     const headers = {
         ...options.headers,
         'Authorization': `Bearer ${accessToken}`,
     };
 
-    let response = await fetch(url, { ...options, headers });
+    let response = await fetch(normalizedUrl, { ...options, headers });
 
     if (response.status === 401) {
         // Try to refresh token
         const refreshToken = getRefreshToken();
         if (refreshToken) {
             try {
-                const refreshRes = await fetch('http://localhost:5001/v1/auth/refresh-token', {
+                const refreshRes = await fetch(`${API_URL}/v1/auth/refresh-token`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ refreshToken }),

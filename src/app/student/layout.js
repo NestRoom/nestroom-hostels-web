@@ -18,8 +18,8 @@ export default function StudentLayout({ children }) {
   const fetchProfile = async () => {
     try {
       const [profileRes, notifRes] = await Promise.all([
-        secureFetch("http://localhost:5001/v1/residents/profile"),
-        secureFetch("http://localhost:5001/v1/residents/notifications")
+        secureFetch("/v1/residents/profile"),
+        secureFetch("/v1/residents/notifications")
       ]);
 
       const profileData = await profileRes.json();

@@ -18,7 +18,7 @@ export default function NavBar() {
       }
 
       try {
-        const res = await secureFetch('http://localhost:5001/v1/auth/me');
+        const res = await secureFetch('/v1/auth/me');
         if (res.status === 429) {
            console.warn("Auth check rate limited");
            return; // Keep current state

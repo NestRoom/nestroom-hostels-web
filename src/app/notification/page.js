@@ -9,6 +9,7 @@ import {
   Plus, Bell, PieChart, Users, Eye, X, Send, 
   CheckCircle2, AlertTriangle, CreditCard, ClipboardCheck, Info
 } from 'lucide-react';
+import { secureFetch } from '../utils/auth';
 
 const NOTIFICATION_TYPES = [
   { value: 'Announcement', icon: <Info size={16} />, className: styles.typeAnnouncement },
@@ -26,6 +27,7 @@ export default function NotificationPage() {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState(null);
 
   // New Notification Form State
   const [formData, setFormData] = useState({
@@ -44,15 +46,7 @@ export default function NotificationPage() {
   useEffect(() => {
     const initData = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          router.push('/login');
-          return;
-        }
-
-        const meRes = await fetch('http://localhost:5001/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const meRes = await secureFetch('/v1/auth/me');
         if (!meRes.ok) throw new Error('Auth failed');
         const { data: meData } = await meRes.json();
         
@@ -64,9 +58,7 @@ export default function NotificationPage() {
         setActiveHostelId(targetHostel);
 
         // Fetch Notifications
-        const res = await fetch(`http://localhost:5001/v1/hostels/${targetHostel}/notifications`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await secureFetch(`/v1/hostels/${targetHostel}/notifications`);
         const { data } = await res.json();
         setNotifications(data.notifications || []);
         
@@ -85,11 +77,10 @@ export default function NotificationPage() {
 
   const handleCreateNotification = async (e) => {
     e.preventDefault();
+    setError(null);
     setIsSending(true);
 
     try {
-      const token = localStorage.getItem('accessToken');
-      
       const payload = {
         title: formData.title,
         message: formData.message,
@@ -105,23 +96,29 @@ export default function NotificationPage() {
         payload.type = 'Survey'; // Force survey type for polls
       }
 
-      const res = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/notifications`, {
+      const res = await secureFetch(`/v1/hostels/${activeHostelId}/notifications`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       });
 
       if (res.ok) {
-        const { data } = await res.json();
+        const { data: createdData } = await res.json();
         // Refresh notifications
-        const listRes = await fetch(`http://localhost:5001/v1/hostels/${activeHostelId}/notifications`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const listRes = await secureFetch(`/v1/hostels/${activeHostelId}/notifications`);
         const { data: listData } = await listRes.json();
-        setNotifications(listData.notifications || []);
+        const newList = listData.notifications || [];
+        setNotifications(newList);
+        
+        // Auto-select the newly created notification
+        if (createdData.notification) {
+           setSelectedNotification(createdData.notification);
+        } else if (newList.length > 0) {
+           setSelectedNotification(newList[0]);
+        }
+
         setIsModalOpen(false);
         // Reset form
         setFormData({
@@ -131,6 +128,9 @@ export default function NotificationPage() {
           recipientType: 'AllResidents',
           poll: { isPoll: false, pollQuestion: '', pollOptions: ['', ''], pollType: 'MultiChoice' }
         });
+      } else {
+        const errorData = await res.json();
+        setError(errorData.error?.message || "Failed to transmit broadcast");
       }
     } catch (err) {
       console.error(err);
@@ -461,10 +461,13 @@ export default function NotificationPage() {
                         ))}
                      </div>
                      <button type="button" className={styles.addOptionBtn} style={{ marginTop: '1rem' }} onClick={addPollOption}>
-                        + Add Response Option
+                        <Plus size={16} />
+                        Add Response Option
                      </button>
                   </div>
                 )}
+
+                {error && <p className={styles.errorMessage}>{error}</p>}
 
                 <button type="submit" className={styles.submitBtn} style={{ marginTop: '1rem' }} disabled={isSending}>
                   <Send size={20} />

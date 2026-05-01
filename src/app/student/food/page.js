@@ -37,7 +37,7 @@ export default function StudentFoodCalendar() {
       const midWeek = new Date(weekStart);
       midWeek.setDate(midWeek.getDate() + 3);
       
-      const res = await secureFetch(`http://localhost:5001/v1/residents/food-schedule?date=${midWeek.toISOString()}`);
+      const res = await secureFetch(`/v1/residents/food-schedule?date=${midWeek.toISOString()}`);
       const data = await res.json();
       
       if (data.success) {
