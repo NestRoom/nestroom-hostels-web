@@ -60,21 +60,21 @@ export default function NotificationsPage() {
       <header className={styles.header}>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>Notice Board</h1>
-          <p className={styles.subtitle}>Updates and announcements from your hostel management.</p>
+          <p className={styles.subtitle}>Stay informed with official updates from NestRoom Management.</p>
         </div>
       </header>
 
       <div className={styles.mainGrid}>
         <aside className={styles.listCard}>
           <div className={styles.listHeader}>
-             <span>Recent Messages</span>
-             {unreadCount > 0 && <span className={styles.count}>{unreadCount}</span>}
+             <span>Recent Updates</span>
+             {unreadCount > 0 && <span className={styles.count}>{unreadCount} New</span>}
           </div>
           <div className={styles.notifList}>
             {notifications.length === 0 ? (
-              <div className={styles.empty}>No notifications yet</div>
+              <div className={styles.empty}>No announcements at this time.</div>
             ) : (
-              notifications.map((notif) => (
+              [...notifications].reverse().map((notif) => (
                 <div 
                   key={notif._id} 
                   className={`${styles.notifItem} ${selectedNotif?._id === notif._id ? styles.active : ""}`}
@@ -85,11 +85,11 @@ export default function NotificationsPage() {
                       {notif.type}
                     </span>
                     <span className={styles.date}>
-                      {new Date(notif.sentAt).toLocaleDateString()}
+                      {new Date(notif.sentAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                     </span>
                   </div>
                   <h3 className={styles.itemTitle}>{notif.title}</h3>
-                  <p className={styles.itemPreview}>{notif.message.substring(0, 50)}...</p>
+                  <p className={styles.itemPreview}>{notif.message}</p>
                 </div>
               ))
             )}
@@ -98,18 +98,23 @@ export default function NotificationsPage() {
 
         <main className={styles.contentCard}>
           {selectedNotif ? (
-            <div className={styles.notifDeatils}>
+            <div key={selectedNotif._id} className={styles.notifDeatils}>
                <div className={styles.detailsHeader}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                    <span className={`${styles.typeTag} ${styles[selectedNotif.type.toLowerCase()]}`}>
-                      {selectedNotif.type}
-                    </span>
-                    <span className={styles.fullDate}>
-                      {new Date(selectedNotif.sentAt).toLocaleString("en-GB", { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                    </span>
+                  <div className={styles.fullDate}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    {new Date(selectedNotif.sentAt).toLocaleString("en-IN", { 
+                      day: '2-digit', month: 'long', year: 'numeric', 
+                      hour: '2-digit', minute: '2-digit', hour12: true 
+                    })}
                   </div>
                   <h2 className={styles.detailsTitle}>{selectedNotif.title}</h2>
+                  <div style={{ marginTop: '1.5rem' }}>
+                    <span className={`${styles.typeTag} ${styles[selectedNotif.type.toLowerCase()]}`}>
+                      Official {selectedNotif.type}
+                    </span>
+                  </div>
                </div>
+               
                <div className={styles.messageBody}>
                  {selectedNotif.message.split("\n").map((line, i) => (
                    <p key={i}>{line}</p>
@@ -118,16 +123,24 @@ export default function NotificationsPage() {
                
                {selectedNotif.poll?.isPoll && (
                  <div className={styles.pollSection}>
-                   <h4 className={styles.pollQuestion}>{selectedNotif.poll.pollQuestion}</h4>
-                   <p className={styles.pollHint}>Note: Poll responses are currently managed in the mobile app.</p>
+                   <h4 className={styles.pollQuestion}>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '1rem', color: '#3b3bff' }}><path d="M12 20v-6M9 20v-10M15 20v-2M18 20V4M6 20v-4"/></svg>
+                     {selectedNotif.poll.pollQuestion}
+                   </h4>
+                   <p className={styles.pollHint}>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                     Poll voting is currently optimized for the mobile application.
+                   </p>
                  </div>
                )}
             </div>
           ) : (
             <div className={styles.noSelection}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2, marginBottom: "1rem" }}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-              <h3>Select a message to read</h3>
-              <p>Stay updated with the latest news from your warden.</p>
+              <div style={{ background: '#f8fafc', padding: '3rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              </div>
+              <h3>Select an Announcement</h3>
+              <p>Stay updated with the latest news, events, and official notices from your warden.</p>
             </div>
           )}
         </main>

@@ -4,6 +4,18 @@ import AdminNav from '../components/AdminNav/AdminNav';
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./complaints.module.css";
 import { secureFetch } from "../utils/auth";
+import { 
+  AlertCircle, 
+  CheckCircle2, 
+  Clock, 
+  MessageSquare, 
+  Trash2, 
+  Check, 
+  Users, 
+  Search,
+  Filter,
+  Flag
+} from 'lucide-react';
 
 export default function ComplaintsPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +26,6 @@ export default function ComplaintsPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      // 1. Get Me to find hostelId
       const meRes = await secureFetch('http://localhost:5001/v1/auth/me');
       const meData = await meRes.json();
       const hId = meData.data.user.hostels?.[0]?._id;
@@ -24,7 +35,6 @@ export default function ComplaintsPage() {
       }
       setHostelId(hId);
 
-      // 2. Fetch Complaints
       const compRes = await secureFetch(`http://localhost:5001/v1/hostels/${hId}/complaints?limit=100`);
       const compData = await compRes.json();
       if (compData.success) {
@@ -51,32 +61,35 @@ export default function ComplaintsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        fetchData(); // Refresh
+        fetchData();
       } else {
         alert(data.error?.message || "Failed to resolve complaint");
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred");
     }
   };
 
   const handleDelete = async (complaintId) => {
-    if (!confirm("Are you sure you want to remove this complaint? This cannot be undone.")) return;
+    if (!confirm("Are you sure you want to remove this complaint?")) return;
     try {
       const res = await secureFetch(`http://localhost:5001/v1/hostels/${hostelId}/complaints/${complaintId}`, {
         method: "DELETE"
       });
       const data = await res.json();
       if (data.success) {
-        fetchData(); // Refresh
-      } else {
-        alert(data.error?.message || "Failed to remove complaint");
+        fetchData();
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred");
     }
+  };
+
+  const stats = {
+    total: complaints.length,
+    open: complaints.filter(c => c.status === 'Open' || c.status === 'InProgress').length,
+    high: complaints.filter(c => c.priority === 'High' && c.status !== 'Resolved').length,
+    resolved: complaints.filter(c => c.status === 'Resolved').length
   };
 
   const filteredComplaints = complaints.filter(c => {
@@ -91,49 +104,82 @@ export default function ComplaintsPage() {
       {isLoading && <LoadingComponent />}
       <AdminNav />
       
-      <div className={styles.mainContent}>
-        <div className={styles.header}>
+      <main className={styles.mainContent}>
+        <header className={styles.header}>
           <div>
-            <h1 className={styles.title}>Resident Complaints</h1>
-            <p className={styles.subtitle}>Manage and resolve issues reported by residents.</p>
+            <h1 className={styles.title}>Complaints Desk</h1>
+            <p className={styles.subtitle}>Manage, track, and resolve resident grievances with precision.</p>
           </div>
-          <div className={styles.filters}>
-            <select 
-              className={styles.filterSelect}
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="All">All Complaints</option>
-              <option value="Open">Open & In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
+        </header>
+
+        {/* KPI Section */}
+        <div className={styles.kpiContainer}>
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#eff6ff', color: '#3b82f6' }}>
+              <MessageSquare size={28} />
+            </div>
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue}>{stats.open}</div>
+              <div className={styles.kpiTitle}>Active Issues</div>
+            </div>
+          </div>
+
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#fef2f2', color: '#ef4444' }}>
+              <AlertCircle size={28} />
+            </div>
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue} style={{ color: '#ef4444' }}>{stats.high}</div>
+              <div className={styles.kpiTitle}>Critical Priority</div>
+            </div>
+          </div>
+
+          <div className={styles.kpiCard}>
+            <div className={styles.kpiIconWrapper} style={{ background: '#ecfdf5', color: '#10b981' }}>
+              <CheckCircle2 size={28} />
+            </div>
+            <div className={styles.kpiContent}>
+              <div className={styles.kpiValue}>{stats.resolved}</div>
+              <div className={styles.kpiTitle}>Resolved Total</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters Bar */}
+        <div className={styles.filtersBar}>
+          <div className={styles.filterGroup}>
+            {['All', 'Open', 'Resolved'].map(f => (
+              <button 
+                key={f}
+                className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
+                onClick={() => setFilter(f)}
+              >
+                {f === 'All' ? 'All Grievances' : f === 'Open' ? 'Active Issues' : 'Resolved'}
+              </button>
+            ))}
           </div>
         </div>
 
         {filteredComplaints.length === 0 && !isLoading ? (
           <div className={styles.emptyState}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            <p>No complaints found.</p>
+            <Flag size={64} strokeWidth={1.5} />
+            <p>No grievances found in this category.</p>
           </div>
         ) : (
           <div className={styles.complaintsGrid}>
             {filteredComplaints.map((complaint) => (
               <div key={complaint._id} className={styles.complaintCard}>
                 <div className={styles.cardHeader}>
-                  <div>
+                  <div style={{ flex: 1, paddingRight: '1rem' }}>
                     <h3 className={styles.complaintTitle}>{complaint.title}</h3>
                     <span className={styles.complaintCategory}>{complaint.category}</span>
                   </div>
                   <div className={styles.badges}>
-                    <span className={`${styles.badge} ${styles['badgePriority' + complaint.priority]}`}>
-                      {complaint.priority}
+                    <span className={`${styles.badge} ${styles['badgePriority' + (complaint.priority || 'Medium')]}`}>
+                      {complaint.priority || 'Medium'}
                     </span>
-                    <span className={`${styles.badge} ${styles['badge' + complaint.status]}`}>
-                      {complaint.status}
+                    <span className={`${styles.badge} ${styles['badge' + (complaint.status || 'Open')]}`}>
+                      {complaint.status || 'Open'}
                     </span>
                   </div>
                 </div>
@@ -145,9 +191,9 @@ export default function ComplaintsPage() {
                     {complaint.residentId?.fullName?.charAt(0) || "R"}
                   </div>
                   <div className={styles.residentDetails}>
-                    <span className={styles.residentName}>{complaint.residentId?.fullName || "Unknown Resident"}</span>
+                    <span className={styles.residentName}>{complaint.residentId?.fullName || "Resident"}</span>
                     <span className={styles.residentRoom}>
-                       {complaint.residentId?.roomId?.roomNumber ? `Room ${complaint.residentId.roomId.roomNumber}` : "Room Unassigned"}
+                       {complaint.residentId?.roomId?.roomNumber ? `Room ${complaint.residentId.roomId.roomNumber}` : "RID: " + (complaint.residentId?.residentId || 'N/A')}
                        {complaint.location ? ` • ${complaint.location}` : ""}
                     </span>
                   </div>
@@ -159,27 +205,24 @@ export default function ComplaintsPage() {
                     onClick={() => handleResolve(complaint._id)}
                     disabled={complaint.status === "Resolved" || complaint.status === "Closed"}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    {complaint.status === "Resolved" || complaint.status === "Closed" ? "Resolved" : "Mark as Resolved"}
+                    {complaint.status === "Resolved" || complaint.status === "Closed" ? (
+                      <><Check size={20} /> Resolved</>
+                    ) : (
+                      <><CheckCircle2 size={20} /> Mark Resolved</>
+                    )}
                   </button>
                   <button 
                     className={styles.btnDelete}
                     onClick={() => handleDelete(complaint._id)}
-                    title="Remove Complaint"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
+                    <Trash2 size={20} />
                   </button>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

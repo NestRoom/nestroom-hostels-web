@@ -92,8 +92,8 @@ export default function StudentOverview() {
     <div className={styles.dashboardContainer}>
       <div className={styles.mainFeed}>
         <header className={styles.pageHeader}>
-          <h1 className={styles.title}>Dashboard Overview</h1>
-          <p className={styles.subtitle}>Welcome back, {resident?.fullName?.split(" ")[0] || "Student"}! Here is what's happening today.</p>
+          <h1 className={styles.title}>Welcome back, {resident?.fullName?.split(" ")[0] || "Resident"}</h1>
+          <p className={styles.subtitle}>Here&apos;s a live overview of your residency at {resident?.hostelId?.hostelName || "NestRoom"}.</p>
         </header>
 
         {/* Attendance Banner */}
@@ -101,18 +101,18 @@ export default function StudentOverview() {
           <div className={styles.attendanceAlert}>
             <div className={styles.alertContent}>
               <div className={styles.alertIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M8 17A5 5 0 0 1 12 7a5 5 0 0 1 4 10"/><path d="M12 2v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 6.3 1.4-1.4"/><path d="M22 12h-2"/><path d="M4 12H2"/><path d="m17.7 17.7 1.4 1.4"/><path d="m4.9 19.1 1.4-1.4"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M8 17A5 5 0 0 1 12 7a5 5 0 0 1 4 10"/><path d="M12 2v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 6.3 1.4-1.4"/><path d="M22 12h-2"/><path d="M4 12H2"/><path d="m17.7 17.7 1.4 1.4"/><path d="m4.9 19.1 1.4-1.4"/></svg>
               </div>
               <div className={styles.alertText}>
-                <h4>Attendance Verification</h4>
-                <p>{activeRequest.remarks || "Regular daily check-in is currently active."}</p>
+                <h4>Attendance Verification Active</h4>
+                <p>{activeRequest.remarks || "A surprise check has been triggered by the administration."}</p>
               </div>
               <button 
                 className={styles.markBtn} 
                 onClick={handleMarkAttendance}
                 disabled={submitting}
               >
-                {submitting ? "Verifying..." : "Confirm Presence"}
+                {submitting ? "Verifying Location..." : "Confirm Presence"}
               </button>
             </div>
           </div>
@@ -128,11 +128,11 @@ export default function StudentOverview() {
         <div className={styles.statGrid}>
           <div className={styles.roomCard}>
             <div className={styles.cardHeader}>
-              <h3>Room Details</h3>
+              <h3>Your Sanctuary</h3>
               <span className={styles.tag}>Assigned</span>
             </div>
             <div className={styles.roomNumber}>
-              <span className={styles.label}>Room</span>
+              <span className={styles.label}>Room Number</span>
               <h2>{resident?.roomId?.roomNumber || "N/A"}</h2>
             </div>
             <div className={styles.roomMeta}>
@@ -149,15 +149,15 @@ export default function StudentOverview() {
                  <span className={styles.metaValue}>{resident?.roomId?.floorNumber || "1"}</span>
               </div>
               <div className={styles.metaItem}>
-                 <span className={styles.metaLabel}>Hostel</span>
-                 <span className={styles.metaValue}>{resident?.hostelId?.hostelName || "N/A"}</span>
+                 <span className={styles.metaLabel}>Type</span>
+                 <span className={styles.metaValue}>{resident?.roomId?.roomType || "Standard"}</span>
               </div>
             </div>
           </div>
 
           <div className={styles.kycCard}>
             <div className={styles.cardHeader}>
-              <h3>KYC Verification</h3>
+              <h3>Identity Status</h3>
             </div>
             <div className={styles.kycStatusWrapper}>
               <div 
@@ -167,43 +167,43 @@ export default function StudentOverview() {
               </div>
               <p className={styles.kycHint}>
                 {resident?.kyc?.kycStatus === 'Verified' 
-                  ? "Your profile is fully verified and all features are unlocked." 
-                  : "Please upload your Aadhaar and College ID to verify your identity."}
+                  ? "Your identity documents are verified. You have full access to all hostel amenities." 
+                  : "Please ensure your Aadhaar and College ID are uploaded to avoid any service interruptions."}
               </p>
+              {resident?.kyc?.kycStatus !== 'Verified' && (
+                <button className={styles.actionLink} onClick={() => window.location.href = "/student/profile"}>
+                  Complete KYC Now
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+              )}
             </div>
-            {resident?.kyc?.kycStatus !== 'Verified' && (
-              <button className={styles.actionLink} onClick={() => window.location.href = "/student/profile"}>
-                Complete Profile
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </button>
-            )}
           </div>
         </div>
 
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>Financial Timeline</h3>
-          <div className={styles.eventList}>
-            <div className={styles.eventItem}>
-              <div className={styles.eventDate}>
-                 <span>{resident?.nextDueDate ? new Date(resident.nextDueDate).getDate() : "17"}</span>
-                 <small>{resident?.nextDueDate ? new Date(resident.nextDueDate).toLocaleString('default', { month: 'short' }) : "MAY"}</small>
-              </div>
-              <div className={styles.eventInfo}>
-                <h4>Rent Payment Due</h4>
-                <p>Status: Unpaid • Due in {resident?.nextDueDate ? Math.ceil((new Date(resident.nextDueDate) - new Date()) / (1000 * 60 * 60 * 24)) : "27"} days</p>
-              </div>
-              <button className={styles.payBtnSmall} onClick={() => window.location.href = "/student/payments"}>Pay ₹{resident?.feeAmount || 0}</button>
+          <div className={styles.eventItem}>
+            <div className={styles.eventDate}>
+               <span>{resident?.nextDueDate ? new Date(resident.nextDueDate).getDate() : "17"}</span>
+               <small>{resident?.nextDueDate ? new Date(resident.nextDueDate).toLocaleString('default', { month: 'short' }) : "MAY"}</small>
             </div>
+            <div className={styles.eventInfo}>
+              <h4>Rent Payment Cycle</h4>
+              <p>Due in {resident?.nextDueDate ? Math.ceil((new Date(resident.nextDueDate) - new Date()) / (1000 * 60 * 60 * 24)) : "27"} days • Monthly Subscription</p>
+            </div>
+            <button className={styles.payBtnSmall} onClick={() => window.location.href = "/student/payments"}>
+              Pay ₹{resident?.feeAmount?.toLocaleString() || 0}
+            </button>
           </div>
         </section>
       </div>
 
       <aside className={styles.infoPanel}>
         <div className={styles.panelSection}>
-          <h4 className={styles.panelTitle}>Notice Board</h4>
+          <h4 className={styles.panelTitle}>Digital Notice Board</h4>
           <div className={styles.announcementList}>
             {notifications.length === 0 ? (
-              <p className={styles.emptyText}>No recent notices.</p>
+              <p className={styles.emptyText}>No recent updates from administration.</p>
             ) : (
               notifications.map((notif) => (
                 <div key={notif._id} className={styles.announcement} onClick={() => window.location.href = "/student/notifications"}>
@@ -215,16 +215,16 @@ export default function StudentOverview() {
                      }}
                    >
                      {notif.type === 'Emergency' ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                      )}
                    </div>
                    <div className={styles.annText}>
                      <h6>{notif.title}</h6>
-                     <p>{notif.message.substring(0, 50)}...</p>
+                     <p>{notif.message.substring(0, 60)}...</p>
                      <span className={notif.isRead ? styles.isRead : styles.isUnread}>
-                        {notif.isRead ? "Viewed" : "New Message"} • {new Date(notif.sentAt).toLocaleDateString()}
+                        {notif.isRead ? "Viewed" : "New Notice"} • {new Date(notif.sentAt).toLocaleDateString()}
                      </span>
                    </div>
                 </div>
@@ -232,30 +232,7 @@ export default function StudentOverview() {
             )}
           </div>
           <button className={styles.actionBtnFull} onClick={() => window.location.href = "/student/notifications"}>
-            View All Notices
-          </button>
-        </div>
-
-        <div className={styles.panelSection}>
-          <h4 className={styles.panelTitle}>Quick Support</h4>
-          <div className={styles.contactCard}>
-             <div className={styles.contactItem}>
-               <div className={styles.contactIcon}>👤</div>
-               <div className={styles.contactInfo}>
-                 <h6>Warden Office</h6>
-                 <p>+91 98765 43210</p>
-               </div>
-             </div>
-             <div className={styles.contactItem}>
-               <div className={styles.contactIcon}>🛠️</div>
-               <div className={styles.contactInfo}>
-                 <h6>Maintenance Desk</h6>
-                 <p>Ext: 104 • 24/7 Available</p>
-               </div>
-             </div>
-          </div>
-          <button className={styles.complaintBtn} onClick={() => window.location.href = "/student/complaints"}>
-            Raise a Complaint
+            View Archive
           </button>
         </div>
 

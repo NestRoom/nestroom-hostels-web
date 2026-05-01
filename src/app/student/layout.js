@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import styles from "./layout.module.css";
 import { secureFetch, clearTokens } from "../utils/auth";
 import Loading from "../components/Loading/Loading";
+import ResidentNav from "../components/ResidentNav/ResidentNav";
 
 export default function StudentLayout({ children }) {
   const pathname = usePathname();
@@ -47,118 +48,39 @@ export default function StudentLayout({ children }) {
 
   useEffect(() => {
     fetchProfile();
-  }, [pathname]); // Refresh on navigation to clear unread if they visited notifications
-
-  const handleLogout = () => {
-    clearTokens();
-    router.push("/login");
-  };
+  }, [pathname]);
 
   if (loading) return <Loading text="Setting up your portal..." />;
 
-  const navItems = [
-    { 
-      name: "Overview", 
-      path: "/student/dashboard", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      )
-    },
-    { 
-      name: "My Profile", 
-      path: "/student/profile", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      )
-    },
-    { 
-      name: "Payments", 
-      path: "/student/payments", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-      )
-    },
-    { 
-      name: "Complaints", 
-      path: "/student/complaints", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      )
-    },
-    { 
-      name: "Notice Board", 
-      path: "/student/notifications", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      )
-    },
-    {
-      name: "Food Calendar",
-      path: "/student/food",
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
-      )
-    },
-    {
-      name: "Attendance",
-      path: "/student/attendance",
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      )
-    },
-  ];
-
   return (
     <div className={styles.container}>
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logo}>
-            <span className={styles.nest}>nest</span><span className={styles.room}>room</span>
-          </div>
-          <p className={styles.portalTag}>Student Portal</p>
-        </div>
-
-        <nav className={styles.nav}>
-          {navItems.map((item) => (
-            <Link 
-              key={item.path} 
-              href={item.path} 
-              className={`${styles.navItem} ${pathname === item.path ? styles.active : ""}`}
-            >
-              <div className={styles.iconWrapper}>
-                <span className={styles.navIcon}>{item.icon}</span>
-                {item.name === "Notice Board" && unreadCount > 0 && (
-                  <span className={styles.unreadBadge}>{unreadCount}</span>
-                )}
-              </div>
-              <span className={styles.navName}>{item.name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.userBrief}>
-            <div className={styles.avatar}>
-               {resident?.kyc?.profilePhoto ? (
-                 <img src={resident.kyc.profilePhoto} alt="Profile" />
-               ) : (
-                 <div className={styles.avatarPlaceholder}>{resident?.fullName?.[0] || "S"}</div>
-               )}
-            </div>
-            <div className={styles.userInfo}>
-              <p className={styles.userName}>{resident?.fullName || "Student"}</p>
-              <p className={styles.userRole}>{resident?.residentId || "RES_ID"}</p>
-            </div>
-          </div>
-          <button onClick={handleLogout} className={styles.logoutBtn}>Logout</button>
-        </div>
-      </aside>
-
+      <ResidentNav />
       <main className={styles.mainContent}>
         <div className={styles.centerWrapper}>
           {children}
         </div>
       </main>
+
+      {/* Global Floating Emergency Button */}
+      <div className={styles.emergencyFabContainer}>
+        <div className={styles.fabOptions}>
+          <div className={styles.fabOption} onClick={() => window.open('tel:+919876543210')}>
+            <span>Warden</span>
+            <div className={styles.optionIcon}>👤</div>
+          </div>
+          <div className={styles.fabOption} onClick={() => window.open('tel:104')}>
+            <span>Maintenance</span>
+            <div className={styles.optionIcon}>🛠️</div>
+          </div>
+        </div>
+        <button 
+          className={styles.fabMain} 
+          onClick={() => window.open('tel:+919876543210')}
+          title="Emergency Contact"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </button>
+      </div>
     </div>
   );
 }
