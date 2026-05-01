@@ -98,35 +98,38 @@ export default function StudentFoodCalendar() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Food Schedule</h1>
-          <p className={styles.subtitle}>View your weekly mess menu.</p>
+          <p className={styles.subtitle}>Your weekly culinary journey at NestRoom.</p>
         </div>
         <div className={styles.headerActions}>
           <div className={styles.weekNav}>
-            <button className={styles.navBtn} onClick={handlePrevWeek}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            <button className={styles.navBtn} onClick={handlePrevWeek} title="Previous Week">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
             <div className={styles.weekRange}>{formatDateLabel(currentWeekStart)}</div>
-            <button className={styles.navBtn} onClick={handleNextWeek}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <button className={styles.navBtn} onClick={handleNextWeek} title="Next Week">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
       {isLoading ? (
         <div className={styles.loadingContainer}>
           <LoadingComponent />
-          <p style={{ fontWeight: 600, color: "#6B7280" }}>Fetching menu...</p>
+          <p style={{ fontWeight: 850, color: "#94A3B8", fontSize: '1.1rem' }}>Preparing the menu...</p>
         </div>
       ) : (
         <div className={styles.calendarGrid}>
           <div className={styles.timeColumn}>
             {mealTypes.map(m => (
               <div key={m.type} className={styles.timeSlotLabel}>
-                <div className={styles.timeLabel}>{m.icon} {m.type}</div>
+                <div className={styles.timeLabel}>
+                  <span style={{ fontSize: '1.4rem' }}>{m.icon}</span>
+                  {m.type}
+                </div>
                 <div className={styles.timeSublabel}>{m.defaultTime}</div>
               </div>
             ))}
@@ -138,13 +141,13 @@ export default function StudentFoodCalendar() {
             return (
               <div key={day} className={styles.dayColumn}>
                 <div className={styles.dayHeader}>
-                  <span className={styles.dayName}>{day}</span>
+                  <span className={styles.dayName}>{day.substring(0, 3)}</span>
                   <span className={`${styles.dayDate} ${active ? styles.todayDate : ""}`}>
                       {date.getDate()}
                   </span>
                 </div>
                 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
                   {mealTypes.map(mType => {
                     const meal = findMeal(day, mType.type);
                     return (
@@ -155,16 +158,16 @@ export default function StudentFoodCalendar() {
                         {meal ? (
                           <>
                             <div className={styles.mealTime}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                               {meal.time}
                             </div>
                             <div className={styles.menuList}>
                               {meal.menu?.map((item, i) => (
-                                  <span key={i} className={styles.menuItem}>{item}{i < meal.menu.length -1 ? ', ' : ''}</span>
+                                  <span key={i} className={styles.menuItem}>{item}{i < meal.menu.length - 1 ? ' · ' : ''}</span>
                               ))}
-                              {(!meal.menu || meal.menu.length === 0) && <span style={{ color: '#9CA3AF' }}>Not set</span>}
+                              {(!meal.menu || meal.menu.length === 0) && <span style={{ color: '#94A3B8', fontWeight: 600 }}>Menu TBD</span>}
                             </div>
-                            <div className={styles.dietaryTags} style={{ marginTop: 'auto' }}>
+                            <div className={styles.dietaryTags}>
                               {meal.dietaryTags?.map(tag => (
                                 <span key={tag} className={`${styles.tag} ${tag === 'Vegetarian' ? styles.tagVeg : tag === 'Non-Vegetarian' ? styles.tagNonVeg : styles.tagVegan}`}>
                                   {tag}
@@ -173,7 +176,7 @@ export default function StudentFoodCalendar() {
                             </div>
                           </>
                         ) : (
-                          <span className={styles.emptyText}>No meal set</span>
+                          <span className={styles.emptyText}>No Meal Plan</span>
                         )}
                       </div>
                     );
@@ -186,12 +189,10 @@ export default function StudentFoodCalendar() {
       )}
 
       {!isLoading && !scheduleData && (
-          <div className={styles.emptyState} style={{ marginTop: '3rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥗</div>
-              <h3>No schedule for this week</h3>
-              <p>The mess menu for this week hasn&apos;t been updated yet.</p>
-          </div>
-      )}
+          <div className={styles.emptyState}>
+              <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🍲</div>
+              <h3>Menu in Preparation</h3>
+              <p>The culinary team is currently curating this week&apos;s menu. Please check back shortly for updates.</p>
     </div>
   );
 }
