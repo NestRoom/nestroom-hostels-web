@@ -379,3 +379,15 @@
   .alertContent { flex-direction: column; text-align: center; }
   .markBtn { margin-left: 0; width: 100%; }
 }
+
+.photoIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f0fdf4;
+  border-radius: 50%;
+  border: 1px solid #dcfce7;
+}
+

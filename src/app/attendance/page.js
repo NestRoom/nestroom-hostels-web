@@ -19,7 +19,9 @@ import {
   Users,
   Search,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Camera,
+  Image as ImageIcon
 } from 'lucide-react';
 import styles from "./page.module.css";
 

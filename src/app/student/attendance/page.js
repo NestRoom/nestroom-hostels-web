@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { secureFetch } from "../../utils/auth";
 import LoadingComponent from "../../components/Loading/Loading";
+import AttendanceCamera from "../../components/AttendanceCamera/AttendanceCamera";
 
 export default function StudentAttendance() {
   const [activeTab, setActiveTab] = useState("attendance");
@@ -15,6 +16,7 @@ export default function StudentAttendance() {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [punching, setPunching] = useState(false);
   const [punchResult, setPunchResult] = useState(null);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   // Leaves state
   const [leaves, setLeaves] = useState([]);
@@ -63,7 +65,13 @@ export default function StudentAttendance() {
   }, []);
 
   const handleMarkAttendance = () => {
+    setIsCameraOpen(true);
+  };
+
+  const processAttendanceWithPhoto = async (photoBase64) => {
+    // The photo is used as a premature check layer and is not uploaded per USER request
     setPunching(true);
+    setIsCameraOpen(false);
     
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -75,6 +83,7 @@ export default function StudentAttendance() {
       async (position) => {
         try {
           const { latitude, longitude, accuracy } = position.coords;
+          
           const res = await secureFetch("http://localhost:5001/v1/residents/attendance/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -85,7 +94,6 @@ export default function StudentAttendance() {
           if (data.status === 'success' || data.success) {
             setPunchResult({ success: true, message: data.data?.message || data.message || "Attendance marked successfully" });
             setActiveRequest(null);
-            // Refresh history
             fetchData();
           } else {
             setPunchResult({ success: false, message: data.message });
@@ -392,6 +400,13 @@ export default function StudentAttendance() {
             </form>
           </div>
         </div>
+      )}
+
+      {isCameraOpen && (
+        <AttendanceCamera 
+          onCapture={processAttendanceWithPhoto}
+          onClose={() => setIsCameraOpen(false)}
+        />
       )}
     </div>
   );

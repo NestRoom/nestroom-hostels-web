@@ -258,20 +258,43 @@
   padding: 1rem;
 }
 
+.table tr {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .table tr td {
   padding: 1.5rem 1rem;
   background: #F9FAFB;
-  transition: all 0.2s;
+  transition: background 0.3s ease;
+  position: relative;
 }
 
 .table tr td:first-child { border-radius: 1.25rem 0 0 1.25rem; }
 .table tr td:last-child { border-radius: 0 1.25rem 1.25rem 0; }
 
+.table tbody tr:hover {
+  transform: scale(1.015);
+  z-index: 10;
+}
+
 .table tbody tr:hover td {
   background: white;
-  transform: scale(1.01);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  z-index: 1;
+  border-top: 1px solid rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.table tbody tr:hover td:first-child {
+  border-left: 1px solid rgba(0, 0, 0, 0.02);
+  box-shadow: -20px 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.table tbody tr:hover td:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.02);
+  box-shadow: 20px 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.table tbody tr:hover td:not(:first-child):not(:last-child) {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .payId { 
@@ -305,6 +328,28 @@
 .successTag { background: #ECFDF5; color: #059669; }
 .pendingTag { background: #FFFBEB; color: #D97706; }
 .failedTag { background: #FEF2F2; color: #DC2626; }
+
+.downloadBtn {
+  background: white;
+  border: 1px solid #E5E7EB;
+  color: var(--text-main);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.downloadBtn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 59, 255, 0.1);
+}
 
 .noData {
   text-align: center;
