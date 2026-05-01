@@ -125,62 +125,78 @@ export default function StudentPayments() {
               <span className={styles.periodTag}>Active Bill</span>
               <h3>Monthly Rent</h3>
             </div>
-            <div className={styles.amount}>₹{upcoming?.feeAmount || 0}</div>
+            <div className={styles.amount}>₹{upcoming?.feeAmount?.toLocaleString() || 0}</div>
           </div>
 
           <div className={styles.billMeta}>
             <div className={styles.metaItem}>
               <span className={styles.label}>Due Date</span>
-              <span className={styles.value}>{upcoming?.nextDueDate ? new Date(upcoming.nextDueDate).toLocaleDateString() : 'N/A'}</span>
-            </div>
-            <div className={styles.metaItem}>
-              <span className={styles.label}>Frequency</span>
-              <span className={styles.value}>{upcoming?.feeFrequency || 'Monthly'}</span>
+              <span className={styles.value}>
+                {upcoming?.nextDueDate ? new Date(upcoming.nextDueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A'}
+              </span>
             </div>
             <div className={styles.metaItem}>
               <span className={styles.label}>Status</span>
               <span className={`${styles.statusLabel} ${upcoming?.daysRemaining < 0 ? styles.overdue : styles.pending}`}>
-                {upcoming?.daysRemaining < 0 ? "Overdue" : "Pending"}
+                {upcoming?.daysRemaining < 0 ? "Overdue" : "Awaiting Payment"}
               </span>
             </div>
           </div>
 
           {upcoming?.daysRemaining < 0 && (
             <div className={styles.overdueAlert}>
-              Your payment is overdue by {Math.abs(upcoming.daysRemaining)} days.
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Payment is overdue by {Math.abs(upcoming.daysRemaining)} days.
             </div>
           )}
 
           <button className={styles.payBtn} onClick={handlePayment} disabled={paying}>
-            {paying ? "Processing..." : "Pay Now with Razorpay"}
+            {paying ? (
+              <>
+                <svg className={styles.spin} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                Processing...
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                Pay Now with Razorpay
+              </>
+            )}
           </button>
         </section>
 
         {/* History Table */}
         <section className={styles.historyCard}>
-          <h3 className={styles.cardTitle}>Payment History</h3>
+          <h3 className={styles.cardTitle}>Recent Activity</h3>
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>Transaction</th>
                   <th>ID</th>
                   <th>Amount</th>
-                  <th>Method</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {history.length === 0 ? (
-                   <tr><td colSpan="5" className={styles.noData}>No payments recorded yet.</td></tr>
+                   <tr><td colSpan="4" className={styles.noData}>No payments recorded yet.</td></tr>
                 ) : (
                   history.map(payment => (
                     <tr key={payment._id}>
-                      <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
-                      <td className={styles.payId}>{payment.paymentId}</td>
-                      <td className={styles.payAmount}>₹{payment.amount}</td>
-                      <td>{payment.paymentMethod}</td>
-                      <td className={styles[payment.paymentStatus.toLowerCase()]}>{payment.paymentStatus}</td>
+                      <td>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <span style={{ fontWeight: 850 }}>{payment.paymentMethod || 'Online'}</span>
+                          <span style={{ fontSize: '0.8rem', color: '#64748B' }}>{new Date(payment.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
+                        </div>
+                      </td>
+                      <td className={styles.payId}>{payment.paymentId?.substring(0, 12)}...</td>
+                      <td className={styles.payAmount}>₹{payment.amount.toLocaleString()}</td>
+                      <td>
+                        <span className={`${styles.statusTag} ${styles[payment.paymentStatus.toLowerCase() + 'Tag']}`}>
+                          {payment.paymentStatus}
+                        </span>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -192,6 +208,11 @@ export default function StudentPayments() {
 
       {message && (
         <div className={`${styles.toast} ${styles[message.type]}`}>
+          {message.type === 'success' ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          )}
           {message.text}
           <button onClick={() => setMessage(null)}>&times;</button>
         </div>
