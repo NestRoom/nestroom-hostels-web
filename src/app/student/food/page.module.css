@@ -71,22 +71,24 @@
 /* Calendar Grid */
 .calendarGrid {
   display: grid;
-  grid-template-columns: 120px repeat(7, 1fr);
+  grid-template-columns: 130px repeat(7, 1fr);
   gap: 1.5rem;
   padding-bottom: 2rem;
   overflow-x: auto;
-  min-width: 1200px;
+  min-width: 1250px;
+  align-items: center;
 }
 
-.dayColumn {
+.gridHeaderCell {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  justify-content: flex-end;
+  min-height: 100px;
+  padding-bottom: 1rem;
 }
 
 .dayHeader {
   text-align: center;
-  padding-bottom: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,8 +107,8 @@
   font-size: 1.5rem;
   font-weight: 850;
   color: #1e293b;
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,18 +123,11 @@
   transform: scale(1.1);
 }
 
-.timeColumn {
-  padding-top: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
 .timeSlotLabel {
-  height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-right: 1rem;
 }
 
 .timeLabel {
