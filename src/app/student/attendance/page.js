@@ -143,40 +143,50 @@ export default function StudentAttendance() {
     }
   };
 
-  if (loading) return <div className={styles.emptyState}><LoadingComponent /><p style={{marginTop: '1rem'}}>Loading your records...</p></div>;
+  if (loading) return (
+    <div className={styles.emptyState}>
+      <LoadingComponent />
+      <p style={{ marginTop: '2rem', fontWeight: 850, color: '#94a3b8', fontSize: '1.1rem' }}>Synchronizing your records...</p>
+    </div>
+  );
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>Attendance & Leaves</h1>
-          <p className={styles.subtitle}>Manage your attendance records and leave applications.</p>
+          <h1 className={styles.title}>Check-in & Leaves</h1>
+          <p className={styles.subtitle}>Maintain your digital presence and manage your time away.</p>
         </div>
         {activeTab === "leaves" && (
           <button className={styles.primaryButton} onClick={() => setIsLeaveModalOpen(true)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
             Apply for Leave
           </button>
         )}
-      </div>
+      </header>
 
       <div className={styles.tabs}>
         <button 
           className={`${styles.tab} ${activeTab === "attendance" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("attendance")}
         >
-          Attendance Records
+          Attendance History
         </button>
         <button 
           className={`${styles.tab} ${activeTab === "leaves" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("leaves")}
         >
-          Leave Applications
+          My Applications
         </button>
       </div>
 
       {punchResult && (
         <div className={`${styles.resultAlert} ${punchResult.success ? styles.resSuccess : styles.resError}`}>
+          {punchResult.success ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          )}
           <p>{punchResult.message}</p>
           <button onClick={() => setPunchResult(null)}>&times;</button>
         </div>
@@ -185,71 +195,81 @@ export default function StudentAttendance() {
       {activeTab === "attendance" && (
         <>
           {activeRequest && (
-            <div className={styles.attendanceAlert}>
+            <section className={styles.attendanceAlert}>
               <div className={styles.alertContent}>
                 <div className={styles.alertIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M8 17A5 5 0 0 1 12 7a5 5 0 0 1 4 10"/><path d="M12 2v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 6.3 1.4-1.4"/><path d="M22 12h-2"/><path d="M4 12H2"/><path d="m17.7 17.7 1.4 1.4"/><path d="m4.9 19.1 1.4-1.4"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
                 <div className={styles.alertText}>
-                  <h4>Attendance Verification Active</h4>
-                  <p>{activeRequest.remarks || "Regular daily check-in is currently active. Please confirm your presence."}</p>
+                  <h4>Presence Verification Required</h4>
+                  <p>{activeRequest.remarks || "A regular presence check is active. Please confirm your location to mark attendance."}</p>
                 </div>
                 <button 
                   className={styles.markBtn} 
                   onClick={handleMarkAttendance}
                   disabled={punching}
                 >
-                  {punching ? "Verifying..." : "Confirm Presence"}
+                  {punching ? "Verifying Location..." : "Confirm Presence"}
                 </button>
               </div>
-            </div>
+            </section>
           )}
 
           {attendanceSummary && (
-            <div className={styles.summaryCards}>
+            <section className={styles.summaryCards}>
               <div className={styles.statCard}>
-                <div className={styles.statLabel}>Total Days</div>
-                <div className={styles.statValue}>{attendanceSummary.total}</div>
+                <span className={styles.statValue}>{attendanceSummary.total}</span>
+                <span className={styles.statLabel}>Academic Days</span>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statLabel}>Present</div>
-                <div className={styles.statValue} style={{ color: "#059669" }}>{attendanceSummary.present}</div>
+                <span className={styles.statValue} style={{ color: "#059669" }}>{attendanceSummary.present}</span>
+                <span className={styles.statLabel}>Days Present</span>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statLabel}>Absent</div>
-                <div className={styles.statValue} style={{ color: "#DC2626" }}>{attendanceSummary.absent}</div>
+                <span className={styles.statValue} style={{ color: "#e11d48" }}>{attendanceSummary.absent}</span>
+                <span className={styles.statLabel}>Days Absent</span>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statLabel}>Attendance Rate</div>
-                <div className={styles.statValue} style={{ color: "#3b3bff" }}>{attendanceSummary.attendanceRate}</div>
+                <span className={styles.statValue} style={{ color: "#3b3bff" }}>{attendanceSummary.attendanceRate}</span>
+                <span className={styles.statLabel}>Attendance Rate</span>
               </div>
-            </div>
+            </section>
           )}
 
           <div className={styles.tableContainer}>
             {attendanceRecords.length === 0 ? (
-              <div className={styles.emptyState}>No attendance records found.</div>
+              <div className={styles.emptyState}>
+                <div style={{ background: '#f8fafc', padding: '3rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                   <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14h6"/><path d="M9 18h6"/><path d="M9 10h6"/></svg>
+                </div>
+                <h3>No Records Yet</h3>
+                <p>Attendance history will appear here once the academic term begins.</p>
+              </div>
             ) : (
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Date</th>
+                    <th>Academic Date</th>
                     <th>Status</th>
-                    <th>Response Time</th>
-                    <th>Type</th>
+                    <th>Verification</th>
+                    <th>Method</th>
                   </tr>
                 </thead>
                 <tbody>
                   {attendanceRecords.map(record => (
                     <tr key={record._id}>
-                      <td>{new Date(record.attendanceDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                      <td style={{ fontWeight: 850, color: '#1e293b' }}>
+                        {new Date(record.attendanceDate).toLocaleDateString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}
+                      </td>
                       <td>
                         <span className={`${styles.statusBadge} ${getStatusClass(record.status)}`}>
                           {record.status}
                         </span>
                       </td>
-                      <td>{record.responseReceivedAt ? new Date(record.responseReceivedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "-"}</td>
-                      <td>{record.responseType || "-"}</td>
+                      <td style={{ color: '#64748b' }}>
+                        {record.responseReceivedAt ? new Date(record.responseReceivedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute:'2-digit', hour12: true }) : "—"}
+                      </td>
+                      <td style={{ color: '#64748b', fontWeight: 700 }}>{record.responseType || "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -263,36 +283,38 @@ export default function StudentAttendance() {
         <div className={styles.tableContainer}>
           {leaves.length === 0 ? (
             <div className={styles.emptyState}>
-               <div style={{fontSize: '3rem', marginBottom: '1rem'}}>✈️</div>
-               <h3>No leaves applied</h3>
-               <p>You haven&apos;t submitted any leave applications yet.</p>
+               <div style={{ background: '#f8fafc', padding: '3rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+               </div>
+               <h3>No Active Applications</h3>
+               <p>Your leave history and pending applications will be displayed here.</p>
             </div>
           ) : (
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Leave ID</th>
-                  <th>Type</th>
+                  <th>Request ID</th>
+                  <th>Category</th>
                   <th>Duration</th>
                   <th>Status</th>
-                  <th>Applied On</th>
+                  <th>Submission</th>
                 </tr>
               </thead>
               <tbody>
-                {leaves.map(leave => (
+                {[...leaves].reverse().map(leave => (
                   <tr key={leave._id}>
-                    <td><span style={{ fontFamily: 'monospace', color: '#6B7280' }}>{leave.leaveId}</span></td>
-                    <td>{leave.leaveType}</td>
+                    <td><span style={{ fontFamily: 'monospace', color: '#94a3b8', fontWeight: 700 }}>#{leave.leaveId}</span></td>
+                    <td style={{ fontWeight: 850, color: '#1e293b' }}>{leave.leaveType}</td>
                     <td>
-                      {new Date(leave.fromDate).toLocaleDateString()} - {new Date(leave.toDate).toLocaleDateString()}<br/>
-                      <span style={{ fontSize: '0.8rem', color: '#6B7280' }}>({leave.duration} days)</span>
+                      <div style={{ fontWeight: 700 }}>{new Date(leave.fromDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })} - {new Date(leave.toDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 850, textTransform: 'uppercase', marginTop: '0.25rem' }}>{leave.duration} Academic Days</div>
                     </td>
                     <td>
                       <span className={`${styles.statusBadge} ${getStatusClass(leave.status)}`}>
                         {leave.status}
                       </span>
                     </td>
-                    <td>{new Date(leave.createdAt).toLocaleDateString()}</td>
+                    <td style={{ color: '#64748b' }}>{new Date(leave.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</td>
                   </tr>
                 ))}
               </tbody>
@@ -304,69 +326,69 @@ export default function StudentAttendance() {
       {isLeaveModalOpen && (
         <div className={styles.modalOverlay} onClick={() => !applyingLeave && setIsLeaveModalOpen(false)}>
           <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>Apply for Leave</h2>
+            <header className={styles.modalHeader}>
+              <h2>Request Absence</h2>
               <button className={styles.closeBtn} onClick={() => setIsLeaveModalOpen(false)} disabled={applyingLeave}>&times;</button>
-            </div>
+            </header>
             <form onSubmit={handleApplyLeave}>
-              <div className={styles.formContent}>
+              <div className={styles.formGroup}>
+                <label>Absence Category</label>
+                <select 
+                  className={styles.formSelect}
+                  value={leaveForm.leaveType}
+                  onChange={e => setLeaveForm({...leaveForm, leaveType: e.target.value})}
+                  required
+                >
+                  <option value="Home Visit">Home Visit</option>
+                  <option value="Sick Leave">Sick Leave</option>
+                  <option value="Vacation">Vacation</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div className={styles.dateRow}>
                 <div className={styles.formGroup}>
-                  <label>Leave Type</label>
-                  <select 
-                    className={styles.formSelect}
-                    value={leaveForm.leaveType}
-                    onChange={e => setLeaveForm({...leaveForm, leaveType: e.target.value})}
+                  <label>Departure Date</label>
+                  <input 
+                    type="date"
+                    className={styles.formInput}
+                    value={leaveForm.fromDate}
+                    onChange={e => setLeaveForm({...leaveForm, fromDate: e.target.value})}
                     required
-                  >
-                    <option value="Home Visit">Home Visit</option>
-                    <option value="Sick Leave">Sick Leave</option>
-                    <option value="Vacation">Vacation</option>
-                    <option value="Emergency">Emergency</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  />
                 </div>
-                
-                <div className={styles.dateRow}>
-                  <div className={styles.formGroup}>
-                    <label>From Date</label>
-                    <input 
-                      type="date"
-                      className={styles.formInput}
-                      value={leaveForm.fromDate}
-                      onChange={e => setLeaveForm({...leaveForm, fromDate: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label>To Date</label>
-                    <input 
-                      type="date"
-                      className={styles.formInput}
-                      value={leaveForm.toDate}
-                      min={leaveForm.fromDate}
-                      onChange={e => setLeaveForm({...leaveForm, toDate: e.target.value})}
-                      required
-                    />
-                  </div>
+                <div className={styles.formGroup}>
+                  <label>Return Date</label>
+                  <input 
+                    type="date"
+                    className={styles.formInput}
+                    value={leaveForm.toDate}
+                    min={leaveForm.fromDate}
+                    onChange={e => setLeaveForm({...leaveForm, toDate: e.target.value})}
+                    required
+                  />
                 </div>
+              </div>
 
-                <div className={styles.formGroup}>
-                  <label>Reason / Details</label>
-                  <textarea 
-                    className={styles.formTextarea}
-                    placeholder="Briefly explain the reason for your leave..."
-                    value={leaveForm.reason}
-                    onChange={e => setLeaveForm({...leaveForm, reason: e.target.value})}
-                    required
-                  ></textarea>
-                </div>
+              <div className={styles.formGroup}>
+                <label>Justification</label>
+                <textarea 
+                  className={styles.formTextarea}
+                  rows="4"
+                  placeholder="Provide a brief explanation for your absence request..."
+                  value={leaveForm.reason}
+                  onChange={e => setLeaveForm({...leaveForm, reason: e.target.value})}
+                  required
+                ></textarea>
               </div>
-              <div className={styles.modalFooter}>
-                <button type="button" className={styles.secondaryBtn} onClick={() => setIsLeaveModalOpen(false)} disabled={applyingLeave}>Cancel</button>
+
+              <footer className={styles.modalFooter}>
+                <button type="button" className={styles.secondaryBtn} onClick={() => setIsLeaveModalOpen(false)} disabled={applyingLeave}>Discard</button>
                 <button type="submit" className={styles.submitBtn} disabled={applyingLeave}>
-                  {applyingLeave ? "Submitting..." : "Submit Application"}
+                  {applyingLeave ? "Processing..." : "Submit Request"}
                 </button>
-              </div>
+              </footer>
             </form>
           </div>
         </div>
