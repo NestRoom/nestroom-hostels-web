@@ -193,6 +193,8 @@ export default function StudentFoodCalendar() {
               <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🍲</div>
               <h3>Menu in Preparation</h3>
               <p>The culinary team is currently curating this week&apos;s menu. Please check back shortly for updates.</p>
+          </div>
+      )}
     </div>
   );
 }
