@@ -236,28 +236,6 @@ export default function StudentOverview() {
           </button>
         </div>
 
-        <div className={styles.panelSection}>
-          <h4 className={styles.panelTitle}>Concierge & Support</h4>
-          <div className={styles.contactCard}>
-             <div className={styles.contactItem}>
-               <div className={styles.contactIcon}>👤</div>
-               <div className={styles.contactInfo}>
-                 <h6>Hostel Warden</h6>
-                 <p>+91 98765 43210</p>
-               </div>
-             </div>
-             <div className={styles.contactItem}>
-               <div className={styles.contactIcon}>🛠️</div>
-               <div className={styles.contactInfo}>
-                 <h6>Maintenance</h6>
-                 <p>Ext: 104 • 24/7 Desk</p>
-               </div>
-             </div>
-          </div>
-          <button className={styles.complaintBtn} onClick={() => window.location.href = "/student/complaints"}>
-            Raise Support Ticket
-          </button>
-        </div>
       </aside>
     </div>
   );

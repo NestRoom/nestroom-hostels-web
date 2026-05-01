@@ -28,3 +28,88 @@
     padding: 0 1rem;
   }
 }
+
+/* Global Emergency FAB */
+.emergencyFabContainer {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.fabMain {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fabMain:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 20px 45px rgba(239, 68, 68, 0.5);
+}
+
+.fabOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.emergencyFabContainer:hover .fabOptions {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.fabOption {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 0.7rem 1.15rem;
+  border-radius: 100px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.fabOption:hover {
+  transform: translateX(-10px);
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.fabOption span {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.optionIcon {
+  width: 32px;
+  height: 32px;
+  background: #f8fafc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
