@@ -12,9 +12,8 @@ export default function Home() {
   const router = useRouter();
 
   const handleStartSignup = () => {
-    if (mobileNumber) {
-      router.push(`/signup?phone=${encodeURIComponent(mobileNumber)}`);
-    }
+    const query = mobileNumber ? `?phone=${encodeURIComponent(mobileNumber)}` : '';
+    router.push(`/signup${query}`);
   };
 
   const handleKeyDown = (e) => {

@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import styles from "./NavBar.module.css";
 import { secureFetch } from "../../utils/auth";
 
 export default function NavBar() {
+  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState('owner');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,17 +65,26 @@ export default function NavBar() {
         <div className={styles.desktopButtons}>
           {!isAuthenticated ? (
             <>
-              <Link href="/login" style={{ textDecoration: 'none' }}>
-                <div className={styles.loginButton}>continue</div>
-              </Link>
-              <Link href="/signup" style={{ textDecoration: 'none' }}>
-                <button className={styles.signUpButton}>sign up</button>
-              </Link>
+              <button 
+                className={styles.loginButton} 
+                onClick={() => router.push('/login')}
+              >
+                continue
+              </button>
+              <button 
+                className={styles.signUpButton} 
+                onClick={() => router.push('/signup')}
+              >
+                sign up
+              </button>
             </>
           ) : (
-            <Link href={userType === 'resident' ? '/student/dashboard' : '/dashboard'} style={{ textDecoration: 'none' }}>
-              <button className={styles.signUpButton}>dashboard</button>
-            </Link>
+            <button 
+              className={styles.signUpButton} 
+              onClick={() => router.push(userType === 'resident' ? '/student/dashboard' : '/dashboard')}
+            >
+              dashboard
+            </button>
           )}
         </div>
 
@@ -91,24 +102,33 @@ export default function NavBar() {
       {isMenuOpen && (
         <div className={styles.mobileMenu}>
           <div className={styles.mobileLinks}>
-            <div className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>about</div>
-            <div className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>features</div>
-            <div className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>pricing</div>
+            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>about</div>
+            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>features</div>
+            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>pricing</div>
             
             <div className={styles.mobileActions}>
               {!isAuthenticated ? (
                 <>
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    <div className={styles.mobileActionLink}>continue</div>
-                  </Link>
-                  <Link href="/signup" onClick={() => setIsMenuOpen(false)}>
-                    <button className={styles.mobileSignUpBtn}>sign up</button>
-                  </Link>
+                  <button 
+                    className={styles.mobileActionLink} 
+                    onClick={() => { setIsMenuOpen(false); router.push('/login'); }}
+                  >
+                    continue
+                  </button>
+                  <button 
+                    className={styles.mobileSignUpBtn} 
+                    onClick={() => { setIsMenuOpen(false); router.push('/signup'); }}
+                  >
+                    sign up
+                  </button>
                 </>
               ) : (
-                <Link href={userType === 'resident' ? '/student/dashboard' : '/dashboard'} onClick={() => setIsMenuOpen(false)}>
-                  <button className={styles.mobileSignUpBtn}>dashboard</button>
-                </Link>
+                <button 
+                  className={styles.mobileSignUpBtn} 
+                  onClick={() => { setIsMenuOpen(false); router.push(userType === 'resident' ? '/student/dashboard' : '/dashboard'); }}
+                >
+                  dashboard
+                </button>
               )}
             </div>
           </div>
