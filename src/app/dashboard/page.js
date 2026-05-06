@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
       setHostelData(meData.user.hostels[0]);
       setRevenueData(rev.data);
-      setFoodData(food.data?.schedule);
+      setFoodData(food.data?.schedule?.schedule || []);
       setResidents(resList.data?.residents || []);
       setComplaints(compList.data?.complaints || []);
       

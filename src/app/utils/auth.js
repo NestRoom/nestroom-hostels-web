@@ -67,7 +67,7 @@ export const secureFetch = async (url, options = {}) => {
                     
                     // Retry original request
                     headers['Authorization'] = `Bearer ${data.data.accessToken}`;
-                    response = await fetch(url, { ...options, headers });
+                    response = await fetch(normalizedUrl, { ...options, headers });
                     return response;
                 }
             } catch (e) {
