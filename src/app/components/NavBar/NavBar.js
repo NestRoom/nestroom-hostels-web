@@ -49,16 +49,16 @@ export default function NavBar() {
 
   return (
     <nav className={styles.nav}>
-      <div className={styles.logo} onClick={() => window.location.href = "/"}>
+      <div className={styles.logo} onClick={() => router.push('/')}>
         <h1 className={styles.nest}>nest</h1>
         <h1 className={styles.room}>room</h1>
       </div>
 
       {/* Desktop Links */}
       <div className={styles.navLinks}>
-        <div className={styles.link}>about</div>
-        <div className={styles.link}>features</div>
-        <div className={styles.link}>pricing</div>
+        <button className={styles.link} onClick={() => router.push('/about')}>about</button>
+        <button className={styles.link} onClick={() => router.push('/features')}>features</button>
+        <button className={styles.link} onClick={() => router.push('/pricing')}>pricing</button>
       </div>
 
       <div className={styles.buttons}>
@@ -102,9 +102,9 @@ export default function NavBar() {
       {isMenuOpen && (
         <div className={styles.mobileMenu}>
           <div className={styles.mobileLinks}>
-            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>about</div>
-            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>features</div>
-            <div className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/'); }}>pricing</div>
+            <button className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/about'); }}>about</button>
+            <button className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/features'); }}>features</button>
+            <button className={styles.mobileLink} onClick={() => { setIsMenuOpen(false); router.push('/pricing'); }}>pricing</button>
             
             <div className={styles.mobileActions}>
               {!isAuthenticated ? (

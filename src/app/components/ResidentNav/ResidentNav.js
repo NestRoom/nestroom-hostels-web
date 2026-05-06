@@ -12,8 +12,6 @@ import {
   Bell, 
   Utensils, 
   ShieldCheck,
-  Search,
-  Mail,
   ChevronDown,
   LogOut,
   CalendarDays
@@ -158,14 +156,6 @@ export default function ResidentNav() {
 
       {/* Right Side */}
       <div className={styles.rightSection}>
-        <div className={styles.iconGroup}>
-          <button className={styles.iconBtn}><Search size={20} /></button>
-          <button className={styles.iconBtn} onClick={() => router.push('/student/notifications')}>
-            <Bell size={20} />
-            {unreadCount > 0 && <div className={styles.badge} />}
-          </button>
-          <button className={styles.iconBtn}><Mail size={20} /></button>
-        </div>
 
         <div className={styles.profileSection} onClick={() => setShowProfileMenu(!showProfileMenu)}>
           <div className={styles.avatar}>
