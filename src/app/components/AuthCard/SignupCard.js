@@ -383,7 +383,14 @@ export default function SignupCard() {
       )}
       {step > 1 && !loading && (
         <p className={styles.footerText}>
-          <span style={{cursor: 'pointer'}} onClick={() => { setStep(step - 1); setError(""); }} className={styles.link}>Go Back</span>
+          <button 
+            type="button" 
+            onClick={() => { setStep(step - 1); setError(""); }} 
+            className={styles.link}
+            style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer' }}
+          >
+            Go Back
+          </button>
         </p>
       )}
     </div>
