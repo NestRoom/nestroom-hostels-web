@@ -420,3 +420,79 @@
   .billMeta { grid-template-columns: 1fr; gap: 1.5rem; }
   .amount { font-size: 2.75rem; }
 }
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .title { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 2rem; }
+  
+  .paymentStats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .historyHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* Table to Cards */
+  .tableWrapper {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .historyTable thead {
+    display: none;
+  }
+
+  .historyTable, .historyTable tbody, .historyTable tr, .historyTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .historyTable tr {
+    background: white;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .historyTable td {
+    padding: 0.75rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .historyTable td::before {
+    content: attr(data-label);
+    font-weight: 850;
+    color: var(--secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .historyTable td:first-child {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+  }
+
+  .historyTable td:first-child::before {
+    display: none;
+  }
+}

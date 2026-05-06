@@ -245,7 +245,7 @@ export default function ResidentsPage() {
                 const isOverdue = new Date(resident.nextDueDate) < new Date();
                 return (
                   <tr key={resident._id} onClick={() => setSelectedResident(resident)}>
-                    <td>
+                    <td data-label="Resident">
                       <div className={styles.residentProfile}>
                         <div className={styles.residentAvatar}>
                           {resident.kyc?.profilePhoto ? (
@@ -260,26 +260,26 @@ export default function ResidentsPage() {
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Room Info">
                       <div className={styles.roomBadge}>
                         <span className={styles.roomNum}>Room {resident.roomId?.roomNumber || 'N/A'}</span>
                         <span className={styles.bedNum}>Bed {resident.bedId?.bedNumber || 'N/A'}</span>
                       </div>
                     </td>
-                    <td className={styles.dateCell}>{formatDate(resident.checkInDate)}</td>
-                    <td>
+                    <td data-label="Joining Date" className={styles.dateCell}>{formatDate(resident.checkInDate)}</td>
+                    <td data-label="Monthly Fee">
                       <div className={styles.feeInfo}>
                         <span className={styles.feeAmount}>₹{resident.feeAmount?.toLocaleString()}</span>
                         <span className={styles.feeCycle}>{resident.feeFrequency}</span>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Fee Status">
                       <div className={`${styles.statusBadge} ${isOverdue ? styles.overdue : styles.paid}`}>
                         {isOverdue ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />}
                         <span>{isOverdue ? 'Overdue' : 'Paid'}</span>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="KYC Status">
                       <div className={`${styles.kycBadge} ${styles[resident.kyc?.kycStatus?.toLowerCase() || 'pending']}`}>
                         <span>{resident.kyc?.kycStatus || 'Pending'}</span>
                       </div>

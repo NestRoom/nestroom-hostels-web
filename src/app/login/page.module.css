@@ -124,18 +124,63 @@
   animation: slideAcrossFromRight 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-@keyframes slideAcrossFromLeft {
-  to {
-    opacity: 1;
-    transform: translateX(0) translateZ(0) rotateY(0);
-    filter: blur(0);
+@media (max-width: 1024px) {
+  .main {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4rem;
+    padding: 2rem 0;
+  }
+
+  .leftContent {
+    align-items: center;
+    text-align: center;
+    transform: none;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .rightContent {
+    transform: none;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .titleBlack, .titleBlue {
+    font-size: 60px;
   }
 }
 
-@keyframes slideAcrossFromRight {
+@media (max-width: 768px) {
+  .page {
+    overflow-y: auto;
+  }
+
+  .container {
+    width: 95%;
+    height: auto;
+  }
+
+  .main {
+    padding: 3rem 0;
+    gap: 3rem;
+  }
+
+  .titleBlack, .titleBlue {
+    font-size: 42px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .trustedBadge {
+    padding: 8px 16px;
+  }
+}
+
+@keyframes fadeIn {
   to {
     opacity: 1;
-    transform: translateX(0) translateZ(0) rotateY(0);
+    transform: none;
     filter: blur(0);
   }
 }

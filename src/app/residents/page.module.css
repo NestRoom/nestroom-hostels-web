@@ -910,3 +910,150 @@
   transform: translateY(0);
   background: #e5e7eb;
 }
+
+@media (max-width: 1200px) {
+  .mainContent {
+    padding: 2rem var(--page-padding);
+  }
+  .title { font-size: 2.25rem; }
+  .kpiContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .filtersBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+  .searchBox {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .primaryButton {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .kpiContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .kpiCard {
+    padding: 1.5rem;
+  }
+
+  .kpiValue {
+    font-size: 2rem;
+  }
+
+  /* Table to Cards for mobile */
+  .tableWrapper {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .residentsTable thead {
+    display: none;
+  }
+
+  .residentsTable, .residentsTable tbody, .residentsTable tr, .residentsTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .residentsTable tr {
+    background: white;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .residentsTable td {
+    padding: 0.5rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .residentsTable td::before {
+    content: attr(data-label);
+    font-weight: 850;
+    color: var(--secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  /* Hide labels for profile and actions */
+  .residentsTable td:first-child::before,
+  .residentsTable td:last-child::before {
+    display: none;
+  }
+
+  .residentsTable td:first-child {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Modal Overrides */
+  .detailModal, .onboardModal {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .detailGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .largeAvatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 2rem;
+  }
+
+  .modalHeader {
+    padding: 1.5rem;
+  }
+
+  .modalTitleGrp h3 { font-size: 1.25rem; }
+
+  .modalBody {
+    padding: 1.5rem;
+  }
+
+  .documentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .kycActions {
+    padding: 1.5rem;
+  }
+
+  .btnGrp {
+    flex-direction: column;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -454,3 +454,117 @@ input:checked + .slider:before {
   color: #94a3b8;
 }
 
+@media (max-width: 1200px) {
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 2rem var(--page-padding);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .title { font-size: 2.25rem; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 1.75rem; }
+  .subtitle { font-size: 1rem; }
+  
+  .surpriseBtn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .tabContainer {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0.25rem;
+  }
+
+  .statsRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .statValue {
+    font-size: 2rem;
+  }
+
+  .configCard {
+    padding: 1.5rem;
+  }
+
+  .coordinatesRow {
+    grid-template-columns: 1fr;
+  }
+
+  /* Table to Cards for mobile */
+  .tableWrapper {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    background: white;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .table td {
+    padding: 0.75rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #F9FAFB;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+    padding-top: 1rem;
+    justify-content: center;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 850;
+    color: var(--secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .table td:first-child::before {
+    display: none;
+  }
+
+  .table td:first-child {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 0.5rem;
+  }
+}

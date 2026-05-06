@@ -570,3 +570,55 @@
   font-weight: 600;
   font-style: italic;
 }
+
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 2rem var(--page-padding);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .title { font-size: 2.25rem; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 1.75rem; }
+  .subtitle { font-size: 1rem; }
+
+  .primaryButton {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .notificationItem {
+    padding: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .notificationContent {
+    width: 100%;
+  }
+
+  .notificationMeta {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F3F4F6;
+    padding-top: 1rem;
+  }
+
+  .itemTitle {
+    font-size: 1.1rem;
+  }
+
+  .itemBody {
+    font-size: 0.9rem;
+  }
+}

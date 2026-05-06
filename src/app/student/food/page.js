@@ -161,6 +161,7 @@ export default function StudentFoodCalendar() {
                   <div 
                     key={`${day}-${mType.type}`} 
                     className={`${styles.mealCard} ${!meal ? styles.empty : ""}`}
+                    data-meal={mType.type}
                   >
                     {meal ? (
                       <>

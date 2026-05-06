@@ -249,47 +249,49 @@ export default function RevenuePage() {
             </div>
           </div>
           
-          <div style={{ width: '100%', height: 350 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={dashboardData?.trends || []}>
-                <defs>
-                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15}/>
-                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis 
-                  dataKey="label" 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
-                  dy={10}
-                />
-                <YAxis 
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
-                  tickFormatter={(value) => `₹${value}`}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    borderRadius: '20px', 
-                    border: 'none', 
-                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.1)',
-                    padding: '16px'
-                  }}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="earnings" 
-                  stroke="#4f46e5" 
-                  strokeWidth={4}
-                  fillOpacity={1} 
-                  fill="url(#colorRev)" 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div style={{ width: '100%', height: 350, position: 'relative' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                <AreaChart data={dashboardData?.trends || []}>
+                  <defs>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15}/>
+                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis 
+                    dataKey="label" 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
+                    dy={10}
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }}
+                    tickFormatter={(value) => `₹${value}`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      borderRadius: '20px', 
+                      border: 'none', 
+                      boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.1)',
+                      padding: '16px'
+                    }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="earnings" 
+                    stroke="#4f46e5" 
+                    strokeWidth={4}
+                    fillOpacity={1} 
+                    fill="url(#colorRev)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
@@ -339,7 +341,7 @@ export default function RevenuePage() {
               {filteredPayments.length > 0 ? (
                 filteredPayments.map((tx) => (
                   <tr key={tx._id}>
-                    <td>
+                    <td data-label="Resident">
                       <div className={styles.residentProfile}>
                         <div className={styles.residentAvatar}>
                           {tx.residentId?.kyc?.profilePhoto ? (
@@ -354,27 +356,27 @@ export default function RevenuePage() {
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Transaction ID">
                       <span className={styles.resId}>{tx.paymentId || 'PAY-N/A'}</span>
                     </td>
-                    <td>
+                    <td data-label="Amount">
                       <div className={styles.amountCell}>₹{(tx.amount || 0).toLocaleString()}</div>
                     </td>
-                    <td>
+                    <td data-label="Date">
                       <div className={styles.dateCell}>{new Date(tx.paidAt || tx.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</div>
                     </td>
-                    <td>
+                    <td data-label="Method">
                       <div className={styles.methodBadge}>
                         <CreditCard size={14} />
                         {tx.paymentMethod}
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <span className={`${styles.statusBadge} ${tx.paymentStatus === 'Success' ? styles.success : tx.paymentStatus === 'Pending' ? styles.pending : styles.failed}`}>
                         {tx.paymentStatus}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Action">
                       <button className={styles.actionBtn}>
                         <ChevronRight size={20} />
                       </button>

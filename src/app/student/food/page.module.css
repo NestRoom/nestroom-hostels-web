@@ -269,8 +269,41 @@
 }
 
 @media (max-width: 768px) {
-  .header { flex-direction: column; align-items: flex-start; gap: 2rem; }
-  .title { font-size: 2.5rem; }
-  .weekNav { width: 100%; justify-content: space-between; }
   .weekRange { min-width: auto; }
+
+  .calendarGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    min-width: 0;
+    overflow-x: visible;
+  }
+
+  .gridHeaderCell {
+    display: none; /* Hide time label column */
+  }
+
+  .dayHeader {
+    height: 60px;
+    margin-bottom: 1rem;
+    position: sticky;
+    top: 70px;
+    z-index: 10;
+    background: white;
+  }
+
+  .mealCard {
+    height: auto;
+    min-height: 140px;
+  }
+
+  .mealCard::before {
+    content: attr(data-meal);
+    font-size: 0.75rem;
+    font-weight: 850;
+    color: var(--secondary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
 }

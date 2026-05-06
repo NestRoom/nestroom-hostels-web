@@ -120,7 +120,23 @@ export default function AdminNav() {
         </div>
       </div>
 
-      {/* Center Navigation */}
+      {/* Mobile Page Selector Dropdown */}
+      <div className={styles.mobilePageSelector}>
+        <select 
+          className={styles.pageDropdown}
+          value={pathname}
+          onChange={(e) => router.push(e.target.value)}
+        >
+          {navItems.map(item => (
+            <option key={item.path} value={item.path}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={14} className={styles.dropdownIcon} />
+      </div>
+
+      {/* Center Navigation (Desktop/Tablet) */}
       <div className={styles.navContainer}>
         {/* Sliding capsule indicator */}
         <div
@@ -142,7 +158,7 @@ export default function AdminNav() {
               className={`${styles.navItem} ${isActive ? styles.activeNavItem : ''}`}
             >
               {item.icon}
-              <span>{item.label}</span>
+              <span className={styles.itemLabel}>{item.label}</span>
             </Link>
           );
         })}

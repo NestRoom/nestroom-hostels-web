@@ -13,6 +13,25 @@
   --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 25px 50px -15px rgba(0, 0, 0, 0.1);
   --font-main: 'Poppins', sans-serif;
+
+  /* Responsive Spacing */
+  --page-padding: 4rem;
+  --widget-gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --page-padding: 2rem;
+    --card-radius: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 1.25rem;
+    --card-radius: 1.5rem;
+    --widget-gap: 16px;
+  }
 }
 
 * {
@@ -93,4 +112,36 @@ a {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
   border-color: var(--primary);
+}
+
+/* Visibility Utilities */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Responsive Grid Helper */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--widget-gap);
+}
+
+@media (max-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+  }
 }
