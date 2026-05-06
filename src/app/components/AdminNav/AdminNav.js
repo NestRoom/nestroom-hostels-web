@@ -17,9 +17,6 @@ import {
   Bell, 
   Utensils, 
   AlertCircle,
-  Search,
-  Mail,
-  MessageSquare,
   ChevronDown,
   LogOut,
   User
@@ -166,15 +163,6 @@ export default function AdminNav() {
 
       {/* Right Side */}
       <div className={styles.rightSection}>
-        <div className={styles.iconGroup}>
-          <button className={styles.iconBtn}><Search size={20} /></button>
-          <button className={styles.iconBtn}>
-            <Bell size={20} />
-            <div className={styles.badge} />
-          </button>
-          <button className={styles.iconBtn}><Mail size={20} /></button>
-          <button className={styles.iconBtn}><MessageSquare size={20} /></button>
-        </div>
 
         <div className={styles.profileSection} onClick={() => setShowProfileMenu(!showProfileMenu)}>
           <div className={styles.avatar}>

@@ -37,6 +37,10 @@
     font-size: 21px;
     cursor: pointer;
     transition: all 0.1s ease;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    padding: 0;
 }
 .link:hover {
     color: #2C1DFF;
@@ -172,6 +176,10 @@
     font-weight: 700;
     color: #171717;
     cursor: pointer;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    padding: 0;
 }
 
 .mobileActions {

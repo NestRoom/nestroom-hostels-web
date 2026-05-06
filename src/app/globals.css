@@ -15,6 +15,8 @@
   --font-main: 'Poppins', sans-serif;
 
   /* Responsive Spacing */
+  --max-content-width: 1600px;
+  --content-padding: 4rem;
   --page-padding: 4rem;
   --widget-gap: 24px;
 }
