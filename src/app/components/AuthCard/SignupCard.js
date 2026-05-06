@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Loading from '../Loading/Loading';
 import styles from './AuthCard.module.css';
 import { setTokens, API_URL } from '../../utils/auth';
@@ -8,6 +8,7 @@ import { setTokens, API_URL } from '../../utils/auth';
 export default function SignupCard() {
 
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   
   const [hostelName, setHostelName] = useState("");
@@ -15,6 +16,26 @@ export default function SignupCard() {
   const [email, setEmail] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [countryCode, setCountryCode] = useState("+91");
+
+  useEffect(() => {
+    const phone = searchParams.get('phone');
+    if (phone) {
+      // If it starts with +, try to split country code
+      if (phone.startsWith('+')) {
+        const match = phone.match(/^(\+\d{1,3})(\d+)$/);
+        if (match) {
+          setCountryCode(match[1]);
+          setWhatsappNumber(match[2]);
+        } else {
+          setWhatsappNumber(phone);
+        }
+      } else if (phone.length === 10) {
+        setWhatsappNumber(phone);
+      } else {
+        setWhatsappNumber(phone);
+      }
+    }
+  }, [searchParams]);
   
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");

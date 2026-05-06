@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminNav from "../components/AdminNav/AdminNav";
 import LoadingComponent from "../components/Loading/Loading";
 import styles from "./page.module.css";
-import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, List, Zap, Leaf, Flame, ShieldCheck, X, Utensils } from 'lucide-react';
 import { secureFetch, API_URL } from "../utils/auth";
 
 export default function FoodPage() {
@@ -14,6 +14,7 @@ export default function FoodPage() {
   const [scheduleData, setScheduleData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingMeal, setEditingMeal] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Helper: Get Monday of the week
   function getMonday(d) {
@@ -156,21 +157,66 @@ export default function FoodPage() {
         daySchedule.meals.push(mealObj);
     }
 
+    const sanitizedSchedule = {
+        weekNumber: newSchedule.weekNumber,
+        weekStartDate: new Date(newSchedule.weekStartDate).toISOString(),
+        weekEndDate: new Date(newSchedule.weekEndDate).toISOString(),
+        specialNotes: newSchedule.specialNotes || "",
+        isVegetarian: newSchedule.isVegetarian ?? true,
+        isNonVegetarian: newSchedule.isNonVegetarian ?? false,
+        hasVeganOptions: newSchedule.hasVeganOptions ?? false,
+        hasGlutenFreeOptions: newSchedule.hasGlutenFreeOptions ?? false,
+        hasHalal: newSchedule.hasHalal ?? false,
+        schedule: newSchedule.schedule.map(day => ({
+            dayOfWeek: day.dayOfWeek,
+            date: day.date ? new Date(day.date).toISOString() : null,
+            meals: day.meals.map(meal => ({
+                mealType: meal.mealType,
+                time: meal.time,
+                menu: meal.menu || [],
+                ingredients: meal.ingredients || [],
+                dietaryTags: meal.dietaryTags || [],
+                calories: meal.calories || null,
+                servingSize: meal.servingSize || null,
+                preparedBy: meal.preparedBy || null
+            }))
+        }))
+    };
+
+    if (!hostelId) {
+        console.error("Hostel ID is missing. Cannot save schedule.");
+        alert("Configuration Error: Hostel ID not found. Please refresh the page.");
+        return;
+    }
+
+    setIsSaving(true);
     try {
         const res = await secureFetch("/v1/hostels/" + hostelId + "/food-schedule", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newSchedule)
+            body: JSON.stringify(sanitizedSchedule)
         });
+        
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            console.error("Server Error Data:", errorData);
+            const msg = errorData.error?.message || `Server responded with ${res.status}`;
+            const details = errorData.error?.details?.map(d => `\n- ${d.field}: ${d.message}`).join("") || "";
+            throw new Error(msg + details);
+        }
+
         const data = await res.json();
         if (data.success) {
             setIsEditModalOpen(false);
             fetchHostelAndSchedule(currentWeekStart);
         }
     } catch (err) {
-        console.error(err);
+        console.error("Failed to save schedule:", err);
+        alert("Could not save schedule: " + err.message);
+    } finally {
+        setIsSaving(false);
     }
   };
 
@@ -318,21 +364,62 @@ export default function FoodPage() {
 
         {isEditModalOpen && (
           <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
-            <div className={styles.modalContent} style={{ maxWidth: '650px' }} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h2>Plan {editingMeal.mealType} • {editingMeal.dayOfWeek}</h2>
-                <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}>&times;</button>
+                <div className={styles.headerTitleWrapper}>
+                  <div className={styles.headerIcon}>
+                    <Utensils size={32} />
+                  </div>
+                  <div className={styles.titleSection}>
+                    <h2>Plan {editingMeal.mealType}</h2>
+                    <p className={styles.modalSubtitle}>Initialize a new culinary draft for {editingMeal.dayOfWeek}</p>
+                  </div>
+                </div>
+                <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}>
+                  <X size={28} />
+                </button>
               </div>
-              <form onSubmit={saveMeal}>
+              <form onSubmit={saveMeal} className={styles.formWrapper}>
                 <div className={styles.formContent}>
+                  <div className={styles.sectionHeader}>
+                    <span className={styles.sectionTitleText}>Meal Configuration</span>
+                  </div>
+                  
+                  <div className={styles.twoCol}>
+                    <div className={styles.formGroup}>
+                      <label>Distribution Time</label>
+                      <input 
+                        className={styles.formInput} 
+                        placeholder="e.g. 08:30 AM - 09:30 AM"
+                        value={editingMeal.time}
+                        onChange={e => setEditingMeal({...editingMeal, time: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
                   <div className={styles.formGroup}>
-                    <label>Distribution Time</label>
-                    <input 
-                      className={styles.formInput} 
-                      placeholder="e.g. 08:30 AM - 09:30 AM"
-                      value={editingMeal.time}
-                      onChange={e => setEditingMeal({...editingMeal, time: e.target.value})}
-                    />
+                    <label>Dietary Classification</label>
+                    <div className={styles.tagSelector}>
+                      {[
+                        { label: "Vegetarian", icon: <Leaf size={20} /> },
+                        { label: "Non-Vegetarian", icon: <Flame size={20} /> },
+                        { label: "Veg & Non-Veg", icon: <Utensils size={20} /> },
+                        { label: "Vegan", icon: <Leaf size={20} /> }
+                      ].map(tag => (
+                        <div 
+                          key={tag.label} 
+                          className={`${styles.tagOption} ${editingMeal.dietaryTags.includes(tag.label) ? styles.selected : ""}`}
+                          onClick={() => toggleTag(tag.label)}
+                        >
+                          {tag.icon}
+                          {tag.label}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={styles.sectionHeader} style={{ marginTop: '1rem' }}>
+                    <span className={styles.sectionTitleText}>Menu Composition</span>
                   </div>
 
                   <div className={styles.formGroup}>
@@ -340,12 +427,12 @@ export default function FoodPage() {
                     <div className={styles.selectedItemsList}>
                         {editingMeal.menu.map(item => (
                             <span key={item} className={styles.selectedItemChip} onClick={() => toggleMenuItem(item)}>
-                                {item} <span style={{ marginLeft: '4px', opacity: 0.7 }}>&times;</span>
+                                {item} <X size={14} />
                             </span>
                         ))}
                         <input 
                             className={styles.itemInput}
-                            placeholder="Add item..."
+                            placeholder="Add item... Press Enter to add more"
                             onKeyDown={addCustomMenuItem}
                         />
                     </div>
@@ -365,25 +452,16 @@ export default function FoodPage() {
                         ))}
                     </div>
                   </div>
-
-                  <div className={styles.formGroup}>
-                    <label>Dietary Classification</label>
-                    <div className={styles.tagSelector}>
-                      {["Vegetarian", "Non-Vegetarian", "Vegan"].map(tag => (
-                        <div 
-                          key={tag} 
-                          className={`${styles.tagOption} ${editingMeal.dietaryTags.includes(tag) ? styles.selected : ""}`}
-                          onClick={() => toggleTag(tag)}
-                        >
-                          {tag}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
                 <div className={styles.modalFooter}>
                   <button type="button" className={styles.secondaryBtn} onClick={() => setIsEditModalOpen(false)}>Discard</button>
-                  <button type="submit" className={styles.submitBtn}>Save Schedule</button>
+                  <button 
+                    type="submit" 
+                    className={styles.submitBtn} 
+                    disabled={isSaving}
+                  >
+                    {isSaving ? "Saving..." : "Save Schedule"}
+                  </button>
                 </div>
               </form>
             </div>
