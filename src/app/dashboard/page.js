@@ -109,7 +109,7 @@ export default function DashboardPage() {
   };
 
   const onMouseDown = (e, widgetId, type) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || window.innerWidth < 768) return;
     e.preventDefault();
     setActiveWidget(widgetId);
     setInitialMousePos({ x: e.clientX, y: e.clientY });
@@ -170,7 +170,7 @@ export default function DashboardPage() {
           ? Math.round((revenueData.stats.submitted / revenueData.stats.totalResidents) * 100) 
           : 0;
         return (
-          <div style={{ display: 'flex', gap: '3rem', height: '100%', alignItems: 'center', padding: '0 1rem' }}>
+          <div className={styles.statsWidgetContent}>
             <div style={{ flex: 1 }}>
               <div className={styles.kpiLabel}>Total Capacity</div>
               <div className={styles.kpiValue}>{revenueData?.stats?.totalResidents || 0}</div>
@@ -179,13 +179,13 @@ export default function DashboardPage() {
               <div className={styles.kpiLabel}>Occupancy Rate</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
                 <div className={styles.kpiValue}>{occupancy}%</div>
-                <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 850 }}>Optimal</div>
+                <div className={styles.hideMobile} style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 850 }}>Optimal</div>
               </div>
               <div className={styles.progressBar}>
                 <div className={styles.progressFill} style={{ width: `${occupancy}%` }}></div>
               </div>
             </div>
-            <div style={{ flex: 1 }}>
+            <div className={styles.hideMobile} style={{ flex: 1 }}>
               <div className={styles.kpiLabel}>Net Revenue</div>
               <div className={styles.kpiValue} style={{ color: '#4f46e5' }}>₹{revenueData?.monthlyRevenue?.toLocaleString() || 0}</div>
             </div>
@@ -194,25 +194,27 @@ export default function DashboardPage() {
 
       case 'revenue':
         return (
-          <div style={{ height: '100%', width: '100%', paddingTop: '1rem' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData?.trends || []}>
-                <defs>
-                  <linearGradient id="widgetColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#94a3b8' }} dy={10} />
-                <YAxis hide />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', padding: '1rem' }}
-                  formatter={(value) => [`₹${value.toLocaleString()}`, 'Monthly Collections']}
-                />
-                <Area type="monotone" dataKey="earnings" stroke="#4f46e5" strokeWidth={4} fillOpacity={1} fill="url(#widgetColor)" />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div style={{ flexGrow: 1, width: '100%', minHeight: 0, position: 'relative', marginTop: '1rem' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                <AreaChart data={revenueData?.trends || []}>
+                  <defs>
+                    <linearGradient id="widgetColor" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#94a3b8' }} dy={10} />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '1.5rem', border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', padding: '1rem' }}
+                    formatter={(value) => [`₹${value.toLocaleString()}`, 'Monthly Collections']}
+                  />
+                  <Area type="monotone" dataKey="earnings" stroke="#4f46e5" strokeWidth={4} fillOpacity={1} fill="url(#widgetColor)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         );
 

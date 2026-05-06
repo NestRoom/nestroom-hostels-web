@@ -391,3 +391,34 @@
   border: 1px solid #dcfce7;
 }
 
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .title { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 2rem; }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .cameraSection {
+    aspect-ratio: 4/3;
+  }
+
+  .historyCard {
+    padding: 1.5rem;
+  }
+}

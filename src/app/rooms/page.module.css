@@ -797,7 +797,122 @@
   font-weight: 750;
 }
 
-/* Editor Modal */
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 2rem var(--page-padding);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .title { font-size: 2.25rem; }
+  .kpiContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 1.75rem; }
+  .subtitle { font-size: 1rem; }
+  
+  .editModeButton {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .kpiContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .kpiCard {
+    padding: 1.5rem;
+  }
+
+  .kpiIconWrapper {
+    width: 56px;
+    height: 56px;
+  }
+
+  .kpiValue {
+    font-size: 1.75rem;
+  }
+
+  .buildingsCanvas {
+    padding: 1.5rem;
+  }
+
+  .canvasHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .buildingsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .buildingGraphic {
+    padding: 2rem 1.5rem;
+  }
+
+  /* Interior Map / Modal */
+  .interiorMap {
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .interiorHeader {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .interiorTitleSection {
+    gap: 1rem;
+  }
+
+  .interiorIconWrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .interiorTitle { font-size: 1.5rem; }
+
+  .interiorActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .addFloorButton {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .scrollingFloors {
+    padding: 1.5rem;
+  }
+
+  .floorContainer {
+    padding: 1.5rem;
+  }
+
+  .floorHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .roomsGrid {
+    grid-template-columns: 1fr;
+  }
+}
 .editorModal {
   width: 100%;
   max-width: 550px;

@@ -213,20 +213,20 @@ export default function StudentPayments() {
                 ) : (
                   history.map(payment => (
                     <tr key={payment._id}>
-                      <td>
+                      <td data-label="Transaction">
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                           <span style={{ fontWeight: 850 }}>{payment.paymentMethod || 'Online'}</span>
                           <span style={{ fontSize: '0.8rem', color: '#64748B' }}>{new Date(payment.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
                         </div>
                       </td>
-                      <td className={styles.payId}>{payment.paymentId?.substring(0, 12)}...</td>
-                      <td className={styles.payAmount}>₹{payment.amount.toLocaleString()}</td>
-                      <td>
+                      <td data-label="ID" className={styles.payId}>{payment.paymentId?.substring(0, 12)}...</td>
+                      <td data-label="Amount" className={styles.payAmount}>₹{payment.amount.toLocaleString()}</td>
+                      <td data-label="Status">
                         <span className={`${styles.statusTag} ${styles[payment.paymentStatus.toLowerCase() + 'Tag']}`}>
                           {payment.paymentStatus}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Action">
                         {payment.paymentStatus === 'Success' && (
                           <button 
                             className={styles.downloadBtn}

@@ -613,19 +613,79 @@
   opacity: 0.7;
 }
 
+@media (max-width: 1200px) {
+  .dashboardContainer {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 var(--page-padding);
+  }
+  .infoPanel {
+    order: 2;
+  }
+  .mainFeed {
+    order: 1;
+  }
+}
+
 @media (max-width: 768px) {
-  .title { font-size: 2.5rem; }
+  .title { font-size: 2rem; }
+  .subtitle { font-size: 1rem; }
+  
   .statGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
+  
+  .attendanceAlert {
+    padding: 2rem;
+  }
+
   .alertContent {
     flex-direction: column;
     text-align: center;
-    gap: 2rem;
+    gap: 1.5rem;
   }
-  .markBtn { width: 100%; }
-  .roomNumber h2 { font-size: 5rem; }
+
+  .alertIcon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .alertText h4 {
+    font-size: 1.4rem;
+  }
+
+  .markBtn { 
+    width: 100%; 
+    margin-left: 0;
+  }
+
+  .roomCard, .kycCard, .eventItem, .panelSection {
+    padding: 1.5rem;
+  }
+
+  .roomNumber h2 { font-size: 3rem; }
+  
   .roomMeta {
     grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-top: 1.5rem;
+  }
+
+  .eventItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .eventDate {
+    width: 60px;
+    height: 60px;
+  }
+
+  .eventDate span { font-size: 1.4rem; }
+
+  .payBtnSmall {
+    width: 100%;
   }
 }

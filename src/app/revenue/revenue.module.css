@@ -477,3 +477,139 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+@media (max-width: 1200px) {
+  .kpiContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filtersBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchBox {
+    max-width: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 2rem var(--page-padding);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .title { font-size: 2.25rem; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 1.75rem; }
+  .subtitle { font-size: 1rem; }
+  
+  .primaryButton {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .kpiContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .kpiValue {
+    font-size: 1.75rem;
+  }
+
+  .chartContainer {
+    padding: 1.5rem;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .timeframeToggle {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .timeframeBtn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .filtersGroup {
+    flex-direction: column;
+  }
+
+  .filterItem {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .resName { font-size: 1rem; }
+
+  /* Table to Cards for mobile */
+  .tableWrapper {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .revenueTable thead {
+    display: none;
+  }
+
+  .revenueTable, .revenueTable tbody, .revenueTable tr, .revenueTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .revenueTable tr {
+    background: white;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .revenueTable td {
+    padding: 0.75rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #F9FAFB;
+  }
+
+  .revenueTable td:last-child {
+    border-bottom: none;
+    padding-top: 1.25rem;
+    justify-content: center;
+  }
+
+  .revenueTable td::before {
+    content: attr(data-label);
+    font-weight: 850;
+    color: var(--secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .revenueTable td:first-child::before,
+  .revenueTable td:last-child::before {
+    display: none;
+  }
+
+  .revenueTable td:first-child {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 0.5rem;
+  }
+}

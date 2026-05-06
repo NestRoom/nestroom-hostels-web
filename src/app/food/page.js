@@ -308,13 +308,14 @@ export default function FoodPage() {
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    {mealTypes.map(mType => {
+                    {mealTypes.map((mType, mIndex) => {
                       const meal = findMeal(day, mType.type);
                       return (
                         <div 
                           key={mType.type} 
                           className={`${styles.mealCard} ${!meal ? styles.empty : ""}`}
                           onClick={() => openEditMeal(day, mType, meal)}
+                          data-meal={mType.type}
                         >
                           {meal ? (
                             <>

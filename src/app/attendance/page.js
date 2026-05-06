@@ -238,7 +238,7 @@ export default function AttendancePage() {
                   {attendanceRecords.length > 0 ? (
                     attendanceRecords.map((record) => (
                       <tr key={record._id}>
-                        <td>
+                        <td data-label="Resident">
                           <div className={styles.residentInfo}>
                             <div className={styles.avatar}>
                               {record.residentId?.fullName?.charAt(0) || "R"}
@@ -249,12 +249,12 @@ export default function AttendancePage() {
                             </div>
                           </div>
                         </td>
-                        <td>
+                        <td data-label="Status">
                           <span className={`${styles.statusBadge} ${styles['status' + record.status]}`}>
                             {record.status}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Verification">
                           {record.geofenceCheck?.distanceFromHostel !== undefined ? (
                             <div className={record.geofenceCheck.withinGeofence ? styles.geoSuccess : styles.geoFail}>
                               {record.geofenceCheck.withinGeofence ? (

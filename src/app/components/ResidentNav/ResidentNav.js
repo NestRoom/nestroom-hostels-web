@@ -110,7 +110,23 @@ export default function ResidentNav() {
         </div>
       </div>
 
-      {/* Center Navigation */}
+      {/* Mobile Page Selector Dropdown */}
+      <div className={styles.mobilePageSelector}>
+        <select 
+          className={styles.pageDropdown}
+          value={pathname}
+          onChange={(e) => router.push(e.target.value)}
+        >
+          {navItems.map(item => (
+            <option key={item.path} value={item.path}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={14} className={styles.dropdownIcon} />
+      </div>
+
+      {/* Center Navigation (Desktop/Tablet) */}
       <div className={styles.navContainer}>
         <div
           className={styles.indicator}
@@ -131,7 +147,7 @@ export default function ResidentNav() {
               className={`${styles.navItem} ${isActive ? styles.activeNavItem : ''}`}
             >
               {item.icon}
-              <span>{item.label}</span>
+              <span className={styles.itemLabel}>{item.label}</span>
               {item.label === "Notices" && unreadCount > 0 && (
                 <div className={styles.badge} style={{ top: '8px', right: '4px', width: '6px', height: '6px' }} />
               )}
