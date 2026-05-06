@@ -187,7 +187,7 @@ export default function DashboardPage() {
             </div>
             <div style={{ flex: 1 }}>
               <div className={styles.kpiLabel}>Net Revenue</div>
-              <div className={styles.kpiValue} style={{ color: '#4f46e5' }}>₹{revenueData?.monthlyRevenue.toLocaleString() || 0}</div>
+              <div className={styles.kpiValue} style={{ color: '#4f46e5' }}>₹{revenueData?.monthlyRevenue?.toLocaleString() || 0}</div>
             </div>
           </div>
         );

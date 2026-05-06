@@ -1,9 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import styles from "./page.module.css";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import SignupCard from "../components/AuthCard/SignupCard";
+import Loading from "../components/Loading/Loading";
 
 export default function SignupPage() {
   return (
@@ -40,7 +42,9 @@ export default function SignupPage() {
           </div>
           
           <div className={styles.rightContent}>
-            <SignupCard />
+            <Suspense fallback={<Loading text="Initializing signup secure portal..." />}>
+              <SignupCard />
+            </Suspense>
           </div>
         </main>
         <Footer />
